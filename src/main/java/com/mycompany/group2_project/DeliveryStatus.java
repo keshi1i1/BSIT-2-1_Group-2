@@ -44,103 +44,108 @@ import javax.swing.table.DefaultTableModel;
       private JProgressBar ProgressBar;
       private JTable orderTable;
       private JScrollPane orderScrollPane;
-      
+      private ImageIcon LogoIcon;
 
     
-      //order status
+      /*enum instead of string, based on my understanding
+      because it is much more applicable in my part which is the status of deliveries
+      it is much strict, you can't mess with the text it has to be one of these four */
       enum OrderStatus {
           PROCESSING, 
           ORDER_PLACED, 
           COMPLETE, 
           CANCELLED; 
-      
+    
+     //so it can have space when it's being called out          
      @Override
      public String toString(){
          return name().replace("_", " ");
      }
       }
       DeliveryStatus(){
-           
+          // Icon logo for our project 
+          LogoIcon = new ImageIcon("fordafood.png");
+          // Delivery status
           currentStatus = OrderStatus.PROCESSING;
-          
+          // datas need for my table
           String[] idnames = {"Order ID", "Customer ID", "Restaurant ID", "Order", "Status"};
           Object[][] data = {
               {"K1p4y", "wR4ThB00", "J4L1b0T", "Order", currentStatus.toString()},
           };
               
-         
+          // Frame 
           setSize(464, 737);
+          setIconImage(LogoIcon.getImage());
           setResizable(false);
           setLayout(null);
           setTitle("Processing Order");
           setLocationRelativeTo(null);
           setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          
+          // Wallpaper for my frame to make it look clean
           BgPanel = new JPanel();
           BgPanel.setLayout(null);
           BgPanel.setBounds(1, 1, 470, 740);
           BgPanel.setBackground(Color.WHITE);
           add(BgPanel);
-          
+          // Header panel, where the big title is located 
           HdrPanel = new JPanel();
           HdrPanel.setLayout(null);
           HdrPanel.setBounds(0, 0, 450, 75);
           HdrPanel.setBackground(new Color(113, 48, 59));
           BgPanel.add(HdrPanel);
-       
+          // Middle Panel, where the main part is
           MidPanel = new JPanel();
           MidPanel.setLayout(null);
           MidPanel.setBounds(12, 130, 425, 450);
           MidPanel.setBackground(new Color(113,48,59));
           BgPanel.add(MidPanel);
-          
+          // this is where you can see the status of the orders
           DefaultTableModel tableModel = new DefaultTableModel (data, idnames);
           orderTable = new JTable(tableModel);
           orderScrollPane = new JScrollPane(orderTable);
           orderScrollPane.setBounds(10, 10, 405, 370);
           MidPanel.add(orderScrollPane);
-          
+          // shows how close you are to getting your food
           ProgressBar = new JProgressBar(0, 100);
           ProgressBar.setValue(25);
           ProgressBar.setStringPainted(true);
           ProgressBar.setString("PLACED ORDERS");
           ProgressBar.setBounds(10, 390, 405, 40);
           MidPanel.add(ProgressBar);
-          
+          // This is what you can inside of the Header Panel
           HdrTitle = new JLabel("PROCESSING");
           HdrTitle.setFont(new Font("arial", Font.BOLD, 20));
           HdrTitle.setForeground(Color.WHITE);
           HdrTitle.setBounds(60, 23, 200, 30);
           HdrPanel.add(HdrTitle);
-          
+          // Where the buttons is located at
           BtmPanel = new JPanel();
           BtmPanel.setLayout(null);
           BtmPanel.setBounds(0, 630, 450, 110);
           BtmPanel.setBackground(new Color (113, 45, 59));
           BgPanel.add(BtmPanel);
-          
+          // Order Status
           StatusLabel = new JLabel("Delivery Status: " + currentStatus);
           StatusLabel.setBounds(10, 450, 405, 30);
           StatusLabel.setForeground(Color.WHITE);
           MidPanel.add(StatusLabel);
-          
+          // Think of this as your history of orders when you click it
           pastBtn = new JButton("Past Orders");
           pastBtn.setBounds(230, 17, 150, 30);
           pastBtn.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
           BtmPanel.add(pastBtn);
-         
-          
+          // set as a enabled false
           currBtn = new JButton("Current Orders");
           currBtn.setBounds(70, 17, 150, 30);
           currBtn.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
           BtmPanel.add(currBtn);
           currBtn.setEnabled(false);
-          
+          // Buttons so you can see the status of your orders
           checkStatusBtn = new JButton("Check Delivery Status");
           checkStatusBtn.setBounds(145, 590, 170, 30);
           checkStatusBtn.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
           BgPanel.add(checkStatusBtn);
-          
+          //Back button it let you go to the previous frame before my frame
           backLabel = new JLabel("\u2b9c");
           backLabel.setBounds(25, 21, 50, 30);
           backLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
@@ -148,16 +153,14 @@ import javax.swing.table.DefaultTableModel;
           HdrPanel.add(backLabel);
           
 
-          
+         // to make the buttons do stuff when you click them 
           pastBtn.addActionListener(this);
           currBtn.addActionListener(this);
           checkStatusBtn.addActionListener(this);
-          checkStatusBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-          
+          checkStatusBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));  
           backLabel.addMouseListener(this);
           backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          
           setVisible(true);
       }
         @Override
@@ -234,7 +237,7 @@ import javax.swing.table.DefaultTableModel;
        if (e.getSource() == pastBtn){
              this.dispose();
              
-             //new OrderHistory()
+             //new OrderHistoryMain()
 
            
        }
