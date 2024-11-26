@@ -1,22 +1,16 @@
 package com.mycompany.group2_project;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
-
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 
@@ -26,87 +20,95 @@ public class ChangePassword extends JFrame implements ActionListener {
     private JLabel lblCurrentPass, lblNewPass, lblRetypePass;
     private JPasswordField txtCurrent, txtNew, txtRetype;
     private JButton btnCancel, btnConfirm;
+    private JPanel mainPanel;
 
-    // Simulated stored password 
+
+    // Stored password 
     private final String currentPasswordStored = "Ryalicaway0720";
 
-    ChangePassword() { //Constructor
-        
-        // Setting up the JFrame properties
+    //Constructor
+    ChangePassword() { 
+       // Set JFrame properties
         setTitle("Change Password");
         setSize(464, 368);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLayout(null);
+        setLocationRelativeTo(null);
+        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\Icon.png");
+        setIconImage(logoIcon.getImage());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        // Main panel with border
+        mainPanel = new JPanel();
+        mainPanel.setBounds(5, 10, 440, 315);
+        mainPanel.setBorder(BorderFactory.createMatteBorder(20, 10, 20, 10, new Color(113, 45, 59)));
+        mainPanel.setLayout(null);
+        mainPanel.setBackground(Color.WHITE);
+        add(mainPanel);
 
         // Current Password label
         lblCurrentPass = new JLabel("Current Password");
-        lblCurrentPass.setBounds(20, 20, 200, 30);
-        lblCurrentPass.setFont(new Font("Arial", Font.BOLD, 18));
-        add(lblCurrentPass);
+        lblCurrentPass.setBounds(20, 30, 200, 30);
+        lblCurrentPass.setFont(new Font("Arial", Font.BOLD, 15));
+        mainPanel.add(lblCurrentPass);
 
         // Password field for current password input
         txtCurrent = new JPasswordField();
-        txtCurrent.setBounds(20, 50, 200, 30);
-        add(txtCurrent);
+        txtCurrent.setBounds(20, 60, 200, 30);
+        mainPanel.add(txtCurrent);
 
         // New Password label
         lblNewPass = new JLabel("New Password");
         lblNewPass.setBounds(20, 90, 200, 30);
-        lblNewPass.setFont(new Font("Arial", Font.BOLD, 18));
-        add(lblNewPass);
+        lblNewPass.setFont(new Font("Arial", Font.BOLD, 15));
+        mainPanel.add(lblNewPass);
 
         // Password field for New Password input
         txtNew = new JPasswordField();
         txtNew.setBounds(20, 120, 200, 30);
-        add(txtNew);
+        mainPanel.add(txtNew);
 
         // Re-type Password label
         lblRetypePass = new JLabel("Re-type Password");
-        lblRetypePass.setBounds(20, 160, 200, 30);
-        lblRetypePass.setFont(new Font("Arial", Font.BOLD, 18));
-        add(lblRetypePass);
+        lblRetypePass.setBounds(20, 150, 200, 30);
+        lblRetypePass.setFont(new Font("Arial", Font.BOLD, 15));
+        mainPanel.add(lblRetypePass);
 
         // Password Field for Re-typing new password
         txtRetype = new JPasswordField();
-        txtRetype.setBounds(20, 190, 200, 30);
-        add(txtRetype);
+        txtRetype.setBounds(20, 180, 200, 30);
+        mainPanel.add(txtRetype);
 
         // Cancel button
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(106, 240, 100, 30);
+        btnCancel.setBounds(70, 230, 100, 30);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 15));
-        add(btnCancel);
+        btnCancel.setBackground(new Color(113, 45, 59));
+        btnCancel.setForeground(Color.WHITE);
+        mainPanel.add(btnCancel);
 
         // Confirm button
         btnConfirm = new JButton("Confirm");
-        btnConfirm.setBounds(252, 240, 100, 30);
+        btnConfirm.setBounds(252, 230, 100, 30);
         btnConfirm.setFont(new Font("Arial", Font.BOLD, 15));
-        add(btnConfirm);
+        btnConfirm.setBackground(new Color(113, 45, 59));
+        btnConfirm.setForeground(Color.WHITE);
+        mainPanel.add(btnConfirm);
 
-        // Add action listeners for button clicks
+        // Add action listeners
         btnCancel.addActionListener(this);
         btnConfirm.addActionListener(this);
         
-        // Set frame visibility
+        // Display the JFrame
         setVisible(true);
     }
 
-    // Main method to run the program
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               new ChangePassword().setLocationRelativeTo(null); // Center the main frame
-            }
-        });
-    }
-
+    // Handles button actions (Cancel, Confirm)
     @Override
     public void actionPerformed(ActionEvent e) {
-        
         // Check if the "Cancel" button was clicked
         if (e.getSource() == btnCancel) {
-            this.dispose(); // Close the current frame
+            this.dispose(); 
         } 
         // Check if the "Confirm" button was clicked
         else if (e.getSource() == btnConfirm) {
@@ -118,20 +120,31 @@ public class ChangePassword extends JFrame implements ActionListener {
             // Validate current password
             if (!currentPasswordInput.equals(currentPasswordStored)) {
                 JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
-                return; // Stop further execution if the password is incorrect
+                return; 
             }
 
             // Validate that new passwords match
             if (!newPassword.equals(retypePassword)) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
-                return; // Stop further execution if passwords do not match
+                return; 
             }
 
             // Show success message and close the frame
             JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); // Close the current frame
-            new CustomerProfile(); // Create a new ProjectRyza frame
+            this.dispose(); 
+            new CustomerProfile();
         }
     }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+               new ChangePassword().setLocationRelativeTo(null);
+            }
+        });
+    }
 }
+
 
