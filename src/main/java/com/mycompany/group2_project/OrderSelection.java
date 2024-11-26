@@ -52,7 +52,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     public String brgyInput, cityInput;
 
     
-    OrderSelection(/*foodDEl parent*/) {
+    OrderSelection(/*MenuSelection parent*/) {
         //modify main frame
         setSize(464, 737);
         setTitle("Food Delivery");
