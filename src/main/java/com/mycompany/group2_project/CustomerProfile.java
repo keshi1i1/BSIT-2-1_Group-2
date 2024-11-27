@@ -20,7 +20,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\Icon.png");
+        ImageIcon logoIcon = new ImageIcon("Icon.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -33,7 +33,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         add(mainPanel);
         
         // Add Home Button
-        Icon ico = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\home.png");
+        Icon ico = new ImageIcon("home.png");
         btnHome = new JButton(ico);
         btnHome.setBounds(20, 40, 30, 30);
         btnHome.setOpaque(false);
@@ -141,7 +141,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         else if (e.getSource() == btnOrder) {
         this.dispose();
         // Open the DeliveryStatusMain frame (Show order history)
-//        new DeliveryStatusMain();
+  //      new DeliveryStatusMain();
     }
          // Check if the "Home" button was clicked
         else if (e.getSource() == btnHome) {
