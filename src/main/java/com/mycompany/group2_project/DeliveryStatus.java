@@ -70,7 +70,7 @@ import javax.swing.table.DefaultTableModel;
           // datas need for my table
           String[] idnames = {"Order ID", "Customer ID", "Restaurant ID", "Order", "Status"};
           Object[][] data = {
-              {"K1p4y", "wR4ThB00", "J4L1b0T", "Order", currentStatus.toString()},
+              {"#oRa1", "#19023", "J4L1b0T", "Order", currentStatus.toString()},
           };
               
           // Frame 
@@ -163,6 +163,7 @@ import javax.swing.table.DefaultTableModel;
           
           setVisible(true);
       }
+      //For the back button beside the procesing label
         @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == backLabel){
@@ -186,13 +187,13 @@ import javax.swing.table.DefaultTableModel;
     @Override
     public void mouseExited(MouseEvent e) {
     }
-      
+      //this will update the status to show the current orders
      private void updateOrderTable(){
          DefaultTableModel tableModel = (DefaultTableModel) orderTable.getModel();
          tableModel.setValueAt(currentStatus.toString(), 0, 4);
       
      } 
-     
+     //This will showcase the 4 status depends on the order process
       private void updateProgressBar(){
         switch (currentStatus){
                 case PROCESSING:
@@ -211,7 +212,7 @@ import javax.swing.table.DefaultTableModel;
                    
        }
     }
-      
+        //this is the method to what will happen if click the Past button and Current Button
          @Override
     public void actionPerformed(ActionEvent e) {
        if (e.getSource() == checkStatusBtn){
