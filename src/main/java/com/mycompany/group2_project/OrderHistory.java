@@ -24,6 +24,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
     private JScrollPane scrollPane;
     private String[] name = {"Restaurant", "Items"};
     private DefaultTableModel model;
+    private ImageIcon imgLogo;
     
     OrderHistory() {
         
@@ -32,6 +33,9 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
+        imgLogo = new ImageIcon("logo.png");
+        setIconImage(imgLogo.getImage());
+        setTitle("FORDA FOODS: Order History");
         
         //Creating Header
         Border hdrBorder = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2);
@@ -126,7 +130,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function of the back button
         if(e.getSource() == hdrExit) {
             this.dispose();
-            //new ProjectMain();
+            //new CustomerProfileMain();
         }
     }
     
