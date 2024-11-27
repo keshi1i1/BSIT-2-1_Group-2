@@ -134,7 +134,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     public void PictureIcons() {    
         homePageIcon = new ImageIcon("home_page.png");
         
-        logoIcon = new ImageIcon("borgir_logo.png");
+        logoIcon = new ImageIcon("fordaFood.png");
         
         openEyeIcon = new ImageIcon("open_eye.png");
         imgScale1 = openEyeIcon.getImage().getScaledInstance(20, 19, Image.SCALE_SMOOTH);
