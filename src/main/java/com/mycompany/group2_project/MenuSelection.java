@@ -13,9 +13,7 @@ public class MenuSelection extends JFrame implements ActionListener {
     private JButton orderBtn, profileBtn, logoutBtn, viewRestaurantsBtn, backBtn, backBtn2;
     private JLabel space1, space2;
     private Color maroon = new Color(113, 45, 59);
-    private ImageIcon homePage, mcdo, jobee, green, burger;;
-    private Image scaledMcdo, scaledJobee, scaledGreen, scaledBurger;
-    private ImageIcon logoIcon = new ImageIcon("burgerLogo.png");
+    private ImageIcon logoIcon, mcdo, jobee, green, burger;;
 
     public MenuSelection() {
         setTitle("Restaurant Profile Manager");
@@ -23,8 +21,7 @@ public class MenuSelection extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new CardLayout());
-        setIconImage(logoIcon.getImage());
-        
+
         restoPanel = RestoPanel(maroon);
         menuPanel = MenuPanel(maroon);
         homePanel = HomePanel(maroon);
@@ -38,140 +35,137 @@ public class MenuSelection extends JFrame implements ActionListener {
     
     // Panel for the Home 
     JPanel HomePanel(Color maroon) {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);  
-        panel.setBackground(Color.WHITE);
+    JPanel panel = new JPanel();
+    panel.setLayout(null);  
+    panel.setBorder(BorderFactory.createLineBorder(maroon, 50)); 
+    panel.setBackground(Color.WHITE);
+    
+    // Logo
+    logoIcon = new ImageIcon("fordaFood.png");
+    JLabel logoLabel = new JLabel(logoIcon);
+    logoLabel.setBounds(100, 25, 250, 350); 
+    
+    Image scaledImage = logoIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+    logoLabel.setIcon(new ImageIcon(scaledImage));
 
-        // Logo
-        homePage = new ImageIcon("fordaFood.png");
-        JLabel logoLabel = new JLabel();
-        logoLabel.setIcon(homePage);
-        logoLabel.setBounds(0, 0, 450, 700); 
+    viewRestaurantsBtn = new JButton("View Restaurants");
+    viewRestaurantsBtn.setBounds(117, 390, 200, 50); 
+    viewRestaurantsBtn.setFont(new Font("Arial", Font.BOLD, 17));
+    viewRestaurantsBtn.setForeground(maroon);
+    viewRestaurantsBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
+    viewRestaurantsBtn.setOpaque(false);
+    viewRestaurantsBtn.setContentAreaFilled(false);
+    viewRestaurantsBtn.addActionListener(this);
+    
+    profileBtn = new JButton("Profile");
+    profileBtn.setBounds(117, 450, 200, 50); 
+    profileBtn.setFont(new Font("Arial", Font.BOLD, 17));
+    profileBtn.setForeground(maroon);
+    profileBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
+    profileBtn.setOpaque(false);
+    profileBtn.setContentAreaFilled(false);
+    profileBtn.addActionListener(this);
 
-        viewRestaurantsBtn = new JButton("View Restaurants");
-        viewRestaurantsBtn.setBounds(125, 410, 200, 50); 
-        viewRestaurantsBtn.setFont(new Font("Arial", Font.BOLD, 17));
-        viewRestaurantsBtn.setForeground(maroon);
-        viewRestaurantsBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
-        viewRestaurantsBtn.setFocusable(false);
-        viewRestaurantsBtn.setOpaque(false);
-        viewRestaurantsBtn.setContentAreaFilled(false);
-        viewRestaurantsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        viewRestaurantsBtn.addActionListener(this);
+    logoutBtn = new JButton("Log Out");
+    logoutBtn.setBounds(117, 510, 200, 50); 
+    logoutBtn.setFont(new Font("Arial", Font.BOLD, 17));
+    logoutBtn.setForeground(maroon);
+    logoutBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
+    logoutBtn.setOpaque(false);
+    logoutBtn.setContentAreaFilled(false);
+    logoutBtn.addActionListener(this);
 
-        profileBtn = new JButton("Profile");
-        profileBtn.setBounds(125, 470, 200, 50); 
-        profileBtn.setFont(new Font("Arial", Font.BOLD, 17));
-        profileBtn.setForeground(maroon);
-        profileBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
-        profileBtn.setFocusable(false);
-        profileBtn.setOpaque(false);
-        profileBtn.setContentAreaFilled(false);
-        profileBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        profileBtn.addActionListener(this);
+    panel.add(logoLabel);
+    panel.add(viewRestaurantsBtn);
+    panel.add(profileBtn);
+    panel.add(logoutBtn);
 
-        logoutBtn = new JButton("Log Out");
-        logoutBtn.setBounds(125, 530, 200, 50); 
-        logoutBtn.setFont(new Font("Arial", Font.BOLD, 17));
-        logoutBtn.setForeground(maroon);
-        logoutBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
-        logoutBtn.setFocusable(false);
-        logoutBtn.setOpaque(false);
-        logoutBtn.setContentAreaFilled(false);
-        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        logoutBtn.addActionListener(this);
+    return panel;
+}
 
-        panel.add(viewRestaurantsBtn);
-        panel.add(profileBtn);
-        panel.add(logoutBtn);
-        panel.add(logoLabel);
+  // Panel for restaurant panel
+  private JPanel RestoPanel(Color maroon) {
+    JPanel panel = new JPanel(new BorderLayout());
 
-        return panel;
-    }   
+    backBtn = new JButton("<                                      ");
+    backBtn.setPreferredSize(new Dimension(5, 50)); 
+    backBtn.setFont(new Font("Arial", Font.BOLD, 35));
+    backBtn.setForeground(Color.WHITE);
+    backBtn.setBackground(maroon); 
+    backBtn.setBorder(BorderFactory.createLineBorder(maroon));
+    backBtn.setOpaque(true); 
+    backBtn.addActionListener(this);
 
-    // Panel for restaurant panel
-    private JPanel RestoPanel(Color maroon) {
-        JPanel panel = new JPanel(new BorderLayout());
+    panel.add(backBtn, BorderLayout.NORTH);
 
-        backBtn = new JButton("<                                      ");
-        backBtn.setPreferredSize(new Dimension(5, 50)); 
-        backBtn.setFont(new Font("Arial", Font.BOLD, 35));
-        backBtn.setForeground(Color.WHITE);
-        backBtn.setBackground(maroon); 
-        backBtn.setBorder(BorderFactory.createLineBorder(maroon));
-        backBtn.setOpaque(true); 
-        backBtn.addActionListener(this);
+    JPanel restaurantPanel = new JPanel(new GridLayout(0, 1, 10, 10));
+    restaurantPanel.setBorder(BorderFactory.createEmptyBorder(1, 20, 20, 20));
+    restaurantPanel.setBackground(maroon);
+    
+    mcdo = new ImageIcon("mcdo.jpg");
+    jobee = new ImageIcon("jobee.jpg");
+    green = new ImageIcon("greenwich.jpg");
+    burger = new ImageIcon("burgerKing.jpg");
+    
+    Image scaledMcdo, scaledJobee, scaledGreen, scaledBurger;
+    scaledMcdo = mcdo.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledJobee = jobee.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledGreen = green.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledBurger = burger.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
 
-        panel.add(backBtn, BorderLayout.NORTH);
+    RestoButton("McDonald's", restaurantPanel, scaledMcdo);
+    RestoButton("Jollibee", restaurantPanel, scaledJobee);
+    RestoButton("Greenwich", restaurantPanel, scaledGreen);
+    RestoButton("Burger King", restaurantPanel, scaledBurger);
 
-        JPanel restaurantPanel = new JPanel(new GridLayout(0, 1, 10, 10));
-        restaurantPanel.setBorder(BorderFactory.createEmptyBorder(1, 20, 20, 20));
-        restaurantPanel.setBackground(maroon);
+    panel.add(restaurantPanel, BorderLayout.CENTER);
 
-        mcdo = new ImageIcon("mcdo.png");
-        jobee = new ImageIcon("jobee.png");
-        green = new ImageIcon("greenwich.png");
-        burger = new ImageIcon("burgerKing.png");   
-
-        scaledMcdo = mcdo.getImage().getScaledInstance(430, 180, Image.SCALE_SMOOTH);
-        scaledJobee = jobee.getImage().getScaledInstance(430, 180, Image.SCALE_SMOOTH);
-        scaledGreen = green.getImage().getScaledInstance(430, 180, Image.SCALE_SMOOTH);
-        scaledBurger = burger.getImage().getScaledInstance(430, 180, Image.SCALE_SMOOTH);
-
-        RestoButton("McDonald's", restaurantPanel, scaledMcdo);
-        RestoButton("Jollibee", restaurantPanel, scaledJobee);
-        RestoButton("Greenwich", restaurantPanel, scaledGreen);
-        RestoButton("Burger King", restaurantPanel, scaledBurger);
-
-        panel.add(restaurantPanel, BorderLayout.CENTER);
-
-        return panel;
-    }
+    return panel;
+}
   
-    public short chosenResto;
-
-    private void RestoButton(String name, JPanel parentPanel, Image restoPic) {
+  public short chosenResto;
+  
+  //restaurant choices
+  private void RestoButton(String name, JPanel parentPanel, Image restoPic) {
         JButton restaurantButton = new JButton(name);
         restaurantButton.setFont(new Font("Arial", Font.BOLD, 20));
         restaurantButton.setHorizontalAlignment(SwingConstants.CENTER);
         restaurantButton.setVerticalAlignment(SwingConstants.CENTER);
-        restaurantButton.setPreferredSize(new Dimension(120, 60));
+        restaurantButton.setPreferredSize(new Dimension(300, 60));
         restaurantButton.addActionListener(this);
         ImageIcon scaledRestoPic = new ImageIcon(restoPic);
         restaurantButton.setIcon(scaledRestoPic);
         parentPanel.add(restaurantButton);
     }
   
-    //menu panel for displaying a selected restaurant menu
-    private JPanel MenuPanel(Color backgroundColor) {
+  //menu panel for displaying a selected restaurant menu
+  private JPanel MenuPanel(Color backgroundColor) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setBackground(backgroundColor);
 
         branchComboBox = new JComboBox<>(new String[]{
-            "Muntinlupa", "San Pedro", "Binan", "Sta. Rosa", "Cabuyao"
+                "Muntinlupa", "San Pedro", "Binan", "Sta. Rosa", "Cabuyao"
         });
         branchComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(branchComboBox);
-
+       
         space1 = new JLabel("  ");
         space1.setFont(new Font("arial", Font.PLAIN, 7));
-
+       
         space2 = new JLabel("  ");
         space2.setFont(new Font("arial", Font.PLAIN, 10));
-
+       
         orderBtn = new JButton("Order Now");
-        orderBtn.setBackground(Color.white);
         orderBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        orderBtn.setPreferredSize(new Dimension(150, 30));
-        orderBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        orderBtn.setPreferredSize(new Dimension(150, 50));
         orderBtn.addActionListener(this);
 
         return panel;
-      }
+    }
   
-    private void MenuPanel(String restaurantName) {
+  private void MenuPanel(String restaurantName) {
         // Clears the current menu and set a new one based on restaurant selection
         menuPanel.removeAll();
 
@@ -179,7 +173,7 @@ public class MenuSelection extends JFrame implements ActionListener {
                 "Muntinlupa", "San Pedro", "Binan", "Sta. Rosa", "Cabuyao"
         });
         
-        //panel for back button
+        //panel for second back button
         JPanel backBtnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
         backBtnPanel.setOpaque(false); 
         backBtn2 = new JButton("<      ");
@@ -208,7 +202,7 @@ public class MenuSelection extends JFrame implements ActionListener {
         menuPanel.add(branchComboBox);
         menuPanel.add(space1);
 
-        if (restaurantName.equals("Burger King")) {
+         if (restaurantName.equals("Burger King")) {
             chosenResto = 2;
             menuCategory("Whopper", new String[][]{
                     {"(₱75) Whopper Jr."},
