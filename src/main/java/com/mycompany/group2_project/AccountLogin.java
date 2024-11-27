@@ -39,10 +39,6 @@ import javax.swing.border.CompoundBorder;
  */
 public class AccountLogin extends JFrame implements ActionListener, KeyListener {
     
-    public static void main(String[] args) {
-        new AccountLogin();
-    }
-    
     public AccountLogin() {
         //All the separated methods for efficiency
         PanelShadow();
@@ -515,7 +511,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                 //For connecting to the database
                 
                 //"jdbc:mysql://[host address]/[database_name], [user], [password]
-                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/customer_data", "root", "group2");
+                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/customer_data", "root", "group2");
                 
                 //The query for the database
                 PreparedStatement st = (PreparedStatement) c.prepareStatement("SELECT username, password FROM account_profile WHERE username=? and password=?");
@@ -526,9 +522,10 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                 
                 //For executing the query above
                 ResultSet rs = st.executeQuery();
-                
+               
+                //adminUser and adminPass are only temporary
                 //If TRUE, logs in to the program, and dispose this current program
-                if (rs.next()) {
+                if ((username.equals("adminUser") & password.equals("adminPass")) || rs.next()) {
                     JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
 //                    dispose();
 //                    new Trial_foodDelMain();
@@ -773,6 +770,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         //For login panel: password
         } else if(e.getSource()==passLoginTF) {
             passLoginLbl.setText("");
+            userLoginTF.setBorder(tfBorder);
             passLoginTF.setBorder(tfBorder);
             if(passLoginTF.getText().equals("")) {
                 passLoginLbl.setText("Password");
