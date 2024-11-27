@@ -15,4 +15,6 @@ These are the members and their assigned program:
 
 P.S. This is an incomplete system that only focuses on design and some functions (GUI). 
 We have not implemented the data structures needed yet. 
-In the future, expect a change in our system as we learn the data structures needed like Hash Table and other stuffs.
+In the future, expect a change in our system as we learn the data structures needed like Hash Table and other stuffs. 
+In addition, please do not expect many commits from us. 
+I told everyone that only after they are done with their GUI is when we will be pushing in our own branch.
