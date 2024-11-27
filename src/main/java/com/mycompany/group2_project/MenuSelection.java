@@ -375,15 +375,15 @@ public class MenuSelection extends JFrame implements ActionListener {
     } else if (e.getSource() == backBtn2) {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else if (e.getSource() == profileBtn) {
-//        dispose();
-//        new CustomerProfile();
+        dispose();
+        new CustomerProfile();
     } else if (e.getSource() == logoutBtn) {
-//        dispose();
-//        new AccountLogin();
+        dispose();
+        new AccountLogin();
     } else if (e.getSource() == orderBtn) {
         JOptionPane.showMessageDialog(this, "Proceeding order for branch: " + branchComboBox.getSelectedItem());
-//        setVisible(false);
-//        new orderSelection(MenuSelection.this);
+        setVisible(false);
+        new OrderSelection(MenuSelection.this);
     } else if (e.getSource() == viewRestaurantsBtn) {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else {String restaurantName = ((JButton) e.getSource()).getText();
