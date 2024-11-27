@@ -168,6 +168,7 @@ import javax.swing.table.DefaultTableModel;
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == backLabel){
             this.dispose();
+            new CustomerProfileMain();
         }
             
     }
@@ -237,10 +238,7 @@ import javax.swing.table.DefaultTableModel;
     }
        if (e.getSource() == pastBtn){
              this.dispose();
-             
-             //new OrderHistoryMain()
-
-           
+             new OrderHistoryMain()
        }
 
     }
