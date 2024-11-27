@@ -54,7 +54,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         setLayout(null);
         setSize(464, 737);
         setVisible(true);
-        setTitle("FORDA FOOD: Sign In");
+        setTitle("Account Login / Register");
         setResizable(false);
         setLocationRelativeTo(null);
         setIconImage(logoIcon.getImage());
@@ -161,7 +161,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         accountBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
         accountBtn.setFocusable(false);
         accountBtn.setContentAreaFilled(false);
-        accountBtn.setBounds(125,435, 200, 50);
+        accountBtn.setBounds(125,440, 200, 50);
         accountBtn.setFont(tahoma);
         accountBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         accountBtn.addActionListener(this);
@@ -172,7 +172,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         exitBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
         exitBtn.setFocusable(false);
         exitBtn.setContentAreaFilled(false);
-        exitBtn.setBounds(125,505, 200, 50);
+        exitBtn.setBounds(125,500, 200, 50);
         exitBtn.setFont(tahoma);
         exitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         exitBtn.addActionListener(this);
