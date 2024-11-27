@@ -122,7 +122,7 @@ public class ConfirmOrder extends JFrame {
                 if (confirmChoice == JOptionPane.YES_OPTION) {
                     dispose();
                     parent.dispose();
-//                    new DeliveryStatusMain();
+                    new DeliveryStatusMain();
                 } else if (confirmChoice == JOptionPane.NO_OPTION) {
                 parent.setEnabled(true);
                 parent.txtfBLSt.setText("");
