@@ -31,7 +31,7 @@ public class EmailVerification extends JFrame implements ActionListener {
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\Icon.png");
+        ImageIcon logoIcon = new ImageIcon("fordaFood.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -44,7 +44,7 @@ public class EmailVerification extends JFrame implements ActionListener {
         add(mainPanel);
 
         // Masked email display for reference
-        lblEmail = new JLabel("ry**********ay@gmail.com");
+        lblEmail = new JLabel("alf*********rto@gmail.com");
         lblEmail.setBounds(115, 70, 250, 30); 
         lblEmail.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblEmail);
@@ -94,7 +94,7 @@ public class EmailVerification extends JFrame implements ActionListener {
         } 
         else if (e.getSource() == btnNext) {
             // Validate email input
-            String correctEmail = "ryzamaealicaway@gmail.com"; // The correct email for validation
+            String correctEmail = "alfredgualberto@gmail.com"; // The correct email for validation
             String enteredEmail = txtUserEmail.getText().trim(); // User input
 
             if (enteredEmail.isEmpty()) {

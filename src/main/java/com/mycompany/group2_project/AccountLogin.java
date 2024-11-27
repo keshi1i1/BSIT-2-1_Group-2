@@ -525,10 +525,10 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                
                 //adminUser and adminPass are only temporary
                 //If TRUE, logs in to the program, and dispose this current program
-                if ((username.equals("adminUser") & password.equals("adminPass")) || rs.next()) {
+                if ((username.equalsIgnoreCase("adminUser") & password.equals("adminPass")) || rs.next()) {
                     JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    new MenuSelectionMain();
+                    new MenuSelection();
                 //If FALSE, highlights the border of username and password textfields
                 } else {
                     JOptionPane.showMessageDialog(loginP, "Invalid Username or Password.", "Error!", JOptionPane.ERROR_MESSAGE);

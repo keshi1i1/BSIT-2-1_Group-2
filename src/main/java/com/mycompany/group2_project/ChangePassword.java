@@ -24,7 +24,7 @@ public class ChangePassword extends JFrame implements ActionListener {
 
 
     // Stored password 
-    private final String currentPasswordStored = "Ryalicaway0720";
+    private final String currentPasswordStored = "adminPass";
 
     //Constructor
     ChangePassword() { 
@@ -34,7 +34,7 @@ public class ChangePassword extends JFrame implements ActionListener {
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\Icon.png");
+        ImageIcon logoIcon = new ImageIcon("fordaFood.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -48,40 +48,40 @@ public class ChangePassword extends JFrame implements ActionListener {
 
         // Current Password label
         lblCurrentPass = new JLabel("Current Password");
-        lblCurrentPass.setBounds(20, 30, 200, 30);
+        lblCurrentPass.setBounds(75, 30, 200, 30);
         lblCurrentPass.setFont(new Font("Arial", Font.BOLD, 15));
         mainPanel.add(lblCurrentPass);
 
         // Password field for current password input
         txtCurrent = new JPasswordField();
-        txtCurrent.setBounds(20, 60, 200, 30);
+        txtCurrent.setBounds(75, 60, 300, 30);
         mainPanel.add(txtCurrent);
 
         // New Password label
         lblNewPass = new JLabel("New Password");
-        lblNewPass.setBounds(20, 90, 200, 30);
+        lblNewPass.setBounds(75, 90, 200, 30);
         lblNewPass.setFont(new Font("Arial", Font.BOLD, 15));
         mainPanel.add(lblNewPass);
 
         // Password field for New Password input
         txtNew = new JPasswordField();
-        txtNew.setBounds(20, 120, 200, 30);
+        txtNew.setBounds(75, 120, 300, 30);
         mainPanel.add(txtNew);
 
         // Re-type Password label
         lblRetypePass = new JLabel("Re-type Password");
-        lblRetypePass.setBounds(20, 150, 200, 30);
+        lblRetypePass.setBounds(75, 150, 200, 30);
         lblRetypePass.setFont(new Font("Arial", Font.BOLD, 15));
         mainPanel.add(lblRetypePass);
 
         // Password Field for Re-typing new password
         txtRetype = new JPasswordField();
-        txtRetype.setBounds(20, 180, 200, 30);
+        txtRetype.setBounds(75, 180, 300, 30);
         mainPanel.add(txtRetype);
 
         // Cancel button
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(70, 230, 100, 30);
+        btnCancel.setBounds(100, 230, 100, 30);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 15));
         btnCancel.setBackground(new Color(113, 45, 59));
         btnCancel.setForeground(Color.WHITE);
@@ -89,7 +89,7 @@ public class ChangePassword extends JFrame implements ActionListener {
 
         // Confirm button
         btnConfirm = new JButton("Confirm");
-        btnConfirm.setBounds(252, 230, 100, 30);
+        btnConfirm.setBounds(250, 230, 100, 30);
         btnConfirm.setFont(new Font("Arial", Font.BOLD, 15));
         btnConfirm.setBackground(new Color(113, 45, 59));
         btnConfirm.setForeground(Color.WHITE);
@@ -124,14 +124,18 @@ public class ChangePassword extends JFrame implements ActionListener {
             }
 
             // Validate that new passwords match
-            if (!newPassword.equals(retypePassword)) {
+            if(newPassword.isEmpty() || retypePassword.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill out the password field!", "Error", JOptionPane.ERROR_MESSAGE);
+                
+            } else if (!newPassword.equals(retypePassword)) {
                 JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
                 return; 
+            } else {
+                // Show success message and close the frame
+                JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose(); 
             }
 
-            // Show success message and close the frame
-            JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose(); 
         }
     }
 

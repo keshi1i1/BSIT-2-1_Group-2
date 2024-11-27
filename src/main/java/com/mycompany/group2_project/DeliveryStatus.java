@@ -84,13 +84,13 @@ import javax.swing.table.DefaultTableModel;
           // Wallpaper for my frame to make it look clean
           BgPanel = new JPanel();
           BgPanel.setLayout(null);
-          BgPanel.setBounds(1, 1, 470, 740);
+          BgPanel.setBounds(0, 0, 470, 740);
           BgPanel.setBackground(Color.WHITE);
           add(BgPanel);
           // Header panel, where the big title is located 
           HdrPanel = new JPanel();
           HdrPanel.setLayout(null);
-          HdrPanel.setBounds(0, 0, 450, 75);
+          HdrPanel.setBounds(0, 0, 450, 70);
           HdrPanel.setBackground(new Color(113, 48, 59));
           BgPanel.add(HdrPanel);
           // Middle Panel, where the main part is
@@ -121,7 +121,7 @@ import javax.swing.table.DefaultTableModel;
           // Where the buttons is located at
           BtmPanel = new JPanel();
           BtmPanel.setLayout(null);
-          BtmPanel.setBounds(0, 630, 450, 110);
+          BtmPanel.setBounds(0, 630, 450, 70);
           BtmPanel.setBackground(new Color (113, 45, 59));
           BgPanel.add(BtmPanel);
           // Order Status
@@ -168,7 +168,7 @@ import javax.swing.table.DefaultTableModel;
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == backLabel){
             this.dispose();
-            new CustomerProfileMain();
+            new CustomerProfile();
         }
             
     }
@@ -197,19 +197,19 @@ import javax.swing.table.DefaultTableModel;
      //This will showcase the 4 status depends on the order process
       private void updateProgressBar(){
         switch (currentStatus){
-                case PROCESSING:
+                case ORDER_PLACED:
                     ProgressBar.setValue(25);
                     break;
-               case ORDER_PLACED:
-                   ProgressBar.setValue(50);
-                   ProgressBar.setString("PROCESSING");
-                   break;
-               case COMPLETE:
-                   ProgressBar.setValue(100);
-                   break;
-               case CANCELLED:
-                   ProgressBar.setValue(0);
-                   break;
+                case PROCESSING:
+                    ProgressBar.setValue(50);
+                    ProgressBar.setString("PROCESSING");
+                    break;
+                case COMPLETE:
+                    ProgressBar.setValue(100);
+                    break;
+                case CANCELLED:
+                    ProgressBar.setValue(0);
+                    break;
                    
        }
     }
@@ -218,7 +218,7 @@ import javax.swing.table.DefaultTableModel;
     public void actionPerformed(ActionEvent e) {
        if (e.getSource() == checkStatusBtn){
             int stats = orderTable.getSelectedRow();
-            currentStatus = OrderStatus.ORDER_PLACED;
+            currentStatus = OrderStatus.PROCESSING;
             if(stats == -1){
                JOptionPane.showMessageDialog(this, "Please Select an Order First");
             }else {
@@ -230,15 +230,15 @@ import javax.swing.table.DefaultTableModel;
        }
        if (e.getSource() == currBtn){
         
-           currentStatus = OrderStatus.CANCELLED;
-           StatusLabel.setText("Delivery Status: " + currentStatus);
-           updateOrderTable();
-           updateProgressBar();
+//           currentStatus = OrderStatus.CANCELLED;
+//           StatusLabel.setText("Delivery Status: " + currentStatus);
+//           updateOrderTable();
+//           updateProgressBar();
 
     }
        if (e.getSource() == pastBtn){
              this.dispose();
-             new OrderHistoryMain()
+             new OrderHistory();
        }
 
     }

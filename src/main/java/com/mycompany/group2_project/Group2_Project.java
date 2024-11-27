@@ -11,6 +11,6 @@ package com.mycompany.group2_project;
 public class Group2_Project {
 
     public static void main(String[] args) {
-        new AccountLoginMain();
+        new AccountLogin();
     }
 }

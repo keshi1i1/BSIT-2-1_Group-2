@@ -41,15 +41,15 @@ public class CustomerProfile extends JFrame implements ActionListener {
         mainPanel.add(btnHome);
 
         // User's Name Label
-        lblName = new JLabel("Ryza Alicaway");
-        lblName.setBounds(145, 40, 200, 30);
-        lblName.setFont(new Font("Arial", Font.BOLD, 22));
+        lblName = new JLabel("Alfred Gualberto");
+        lblName.setBounds(130, 40, 200, 30);
+        lblName.setFont(new Font("Arial", Font.BOLD, 25));
         lblName.setForeground(new Color(113, 45, 59)); 
         mainPanel.add(lblName);
 
         // Order History Button
         btnOrder = new JButton("Order History");
-        btnOrder.setBounds(168, 70, 115, 20);
+        btnOrder.setBounds(168, 80, 115, 20);
         btnOrder.setFont(new Font("Arial", Font.BOLD, 12));
         btnOrder.setBackground(new Color(113, 45, 59)); // Maroon
         btnOrder.setForeground(Color.WHITE);
@@ -57,48 +57,48 @@ public class CustomerProfile extends JFrame implements ActionListener {
 
         // Add Profile Details (Email, Username, Phone Number, Password, Address)
         lblEmail = new JLabel("Email");
-        lblEmail.setBounds(50, 110, 80, 30);
+        lblEmail.setBounds(50, 120, 80, 30);
         lblEmail.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblEmail);
 
-        EmailBox = createBoxWithLabel("ry***********ay@gmail.com", 50, 140, 340, 40);
+        EmailBox = createBoxWithLabel("alf*********rto@gmail.com", 50, 150, 340, 40);
         mainPanel.add(EmailBox);
 
         lblUsername = new JLabel("Username");
-        lblUsername.setBounds(50, 195, 100, 30);
+        lblUsername.setBounds(50, 210, 100, 30);
         lblUsername.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblUsername);
 
-        UsernameBox = createBoxWithLabel("ryzchi", 50, 225, 340, 40);
+        UsernameBox = createBoxWithLabel("adminUser", 50, 240, 340, 40);
         mainPanel.add(UsernameBox);
 
         lblPhoneNumber = new JLabel("Phone Number");
-        lblPhoneNumber.setBounds(50, 275, 150, 30);
+        lblPhoneNumber.setBounds(50, 300, 150, 30);
         lblPhoneNumber.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblPhoneNumber);
 
-        PhoneNumberBox = createBoxWithLabel("09086003668", 50, 305, 340, 40);
+        PhoneNumberBox = createBoxWithLabel("09876543210", 50, 330, 340, 40);
         mainPanel.add(PhoneNumberBox);
 
         lblPassword = new JLabel("Password");
-        lblPassword.setBounds(50, 355, 100, 30);
+        lblPassword.setBounds(50, 390, 100, 30);
         lblPassword.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblPassword);
 
-        PasswordBox = createBoxWithLabel("**********", 50, 385, 340, 40);
+        PasswordBox = createBoxWithLabel("*********", 50, 420, 340, 40);
         mainPanel.add(PasswordBox);
 
         lblAddress = new JLabel("Address");
-        lblAddress.setBounds(50, 435, 100, 30);
+        lblAddress.setBounds(50, 480, 100, 30);
         lblAddress.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblAddress);
 
-        AddressBox = createBoxWithLabel("Brgy. Santo Niño, Biñan City, Laguna", 50, 465, 340, 40);
+        AddressBox = createBoxWithLabel("Brgy. Santo Niño, Biñan City, Laguna", 50, 510, 340, 40);
         mainPanel.add(AddressBox);
 
         // Add Change Password Button
         btnResetPass = new JButton("Change Password");
-        btnResetPass.setBounds(134, 530, 180, 30);
+        btnResetPass.setBounds(134, 580, 180, 30);
         btnResetPass.setFont(new Font("Arial", Font.BOLD, 15));
         btnResetPass.setBackground(new Color(113, 45, 59));
         btnResetPass.setForeground(Color.WHITE);
@@ -141,13 +141,13 @@ public class CustomerProfile extends JFrame implements ActionListener {
         else if (e.getSource() == btnOrder) {
         this.dispose();
         // Open the DeliveryStatusMain frame (Show order history)
-        new DeliveryStatusMain();
+        new DeliveryStatus();
     }
          // Check if the "Home" button was clicked
         else if (e.getSource() == btnHome) {
             this.dispose();
             // Open the MenuSelectionMain frame (Back to the main menu)
-            new MenuSelectionMain();
+            new MenuSelection();
         } 
     }
 
