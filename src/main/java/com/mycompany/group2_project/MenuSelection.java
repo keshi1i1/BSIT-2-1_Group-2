@@ -376,14 +376,14 @@ public class MenuSelection extends JFrame implements ActionListener {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else if (e.getSource() == profileBtn) {
 //        dispose();
-//        new ProjectMain();
+//        new CustomerProfile();
     } else if (e.getSource() == logoutBtn) {
 //        dispose();
-//        new LogIn();
+//        new AccountLogin();
     } else if (e.getSource() == orderBtn) {
         JOptionPane.showMessageDialog(this, "Proceeding order for branch: " + branchComboBox.getSelectedItem());
 //        setVisible(false);
-//        new orderItemSelect(foodDel.this);
+//        new orderSelection(MenuSelection.this);
     } else if (e.getSource() == viewRestaurantsBtn) {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else {String restaurantName = ((JButton) e.getSource()).getText();
