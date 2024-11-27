@@ -376,10 +376,10 @@ public class MenuSelection extends JFrame implements ActionListener {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else if (e.getSource() == profileBtn) {
         dispose();
-        new CustomerProfile();
+        new CustomerProfileMain();
     } else if (e.getSource() == logoutBtn) {
         dispose();
-        new AccountLogin();
+        new AccountLoginMain();
     } else if (e.getSource() == orderBtn) {
         JOptionPane.showMessageDialog(this, "Proceeding order for branch: " + branchComboBox.getSelectedItem());
         setVisible(false);
