@@ -23,6 +23,7 @@ public class ConfirmOrder extends JFrame {
     private JButton btnConfirm, btnCancel;
     private JLabel lblAddress, lblCost, lblCostShow, lblContact, lblContactNum, lblCart;
     private JTextArea txtaAddressSet;
+    private ImageIcon imgLogo;
     
     ConfirmOrder(OrderSelection parent) {
         //disable parent frame
@@ -36,6 +37,9 @@ public class ConfirmOrder extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Confirm Order");
         setSize(464,407);
+        //set Logo
+        imgLogo = new ImageIcon("Image.png");
+        setIconImage(imgLogo.getImage());
         
         //displaying the cart
         lblCart = new JLabel("Cart");

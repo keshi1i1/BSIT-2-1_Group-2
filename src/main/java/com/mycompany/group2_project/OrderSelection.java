@@ -20,6 +20,8 @@ public class OrderSelection extends JFrame implements ActionListener {
     public JLabel lblNum;
     public JComboBox cmbBrgy, cmbCity;
     public JTextField txtfBLSt;
+    private ImageIcon imgLogo;
+    
     
     //Panel - header
     private JPanel pnlHeader;
@@ -60,6 +62,9 @@ public class OrderSelection extends JFrame implements ActionListener {
         setLayout(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setLogo
+        imgLogo = new ImageIcon("Image.png");
+        setIconImage(imgLogo.getImage());
         
         //header panel
         pnlHeader = new JPanel();
