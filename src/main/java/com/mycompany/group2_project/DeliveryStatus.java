@@ -64,7 +64,7 @@ import javax.swing.table.DefaultTableModel;
       }
       DeliveryStatus(){
           // Icon logo for our project 
-          LogoIcon = new ImageIcon("fordafood.png");
+          LogoIcon = new ImageIcon("fordaFood.png");
           // Delivery status
           currentStatus = OrderStatus.PROCESSING;
           // datas need for my table
