@@ -14,6 +14,7 @@ public class MenuSelection extends JFrame implements ActionListener {
     private JLabel space1, space2;
     private Color maroon = new Color(113, 45, 59);
     private ImageIcon logoIcon, mcdo, jobee, green, burger;;
+    private Image scaledMcdo, scaledJobee, scaledGreen, scaledBurger;
 
     public MenuSelection() {
         setTitle("Restaurant Profile Manager");
@@ -105,13 +106,12 @@ public class MenuSelection extends JFrame implements ActionListener {
     mcdo = new ImageIcon("mcdo.jpg");
     jobee = new ImageIcon("jobee.jpg");
     green = new ImageIcon("greenwich.jpg");
-    burger = new ImageIcon("burgerKing.jpg");
+    burger = new ImageIcon("burgerKing.jpg");   
     
-    Image scaledMcdo, scaledJobee, scaledGreen, scaledBurger;
-    scaledMcdo = mcdo.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
-    scaledJobee = jobee.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
-    scaledGreen = green.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
-    scaledBurger = burger.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledMcdo = mcdo.getImage().getScaledInstance(420, 145, Image.SCALE_SMOOTH);
+    scaledJobee = jobee.getImage().getScaledInstance(420, 145, Image.SCALE_SMOOTH);
+    scaledGreen = green.getImage().getScaledInstance(420, 145, Image.SCALE_SMOOTH);
+    scaledBurger = burger.getImage().getScaledInstance(420, 145, Image.SCALE_SMOOTH);
 
     RestoButton("McDonald's", restaurantPanel, scaledMcdo);
     RestoButton("Jollibee", restaurantPanel, scaledJobee);
@@ -130,7 +130,7 @@ public class MenuSelection extends JFrame implements ActionListener {
         restaurantButton.setFont(new Font("Arial", Font.BOLD, 20));
         restaurantButton.setHorizontalAlignment(SwingConstants.CENTER);
         restaurantButton.setVerticalAlignment(SwingConstants.CENTER);
-        restaurantButton.setPreferredSize(new Dimension(300, 60));
+        restaurantButton.setPreferredSize(new Dimension(120, 60));
         restaurantButton.addActionListener(this);
         ImageIcon scaledRestoPic = new ImageIcon(restoPic);
         restaurantButton.setIcon(scaledRestoPic);
