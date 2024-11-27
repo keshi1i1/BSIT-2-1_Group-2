@@ -20,7 +20,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("Icon.png");
+        ImageIcon logoIcon = new ImageIcon("fordaFood.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -141,13 +141,13 @@ public class CustomerProfile extends JFrame implements ActionListener {
         else if (e.getSource() == btnOrder) {
         this.dispose();
         // Open the DeliveryStatusMain frame (Show order history)
-  //      new DeliveryStatusMain();
+        new DeliveryStatusMain();
     }
          // Check if the "Home" button was clicked
         else if (e.getSource() == btnHome) {
             this.dispose();
             // Open the MenuSelectionMain frame (Back to the main menu)
- //           new MenuSelectionMain();
+            new MenuSelectionMain();
         } 
     }
 
