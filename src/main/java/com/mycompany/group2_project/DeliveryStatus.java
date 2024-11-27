@@ -171,7 +171,7 @@ import javax.swing.table.DefaultTableModel;
         }
             
     }
-
+      //if you remove this other 3 the mouse event will not work
     @Override
     public void mousePressed(MouseEvent e) {
     }
