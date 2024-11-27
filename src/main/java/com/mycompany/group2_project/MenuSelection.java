@@ -43,39 +43,38 @@ public class MenuSelection extends JFrame implements ActionListener {
     // Logo
     logoIcon = new ImageIcon("fordaFood.png");
     JLabel logoLabel = new JLabel(logoIcon);
-    logoLabel.setBounds(115, 10, 250, 500); 
+    logoLabel.setBounds(100, 25, 250, 350); 
     
-    Image scaledImage = logoIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+    Image scaledImage = logoIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
     logoLabel.setIcon(new ImageIcon(scaledImage));
 
     viewRestaurantsBtn = new JButton("View Restaurants");
-    viewRestaurantsBtn.setBounds(115, 350, 200, 70); 
-    viewRestaurantsBtn.setFont(new Font("Arial", Font.BOLD, 15));
+    viewRestaurantsBtn.setBounds(117, 390, 200, 50); 
+    viewRestaurantsBtn.setFont(new Font("Arial", Font.BOLD, 17));
     viewRestaurantsBtn.setForeground(maroon);
-    viewRestaurantsBtn.setBorder(BorderFactory.createLineBorder(maroon));
+    viewRestaurantsBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
     viewRestaurantsBtn.setOpaque(false);
     viewRestaurantsBtn.setContentAreaFilled(false);
     viewRestaurantsBtn.addActionListener(this);
     
     profileBtn = new JButton("Profile");
-    profileBtn.setBounds(115, 450, 200, 70); 
-    profileBtn.setFont(new Font("Arial", Font.BOLD, 15));
+    profileBtn.setBounds(117, 450, 200, 50); 
+    profileBtn.setFont(new Font("Arial", Font.BOLD, 17));
     profileBtn.setForeground(maroon);
-    profileBtn.setBorder(BorderFactory.createLineBorder(maroon));
+    profileBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
     profileBtn.setOpaque(false);
     profileBtn.setContentAreaFilled(false);
     profileBtn.addActionListener(this);
 
     logoutBtn = new JButton("Log Out");
-    logoutBtn.setBounds(115, 550, 200, 70); 
-    logoutBtn.setFont(new Font("Arial", Font.BOLD, 15));
+    logoutBtn.setBounds(117, 510, 200, 50); 
+    logoutBtn.setFont(new Font("Arial", Font.BOLD, 17));
     logoutBtn.setForeground(maroon);
-    logoutBtn.setBorder(BorderFactory.createLineBorder(maroon));
+    logoutBtn.setBorder(BorderFactory.createLineBorder(maroon, 3));
     logoutBtn.setOpaque(false);
     logoutBtn.setContentAreaFilled(false);
     logoutBtn.addActionListener(this);
 
-    // Add components to panel
     panel.add(logoLabel);
     panel.add(viewRestaurantsBtn);
     panel.add(profileBtn);
@@ -109,10 +108,10 @@ public class MenuSelection extends JFrame implements ActionListener {
     burger = new ImageIcon("burgerKing.jpg");
     
     Image scaledMcdo, scaledJobee, scaledGreen, scaledBurger;
-    scaledMcdo = mcdo.getImage().getScaledInstance(620, 147, Image.SCALE_SMOOTH);
-    scaledJobee = jobee.getImage().getScaledInstance(620, 147, Image.SCALE_SMOOTH);
-    scaledGreen = green.getImage().getScaledInstance(635, 147, Image.SCALE_SMOOTH);
-    scaledBurger = burger.getImage().getScaledInstance(620, 147, Image.SCALE_SMOOTH);
+    scaledMcdo = mcdo.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledJobee = jobee.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledGreen = green.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
+    scaledBurger = burger.getImage().getScaledInstance(430, 147, Image.SCALE_SMOOTH);
 
     RestoButton("McDonald's", restaurantPanel, scaledMcdo);
     RestoButton("Jollibee", restaurantPanel, scaledJobee);
