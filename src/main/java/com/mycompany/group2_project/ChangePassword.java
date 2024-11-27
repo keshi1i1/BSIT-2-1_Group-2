@@ -132,7 +132,6 @@ public class ChangePassword extends JFrame implements ActionListener {
             // Show success message and close the frame
             JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
             this.dispose(); 
-            new CustomerProfile();
         }
     }
 
