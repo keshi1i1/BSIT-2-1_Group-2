@@ -30,7 +30,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        imgLogo = new ImageIcon("logo.png");
+        imgLogo = new ImageIcon("fordaFood.png");
         setIconImage(imgLogo.getImage());
         setTitle("FORDA FOODS: Order History");
         
