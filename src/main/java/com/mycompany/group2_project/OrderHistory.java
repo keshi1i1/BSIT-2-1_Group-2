@@ -127,7 +127,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function of the back button
         if(e.getSource() == hdrExit) {
             this.dispose();
-            //new CustomerProfileMain();
+            new CustomerProfileMain();
         }
     }
     
@@ -158,7 +158,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function for the Current Orders tab
         if(e.getSource() == btnCurrent) {
             this.dispose();
-            //new DeliveryStatusMain();
+            new DeliveryStatusMain();
         }
     }
 }
