@@ -30,38 +30,37 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        imgLogo = new ImageIcon("logo.png");
+        imgLogo = new ImageIcon("fordaFood.png");
         setIconImage(imgLogo.getImage());
-        setTitle("FORDA FOODS: Order History");
+        setTitle("Order History");
         
         //Creating Header
-        Border hdrBorder = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2);
         panelHdr = new JPanel();
-        panelHdr.setBounds(0, 0, 450, 71);
+        panelHdr.setBounds(0, 0, 450, 70);
         panelHdr.setBackground(new Color(113, 45, 59));
         panelHdr.setLayout(null);
-        panelHdr.setBorder(hdrBorder);
         
         //Back button at the header
         hdrExit = new JLabel("\u2b9c");
         hdrExit.setBounds(25, 21, 25, 31);
+        hdrExit.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
         hdrExit.setForeground(Color.WHITE);
         hdrExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         //Order label at the header
-        hdrText = new JLabel("Orders");
-        hdrText.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-        hdrText.setBounds(60, 23, 100, 30);
+        hdrText = new JLabel("ORDER HISTORY");
+        hdrText.setFont(new Font("arial", Font.BOLD, 20));
+        hdrText.setBounds(60, 23, 300, 30);
         hdrText.setForeground(Color.WHITE);
         
         //Button for Reviewing Orders
         btnReview = new JButton("Review Order");
         btnReview.setBounds(300, 85, 135, 24);
-        btnReview.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 11));
+        btnReview.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 11));
         
         //Delivery times label
         lblPastOrders = new JLabel("Delivery Times:");
-        lblPastOrders.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+        lblPastOrders.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
         lblPastOrders.setBounds(25, 82, 150, 30);
         lblPastOrders.setForeground(Color.BLACK);
         
@@ -72,22 +71,20 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         lblDeliveryTimes.setForeground(Color.BLACK);
         
         //Bottom panel of the frame
-        Border btmBorder = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2);
         panelBottom = new JPanel();
-        panelBottom.setBounds(0, 635, 450, 110);
+        panelBottom.setBounds(0, 630, 450, 70);
         panelBottom.setBackground(new Color(113, 45, 59));
-        panelBottom.setBorder(btmBorder);
         panelBottom.setLayout(null);
         
         //Button for the Current Orders tab
         btnCurrent = new JButton("Current Orders");
         btnCurrent.setBounds(70, 17, 150, 30);
-        btnCurrent.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+        btnCurrent.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
         
         //Button for the Past Orders tab
         btnPast = new JButton("Past Orders");
         btnPast.setBounds(230, 17, 150, 30);
-        btnPast.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+        btnPast.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
         btnPast.setEnabled(false);
         
         //Creating custom color for scrollpane border
@@ -127,7 +124,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function of the back button
         if(e.getSource() == hdrExit) {
             this.dispose();
-            //new CustomerProfileMain();
+            //new CustomerProfile();
         }
     }
     
@@ -158,10 +155,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function for the Current Orders tab
         if(e.getSource() == btnCurrent) {
             this.dispose();
-            //new DeliveryStatusMain();
+            //new DeliveryStatus();
         }
     }
 }
-
-
-
