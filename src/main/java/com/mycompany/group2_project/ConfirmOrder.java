@@ -31,7 +31,7 @@ public class ConfirmOrder extends JFrame {
         //updating the address
         String address = parent.txtfBLSt.getText().concat("\nBrgy "+parent.brgyInput).concat(", "+parent.cityInput+" City");
         //modify main frame
-        setLocation(536, 380);
+        setLocation(536, 210);
         setLayout(null);
         setResizable(false);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -118,17 +118,19 @@ public class ConfirmOrder extends JFrame {
         btnConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int confirmChoice = JOptionPane.showConfirmDialog(ConfirmOrder.this, "Do you want to place your order?", "Order Confirmation", JOptionPane.YES_NO_OPTION);
+                int confirmChoice = JOptionPane.showConfirmDialog(parent, "Do you want to check your order?", "Order Checker", JOptionPane.YES_NO_OPTION);
                 if (confirmChoice == JOptionPane.YES_OPTION) {
                     dispose();
                     parent.dispose();
-//                    new DeliveryStatusMain();
+//                    new DeliveryStatus();
                 } else if (confirmChoice == JOptionPane.NO_OPTION) {
-                parent.setEnabled(true);
-                parent.txtfBLSt.setText("");
-                parent.cmbCity.setSelectedIndex(0);
-                parent.dlmItemCart.removeAllElements();
-                dispose();
+                    parent.priceTotal = 0;
+                    parent.lblTotal.setText("Total Cost:                       ₱0");
+                    parent.setEnabled(true);
+                    parent.txtfBLSt.setText("");
+                    parent.cmbCity.setSelectedIndex(0);
+                    parent.dlmItemCart.removeAllElements();
+                    dispose();
                 }
                 
             }

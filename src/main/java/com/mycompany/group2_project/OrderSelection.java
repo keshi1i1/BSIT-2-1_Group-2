@@ -16,8 +16,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class OrderSelection extends JFrame implements ActionListener {
     
-    private JLabel lblName, lblNameDesc, lblNumDesc, lblAddress, lblBLSt, lblBrgy, lblCity, lblTotal;
-    public JLabel lblNum;
+    private JLabel lblName, lblNameDesc, lblNumDesc, lblAddress, lblBLSt, lblBrgy, lblCity;
+    public JLabel lblNum, lblTotal;
     public JComboBox cmbBrgy, cmbCity;
     public JTextField txtfBLSt;
     private ImageIcon imgLogo;
@@ -63,7 +63,7 @@ public class OrderSelection extends JFrame implements ActionListener {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //setLogo
-        imgLogo = new ImageIcon("Image.png");
+        imgLogo = new ImageIcon("fordaFood.png");
         setIconImage(imgLogo.getImage());
         
         //header panel
@@ -97,7 +97,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         lblNameDesc.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNameDesc);
         
-        lblName = new JLabel("From database");
+        //Alfred Gualberto will be the temporary name here
+        lblName = new JLabel("Alfred Gualberto");
         lblName.setBounds(100, 50, 330, 30);
         lblName.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblName);
@@ -108,7 +109,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         lblNumDesc.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNumDesc);
         
-        lblNum = new JLabel("From database");
+        //09876543210 will be the temporary contact number here
+        lblNum = new JLabel("09876543210");
         lblNum.setBounds(100, 80, 330, 30);
         lblNum.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNum);
@@ -247,9 +249,10 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
+        restoChoice = 1;
 //        restoChoice = parent.chosenResto;
         
-        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
+//        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
         
         switch(restoChoice){
             case 0:
@@ -478,7 +481,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     public void restoTwoJB(){
         
         lblResto.setText("Jollibee");
-        lblResto.setBounds(250,10,300,30);
+        lblResto.setBounds(185,10,300,30);
 
         dlmItemSelect.addElement("(₱40) Yumburger");
         dlmItemSelect.addElement("(₱66) Cheesy Yumburger");
@@ -506,7 +509,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     public void restoThreeBK(){
         
         lblResto.setText("Burger King");
-        lblResto.setBounds(250,10,300,30);
+        lblResto.setBounds(170,10,300,30);
         
         dlmItemSelect.addElement("(₱75) Whopper Jr.");
         dlmItemSelect.addElement("(₱177) Whopper");
@@ -533,7 +536,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     public void restoFourGW(){
         
         lblResto.setText("Greenwich");
-        lblResto.setBounds(250,10,300,30);
+        lblResto.setBounds(175,10,300,30);
                 
         dlmItemSelect.addElement("(₱319) 9\" Pizza - Buy  One Take One");
         dlmItemSelect.addElement("(₱499) 12\" Pizza - Buy  One Take One");
