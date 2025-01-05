@@ -20,12 +20,12 @@ public class OrderSelection extends JFrame implements ActionListener {
     public JLabel lblNum, lblTotal;
     public JComboBox cmbBrgy, cmbCity;
     public JTextField txtfBLSt;
-    private ImageIcon imgLogo;
+    private ImageIcon imgLogo, imgResto;
     
     
     //Panel - header
     private JPanel pnlHeader;
-    private JLabel lblResto;
+    private JLabel lblResto, lblRestoImg;
     private JButton btnBack;
     
     //Panel - order
@@ -62,6 +62,7 @@ public class OrderSelection extends JFrame implements ActionListener {
         setLayout(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
         //setLogo
 //        imgLogo = new ImageIcon("fordaFood.png");
         imgLogo = new ImageIcon("Image.png");
@@ -250,7 +251,7 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
-        restoChoice = 1;
+        restoChoice = 0;
 //        restoChoice = parent.chosenResto;
         
 //        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
@@ -453,9 +454,13 @@ public class OrderSelection extends JFrame implements ActionListener {
     
     //for the restaurants and its food menu
     public void restoOneMD(){
+        imgResto = new ImageIcon("mcdo.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg);
         
         lblResto.setText("McDonald's");
-        lblResto.setBounds(170,10,300,30);
+        lblResto.setBounds(170,10,200,30);
 
         dlmItemSelect.addElement("(₱154) Big Mac");
         dlmItemSelect.addElement("(₱54) Burger McDo");
@@ -480,6 +485,10 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoTwoJB(){
+        imgResto = new ImageIcon("jollibee.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(262,0,300,50);
+        pnlHeader.add(lblRestoImg);
         
         lblResto.setText("Jollibee");
         lblResto.setBounds(185,10,300,30);
@@ -508,6 +517,10 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoThreeBK(){
+        imgResto = new ImageIcon("burgerk.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg);
         
         lblResto.setText("Burger King");
         lblResto.setBounds(170,10,300,30);
@@ -535,6 +548,10 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoFourGW(){
+        imgResto = new ImageIcon("greenw.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg);
         
         lblResto.setText("Greenwich");
         lblResto.setBounds(175,10,300,30);
