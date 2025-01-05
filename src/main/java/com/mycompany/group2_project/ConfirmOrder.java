@@ -38,6 +38,7 @@ public class ConfirmOrder extends JFrame {
         setTitle("Confirm Order");
         setSize(464,407);
         //set Logo
+//        imgLogo = new ImageIcon("fordaFood.png");
         imgLogo = new ImageIcon("Image.png");
         setIconImage(imgLogo.getImage());
         

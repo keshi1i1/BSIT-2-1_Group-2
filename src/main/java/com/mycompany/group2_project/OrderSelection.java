@@ -63,7 +63,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //setLogo
-        imgLogo = new ImageIcon("fordaFood.png");
+//        imgLogo = new ImageIcon("fordaFood.png");
+        imgLogo = new ImageIcon("Image.png");
         setIconImage(imgLogo.getImage());
         
         //header panel
