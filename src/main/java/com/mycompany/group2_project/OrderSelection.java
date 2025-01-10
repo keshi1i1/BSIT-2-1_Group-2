@@ -16,8 +16,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class OrderSelection extends JFrame implements ActionListener {
     
-    private JLabel lblName, lblNameDesc, lblNumDesc, lblAddress, lblBLSt, lblBrgy, lblCity;
-    public JLabel lblNum, lblTotal;
+    private JLabel lblNameDesc, lblNumDesc, lblAddress, lblBLSt, lblBrgy, lblCity;
+    public JLabel lblNum, lblTotal, lblName;
     public JComboBox cmbBrgy, cmbCity;
     public JTextField txtfBLSt;
     private ImageIcon imgLogo, imgResto;
@@ -37,7 +37,9 @@ public class OrderSelection extends JFrame implements ActionListener {
     private JButton btnAdd, btnRem, btnAddQt, btnMinQt, btnOrder;
     
     private int itemQt=1; //food quantity
-    private short restoChoice; //temporary //for displaying diff food menus
+    public short restoChoice; //temporary //for displaying diff food menus
+    public String restoID;
+
     
     //prices
     public int priceAdd, priceRem, priceTotal;
@@ -51,7 +53,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     String brgy[] = {"-select-"};
     
     private String city[] = {"-select-","Biñan", "Cabuyao", "Muntinlupa", "San Pedro", "Sta. Rosa"};
-    public String brgyInput, cityInput;
+    public String brgyInput, cityInput, customerName;
 
     
     OrderSelection(/*MenuSelection parent*/) {
@@ -251,7 +253,7 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
-        restoChoice = 0;
+        restoChoice = 1;
 //        restoChoice = parent.chosenResto;
         
 //        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
@@ -409,6 +411,8 @@ public class OrderSelection extends JFrame implements ActionListener {
                 if (!txtfBLSt.getText().isEmpty()&&cmbCity.getSelectedIndex()!=0&&cmbBrgy.getSelectedIndex()!=0) {
                     brgyInput = (String) cmbBrgy.getSelectedItem(); //get the brgy for the next frame
                     cityInput = (String) cmbCity.getSelectedItem(); //get the city for the next frame
+                    customerName = lblName.getText();
+                    restoId();
                     new ConfirmOrder(OrderSelection.this); //go to next frame - OrderSelection frame is set to parent
                 }else{
                     JOptionPane.showMessageDialog(this, "Fill out all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -449,6 +453,100 @@ public class OrderSelection extends JFrame implements ActionListener {
             cmbBrgy.setBounds(240, 200, 190,25);
             cmbBrgy.setFont(new Font("Sherif", Font.PLAIN, 15));
             add(cmbBrgy); //adding updated combo box for brgy
+        }
+    }
+    
+    //for restoID depending on the resto and city
+    public void restoId() {
+        short chosenCity = (short) cmbCity.getSelectedIndex();
+
+        switch (restoChoice) {
+            case 0:
+                switch (chosenCity) {
+                    case 1:
+                        restoID = "MDBC";
+                        break;
+                    case 2:
+                        restoID = "MDCC";
+                        break;
+                    case 3:
+                        restoID = "MDMC";
+                        break;
+                    case 4:
+                        restoID = "MDSPC";
+                        break;
+                    case 5:
+                        restoID = "MDSC";
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 1:
+                switch (chosenCity) {
+                    case 1:
+                        restoID = "JBBC";
+                        break;
+                    case 2:
+                        restoID = "JBCC";
+                        break;
+                    case 3:
+                        restoID = "JBMC";
+                        break;
+                    case 4:
+                        restoID = "JBSPC";
+                        break;
+                    case 5:
+                        restoID = "JBSC";
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 2:
+                switch (chosenCity) {
+                    case 1:
+                        restoID = "BKBC";
+                        break;
+                    case 2:
+                        restoID = "BKCC";
+                        break;
+                    case 3:
+                        restoID = "BKMC";
+                        break;
+                    case 4:
+                        restoID = "BKSPC";
+                        break;
+                    case 5:
+                        restoID = "BKSC";
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 3:
+                switch (chosenCity) {
+                    case 1:
+                        restoID = "GWBC";
+                        break;
+                    case 2:
+                        restoID = "GWCC";
+                        break;
+                    case 3:
+                        restoID = "GWMC";
+                        break;
+                    case 4:
+                        restoID = "GWSPC";
+                        break;
+                    case 5:
+                        restoID = "GWSC";
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;                
+            default:
+                throw new AssertionError();
         }
     }
     

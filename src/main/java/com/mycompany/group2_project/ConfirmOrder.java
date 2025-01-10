@@ -8,8 +8,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.*;
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  *
@@ -121,6 +124,43 @@ public class ConfirmOrder extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int confirmChoice = JOptionPane.showConfirmDialog(parent, "Do you want to check your order?", "Order Checker", JOptionPane.YES_NO_OPTION);
                 if (confirmChoice == JOptionPane.YES_OPTION) {
+                    
+                    //to be fixed
+                    
+                    try {
+                    // connecting to database
+                    Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectdatabase", "root", "group2");
+
+                    // elements to be stored in the database
+                    String name =  parent.customerName;
+                    String orderId = "1123";
+                    String customerId = "1123";
+                    String restoId = parent.restoID;
+
+
+                    // insert the elements into the database
+                    String query = "INSERT INTO projectdata (name, address, orderId, customerId, restoId) VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement st = c.prepareStatement(query);
+                    st.setString(1, name);
+                    st.setString(2, address);
+                    st.setString(3, orderId);
+                    st.setString(4, customerId);
+                    st.setString(5, restoId);
+
+                    int rowsInserted = st.executeUpdate();
+                    if (rowsInserted > 0) {
+                        JOptionPane.showMessageDialog(rootPane, "Order placed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Order failed.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    c.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+                    
+                    
+                    
                     dispose();
                     parent.dispose();
 //                    new DeliveryStatus();
