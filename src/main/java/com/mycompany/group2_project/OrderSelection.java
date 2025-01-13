@@ -22,7 +22,6 @@ public class OrderSelection extends JFrame implements ActionListener {
     public JTextField txtfBLSt;
     private ImageIcon imgLogo, imgResto;
     
-    
     //Panel - header
     private JPanel pnlHeader;
     private JLabel lblResto, lblRestoImg;
@@ -38,8 +37,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     
     private int itemQt=1; //food quantity
     public short restoChoice; //temporary //for displaying diff food menus
-    public String restoID;
-
+    public String restoID, orderPrefix; //necessary for IDs
     
     //prices
     public int priceAdd, priceRem, priceTotal;
@@ -253,23 +251,27 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
-        restoChoice = 1;
+        restoChoice = 2;
 //        restoChoice = parent.chosenResto;
         
 //        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
-        
+        // orderPrefix depending on chosen resto that will be used for restoId
         switch(restoChoice){
             case 0:
                 restoOneMD();
+                orderPrefix = "MD-";
                 break;
             case 1:
                 restoTwoJB();
+                orderPrefix = "JB-";
                 break;
             case 2:
                 restoThreeBK();
+                orderPrefix = "BK-";
                 break;
             case 3:
                 restoFourGW();
+                orderPrefix = "GW-";
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "Invalid Resto", "Error", JOptionPane.ERROR_MESSAGE);
@@ -411,8 +413,8 @@ public class OrderSelection extends JFrame implements ActionListener {
                 if (!txtfBLSt.getText().isEmpty()&&cmbCity.getSelectedIndex()!=0&&cmbBrgy.getSelectedIndex()!=0) {
                     brgyInput = (String) cmbBrgy.getSelectedItem(); //get the brgy for the next frame
                     cityInput = (String) cmbCity.getSelectedItem(); //get the city for the next frame
-                    customerName = lblName.getText();
-                    restoId();
+                    customerName = lblName.getText(); //get the customer name for the data base
+                    restoId(); //method to get generated restoId
                     new ConfirmOrder(OrderSelection.this); //go to next frame - OrderSelection frame is set to parent
                 }else{
                     JOptionPane.showMessageDialog(this, "Fill out all fields", "Error", JOptionPane.ERROR_MESSAGE);
@@ -454,6 +456,132 @@ public class OrderSelection extends JFrame implements ActionListener {
             cmbBrgy.setFont(new Font("Sherif", Font.PLAIN, 15));
             add(cmbBrgy); //adding updated combo box for brgy
         }
+    }
+    
+    //for the restaurants and its food menu
+    public void restoOneMD(){
+        imgResto = new ImageIcon("mcdo.png");
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg); //change image on the upper right corner
+        
+        lblResto.setText("McDonald's");
+        lblResto.setBounds(170,10,200,30);
+
+        dlmItemSelect.addElement("(₱154) Big Mac");
+        dlmItemSelect.addElement("(₱54) Burger McDo");
+        dlmItemSelect.addElement("(₱135) Double Cheeseburger");
+        dlmItemSelect.addElement("(₱146) McChicken Sandwich");
+        dlmItemSelect.addElement("(₱52) McCrispy Chicken Sandwich");
+        dlmItemSelect.addElement("(₱118) 1pc. Chicken McDo with McSpaghetti");
+        dlmItemSelect.addElement("(₱80) 1pc. Chicken McDo with Rice");
+        dlmItemSelect.addElement("(₱60) McCrispy Chicken Fillet with Rice");
+        dlmItemSelect.addElement("(₱158) 2pc. Chicken McDo with Rice");
+        dlmItemSelect.addElement("(₱178) 6pc. Chicken McNuggets with Fries");
+        dlmItemSelect.addElement("(₱66) Coke");
+        dlmItemSelect.addElement("(₱72) Orange Juice");
+        dlmItemSelect.addElement("(₱52) Coke McFloat");
+        dlmItemSelect.addElement("(₱57) McFlurry with Oreo Cookies");
+        dlmItemSelect.addElement("(₱50) Hot Fudge Sundae");
+        dlmItemSelect.addElement("(₱79) Fries");
+        dlmItemSelect.addElement("(₱158) Cheesy Eggdesal");
+        dlmItemSelect.addElement("(₱37) Hash Browns");
+        dlmItemSelect.addElement("(₱63) Sausage Platter with Rice");
+        dlmItemSelect.addElement("(₱66) 3pc. Hotcakes");
+    }
+    
+    public void restoTwoJB(){
+        imgResto = new ImageIcon("jollibee.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(262,0,300,50);
+        pnlHeader.add(lblRestoImg); //change image on the upper right corner
+        
+        lblResto.setText("Jollibee");
+        lblResto.setBounds(185,10,300,30);
+
+        dlmItemSelect.addElement("(₱40) Yumburger");
+        dlmItemSelect.addElement("(₱66) Cheesy Yumburger");
+        dlmItemSelect.addElement("(₱169) Champ");
+        dlmItemSelect.addElement("(₱239) Aloha Champ");
+        dlmItemSelect.addElement("(₱91) Bacon Cheesy Yumburger");
+        dlmItemSelect.addElement("(₱82) 1pc. Chickenjoy");
+        dlmItemSelect.addElement("(₱163) 2pc. Chickenjoy");
+        dlmItemSelect.addElement("(₱140) 1pc. Chickenjoy with Burger Steak");
+        dlmItemSelect.addElement("(₱139) 1pc. Chickenjoy with Jolly Spaghetti");
+        dlmItemSelect.addElement("(₱535) 8pc. Chickenjoy");
+        dlmItemSelect.addElement("(₱235) Jolly Spaghetti Pan");
+        dlmItemSelect.addElement("(₱59) Jolly Spaghetti");
+        dlmItemSelect.addElement("(₱112) Jolly Spaghetti with Burger Steak");
+        dlmItemSelect.addElement("(₱59) 1pc. Burger Steak");
+        dlmItemSelect.addElement("(₱117) 2pc. Burger Steak");
+        dlmItemSelect.addElement("(₱450) 8pc. Burger Steak");
+        dlmItemSelect.addElement("(₱48) Jolly Crispy Fries");
+        dlmItemSelect.addElement("(₱53) Coke");
+        dlmItemSelect.addElement("(₱64) Ice Tea");
+        dlmItemSelect.addElement("(₱52) Coke Float");
+        dlmItemSelect.addElement("(₱64) Cookies and Cream Sundae");
+    }
+    
+    public void restoThreeBK(){
+        imgResto = new ImageIcon("burgerk.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg); //change image on the upper right corner
+        
+        lblResto.setText("Burger King");
+        lblResto.setBounds(170,10,300,30);
+        
+        dlmItemSelect.addElement("(₱75) Whopper Jr.");
+        dlmItemSelect.addElement("(₱177) Whopper");
+        dlmItemSelect.addElement("(₱99) 4-Cheese Whopper Jr.");
+        dlmItemSelect.addElement("(₱198) 4-Cheese Whopper");
+        dlmItemSelect.addElement("(₱173) Bacon 4-Cheese Whopper Jr.");
+        dlmItemSelect.addElement("(₱282) Bacon 4-Cheese Whopper");
+        dlmItemSelect.addElement("(₱59) X-tra Long Chicken Jr. Sandwich");
+        dlmItemSelect.addElement("(₱99) X-tra Long Chicken Sandwich");
+        dlmItemSelect.addElement("(₱136) Plant-Based Whopper Jr.");
+        dlmItemSelect.addElement("(₱295) Plant-Based Whopper");
+        dlmItemSelect.addElement("(₱269) BLT Spicy Chicken King");
+        dlmItemSelect.addElement("(₱215) Chicken King");
+        dlmItemSelect.addElement("(₱229) Spicy Chicken King");
+        dlmItemSelect.addElement("(₱225) Flame-Grilled BBQ Hamburger");
+        dlmItemSelect.addElement("(₱75) Flame-Grilled Hamburger");
+        dlmItemSelect.addElement("(₱85) Flame-Grilled Cheeseburger");
+        dlmItemSelect.addElement("(₱159) Flame-Grilled Double Cheeseburger");
+        dlmItemSelect.addElement("(₱75) Coke");
+        dlmItemSelect.addElement("(₱63) Coke Float");
+        dlmItemSelect.addElement("(₱73) Rootbeer Float");
+    }
+    
+    public void restoFourGW(){
+        imgResto = new ImageIcon("greenw.png");        
+        lblRestoImg = new JLabel(imgResto);
+        lblRestoImg.setBounds(270,0,300,50);
+        pnlHeader.add(lblRestoImg); //change image on the upper right corner
+        
+        lblResto.setText("Greenwich");
+        lblResto.setBounds(175,10,300,30);
+                
+        dlmItemSelect.addElement("(₱319) 9\" Pizza - Buy  One Take One");
+        dlmItemSelect.addElement("(₱499) 12\" Pizza - Buy  One Take One");
+        dlmItemSelect.addElement("(₱679) Buy One Take Two Pizza");
+        dlmItemSelect.addElement("(₱77) Hawaiian Overload Pizzawrap");
+        dlmItemSelect.addElement("(₱122) Hawaiian Overload Pizzawrap Value Meal");
+        dlmItemSelect.addElement("(₱223) Hawaiian Overload Pizzawrap Pack of Three");
+        dlmItemSelect.addElement("(₱223) Assorted Pizzawrap Pack of Three");
+        dlmItemSelect.addElement("(₱111) Roast Beef & Cream Cheese Pizzawrap");
+        dlmItemSelect.addElement("(₱174) All Meat Overload");
+        dlmItemSelect.addElement("(₱140) Ham & Cheese Classic");
+        dlmItemSelect.addElement("(₱140) Cheeseburger Classic");
+        dlmItemSelect.addElement("(₱140) Cheesy Bacon & Ham Classic");
+        dlmItemSelect.addElement("(₱162) Beef & Pineapples Overload");
+        dlmItemSelect.addElement("(₱99) Lasagna Supreme");
+        dlmItemSelect.addElement("(₱99) Meaty Spaghetti");
+        dlmItemSelect.addElement("(₱144) Creamy Bacon Carbonara");
+        dlmItemSelect.addElement("(₱62) Classic Choco Frozen  Cake");
+        dlmItemSelect.addElement("(₱308) Chicken and Waves");
+        dlmItemSelect.addElement("(₱99) 1.5L Coke");
+        dlmItemSelect.addElement("(₱85) 1L Pepsi");
     }
     
     //for restoID depending on the resto and city
@@ -549,131 +677,5 @@ public class OrderSelection extends JFrame implements ActionListener {
                 throw new AssertionError();
         }
     }
-    
-    //for the restaurants and its food menu
-    public void restoOneMD(){
-        imgResto = new ImageIcon("mcdo.png");        
-        lblRestoImg = new JLabel(imgResto);
-        lblRestoImg.setBounds(270,0,300,50);
-        pnlHeader.add(lblRestoImg);
-        
-        lblResto.setText("McDonald's");
-        lblResto.setBounds(170,10,200,30);
 
-        dlmItemSelect.addElement("(₱154) Big Mac");
-        dlmItemSelect.addElement("(₱54) Burger McDo");
-        dlmItemSelect.addElement("(₱135) Double Cheeseburger");
-        dlmItemSelect.addElement("(₱146) McChicken Sandwich");
-        dlmItemSelect.addElement("(₱52) McCrispy Chicken Sandwich");
-        dlmItemSelect.addElement("(₱118) 1pc. Chicken McDo with McSpaghetti");
-        dlmItemSelect.addElement("(₱80) 1pc. Chicken McDo with Rice");
-        dlmItemSelect.addElement("(₱60) McCrispy Chicken Fillet with Rice");
-        dlmItemSelect.addElement("(₱158) 2pc. Chicken McDo with Rice");
-        dlmItemSelect.addElement("(₱178) 6pc. Chicken McNuggets with Fries");
-        dlmItemSelect.addElement("(₱66) Coke");
-        dlmItemSelect.addElement("(₱72) Orange Juice");
-        dlmItemSelect.addElement("(₱52) Coke McFloat");
-        dlmItemSelect.addElement("(₱57) McFlurry with Oreo Cookies");
-        dlmItemSelect.addElement("(₱50) Hot Fudge Sundae");
-        dlmItemSelect.addElement("(₱79) Fries");
-        dlmItemSelect.addElement("(₱158) Cheesy Eggdesal");
-        dlmItemSelect.addElement("(₱37) Hash Browns");
-        dlmItemSelect.addElement("(₱63) Sausage Platter with Rice");
-        dlmItemSelect.addElement("(₱66) 3pc. Hotcakes");
-    }
-    
-    public void restoTwoJB(){
-        imgResto = new ImageIcon("jollibee.png");        
-        lblRestoImg = new JLabel(imgResto);
-        lblRestoImg.setBounds(262,0,300,50);
-        pnlHeader.add(lblRestoImg);
-        
-        lblResto.setText("Jollibee");
-        lblResto.setBounds(185,10,300,30);
-
-        dlmItemSelect.addElement("(₱40) Yumburger");
-        dlmItemSelect.addElement("(₱66) Cheesy Yumburger");
-        dlmItemSelect.addElement("(₱169) Champ");
-        dlmItemSelect.addElement("(₱239) Aloha Champ");
-        dlmItemSelect.addElement("(₱91) Bacon Cheesy Yumburger");
-        dlmItemSelect.addElement("(₱82) 1pc. Chickenjoy");
-        dlmItemSelect.addElement("(₱163) 2pc. Chickenjoy");
-        dlmItemSelect.addElement("(₱140) 1pc. Chickenjoy with Burger Steak");
-        dlmItemSelect.addElement("(₱139) 1pc. Chickenjoy with Jolly Spaghetti");
-        dlmItemSelect.addElement("(₱535) 8pc. Chickenjoy");
-        dlmItemSelect.addElement("(₱235) Jolly Spaghetti Pan");
-        dlmItemSelect.addElement("(₱59) Jolly Spaghetti");
-        dlmItemSelect.addElement("(₱112) Jolly Spaghetti with Burger Steak");
-        dlmItemSelect.addElement("(₱59) 1pc. Burger Steak");
-        dlmItemSelect.addElement("(₱117) 2pc. Burger Steak");
-        dlmItemSelect.addElement("(₱450) 8pc. Burger Steak");
-        dlmItemSelect.addElement("(₱48) Jolly Crispy Fries");
-        dlmItemSelect.addElement("(₱53) Coke");
-        dlmItemSelect.addElement("(₱64) Ice Tea");
-        dlmItemSelect.addElement("(₱52) Coke Float");
-        dlmItemSelect.addElement("(₱64) Cookies and Cream Sundae");
-    }
-    
-    public void restoThreeBK(){
-        imgResto = new ImageIcon("burgerk.png");        
-        lblRestoImg = new JLabel(imgResto);
-        lblRestoImg.setBounds(270,0,300,50);
-        pnlHeader.add(lblRestoImg);
-        
-        lblResto.setText("Burger King");
-        lblResto.setBounds(170,10,300,30);
-        
-        dlmItemSelect.addElement("(₱75) Whopper Jr.");
-        dlmItemSelect.addElement("(₱177) Whopper");
-        dlmItemSelect.addElement("(₱99) 4-Cheese Whopper Jr.");
-        dlmItemSelect.addElement("(₱198) 4-Cheese Whopper");
-        dlmItemSelect.addElement("(₱173) Bacon 4-Cheese Whopper Jr.");
-        dlmItemSelect.addElement("(₱282) Bacon 4-Cheese Whopper");
-        dlmItemSelect.addElement("(₱59) X-tra Long Chicken Jr. Sandwich");
-        dlmItemSelect.addElement("(₱99) X-tra Long Chicken Sandwich");
-        dlmItemSelect.addElement("(₱136) Plant-Based Whopper Jr.");
-        dlmItemSelect.addElement("(₱295) Plant-Based Whopper");
-        dlmItemSelect.addElement("(₱269) BLT Spicy Chicken King");
-        dlmItemSelect.addElement("(₱215) Chicken King");
-        dlmItemSelect.addElement("(₱229) Spicy Chicken King");
-        dlmItemSelect.addElement("(₱225) Flame-Grilled BBQ Hamburger");
-        dlmItemSelect.addElement("(₱75) Flame-Grilled Hamburger");
-        dlmItemSelect.addElement("(₱85) Flame-Grilled Cheeseburger");
-        dlmItemSelect.addElement("(₱159) Flame-Grilled Double Cheeseburger");
-        dlmItemSelect.addElement("(₱75) Coke");
-        dlmItemSelect.addElement("(₱63) Coke Float");
-        dlmItemSelect.addElement("(₱73) Rootbeer Float");
-    }
-    
-    public void restoFourGW(){
-        imgResto = new ImageIcon("greenw.png");        
-        lblRestoImg = new JLabel(imgResto);
-        lblRestoImg.setBounds(270,0,300,50);
-        pnlHeader.add(lblRestoImg);
-        
-        lblResto.setText("Greenwich");
-        lblResto.setBounds(175,10,300,30);
-                
-        dlmItemSelect.addElement("(₱319) 9\" Pizza - Buy  One Take One");
-        dlmItemSelect.addElement("(₱499) 12\" Pizza - Buy  One Take One");
-        dlmItemSelect.addElement("(₱679) Buy One Take Two Pizza");
-        dlmItemSelect.addElement("(₱77) Hawaiian Overload Pizzawrap");
-        dlmItemSelect.addElement("(₱122) Hawaiian Overload Pizzawrap Value Meal");
-        dlmItemSelect.addElement("(₱223) Hawaiian Overload Pizzawrap Pack of Three");
-        dlmItemSelect.addElement("(₱223) Assorted Pizzawrap Pack of Three");
-        dlmItemSelect.addElement("(₱111) Roast Beef & Cream Cheese Pizzawrap");
-        dlmItemSelect.addElement("(₱174) All Meat Overload");
-        dlmItemSelect.addElement("(₱140) Ham & Cheese Classic");
-        dlmItemSelect.addElement("(₱140) Cheeseburger Classic");
-        dlmItemSelect.addElement("(₱140) Cheesy Bacon & Ham Classic");
-        dlmItemSelect.addElement("(₱162) Beef & Pineapples Overload");
-        dlmItemSelect.addElement("(₱99) Lasagna Supreme");
-        dlmItemSelect.addElement("(₱99) Meaty Spaghetti");
-        dlmItemSelect.addElement("(₱144) Creamy Bacon Carbonara");
-        dlmItemSelect.addElement("(₱62) Classic Choco Frozen  Cake");
-        dlmItemSelect.addElement("(₱308) Chicken and Waves");
-        dlmItemSelect.addElement("(₱99) 1.5L Coke");
-        dlmItemSelect.addElement("(₱85) 1L Pepsi");
-    }
-    
 }
