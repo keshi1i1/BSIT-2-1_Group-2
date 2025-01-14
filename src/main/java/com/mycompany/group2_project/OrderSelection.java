@@ -7,6 +7,10 @@ package com.mycompany.group2_project;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -16,10 +20,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class OrderSelection extends JFrame implements ActionListener {
     
-    private JLabel lblNameDesc, lblNumDesc, lblAddress, lblBLSt, lblBrgy, lblCity;
+    private JLabel lblNameDesc, lblNumDesc, lblAddress;
     public JLabel lblNum, lblTotal, lblName;
-    public JComboBox cmbBrgy, cmbCity;
-    public JTextField txtfBLSt;
     private ImageIcon imgLogo, imgResto;
     
     //Panel - header
@@ -33,25 +35,18 @@ public class OrderSelection extends JFrame implements ActionListener {
     public DefaultListModel<String> dlmItemSelect, dlmItemCart;
     private JScrollPane spItemSelect, spItemCart;
     private JLabel lblItemSelect, lblItemCart, txtfItemQt;
+    private JTextArea lblAddressQ;
     private JButton btnAdd, btnRem, btnAddQt, btnMinQt, btnOrder;
     
     private int itemQt=1; //food quantity
-    public short restoChoice; //temporary //for displaying diff food menus
+    public short restoChoice, cityChoice; //inherit from previous frame - necessary for resto id and what menu to show
     public String restoID, orderPrefix; //necessary for IDs
     
     //prices
     public int priceAdd, priceRem, priceTotal;
     
-    //locations arrays
-    private String brgyBinan[] = {"-select-","Biñan", "Bungahan", "Canlalay", "Casile", "Dela Paz", "Ganado", "Langkiwa", "Loma", "Malaban", "Malamig", "Mampalasan", "Platero", "Poblacion","San Antonio", "San Francisco (Halang)", "San Jose", "San Vicente","Sto. Domingo", "Soro-Soro", "Sto. Niño", "Sto. Tomas (Calabuso)","Timbao", "Tubigan", "Zapote"};
-    private String brgyCabuyao[] = {"-select-","Baclaran", "Banay-Banay", "Banlic", "Bigaa","Butong", "Casile", "Diezmo", "Gulod","Mamatid", "Marinig", "Niugan", "Pittland","Pulo", "Sala", "San Isidro", "Barangay I Poblacion","Barangay II Poblacion", "Barangay III Poblacion"};
-    private String brgyMuntinlupa[] = {"-select-","Alabang", "Bayanan", "Buli", "Cupang","New Alabang Village", "Poblacion", "Putatan", "Sucat","Tunasan"};
-    private String brgySanPedro[] = {"-select-","Bagong Silang", "Calendola", "Chrysanthemum", "Cuyab","Estrella", "Fatima", "GSIS", "Landayan","Langgam", "Laram", "Magsaysay", "Maharlika","Narra", "Nueva", "Pacita 1", "Pacita 2","Poblacion", "Riverside", "Rosario", "Sampaguita","San Antonio", "San Lorenzo Ruiz", "San Roque", "San Vicente", "Santo Niño", "United Bayanihan", "United Better Living"};
-    private String brgyStaRosa[] = {"-select-","Aplaya", "Balibago", "Caingin", "Dila","Dita", "Don Jose", "Ibaba", "Kanluran","Labas", "Macabling", "Malitlit", "Malusak","Market Area", "Pook", "Pulong Santa Cruz", "Santo Domingo","Sinalhan", "Tagapo"};
-    String brgy[] = {"-select-"};
-    
-    private String city[] = {"-select-","Biñan", "Cabuyao", "Muntinlupa", "San Pedro", "Sta. Rosa"};
-    public String brgyInput, cityInput, customerName;
+    //variables for query
+    public String fnameQ, lnameQ, addressQ, phNumberQ, customerIdQ;
 
     
     OrderSelection(/*MenuSelection parent*/) {
@@ -93,14 +88,17 @@ public class OrderSelection extends JFrame implements ActionListener {
         btnBack.setFocusable(false);
         pnlHeader.add(btnBack);
         
+        //method to get the necessary elements from database
+        dataBaseElements();
+        
         //customer name
         lblNameDesc = new JLabel("Name:");
         lblNameDesc.setBounds(20,50,100,30);
         lblNameDesc.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNameDesc);
         
-        //Alfred Gualberto will be the temporary name here
-        lblName = new JLabel("Alfred Gualberto");
+        //customer's name from database
+        lblName = new JLabel(fnameQ+" "+lnameQ);
         lblName.setBounds(100, 50, 330, 30);
         lblName.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblName);
@@ -111,8 +109,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         lblNumDesc.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNumDesc);
         
-        //09876543210 will be the temporary contact number here
-        lblNum = new JLabel("09876543210");
+        //phone number from database
+        lblNum = new JLabel(phNumberQ);
         lblNum.setBounds(100, 80, 330, 30);
         lblNum.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblNum);
@@ -123,46 +121,18 @@ public class OrderSelection extends JFrame implements ActionListener {
         lblAddress.setFont(new Font("Sherif", Font.PLAIN, 15));
         add(lblAddress);
         
-        lblBLSt = new JLabel("Block, Lot, Street, Subdivision");
-        lblBLSt.setBounds(30, 130, 200, 30);
-        lblBLSt.setFont(new Font("Sherif", Font.BOLD, 10));
-        add(lblBLSt);
-        
-        txtfBLSt = new JTextField();
-        txtfBLSt.setBounds(30, 155, 400, 25);
-        txtfBLSt.setBorder(null);
-        txtfBLSt.setFont(new Font("Sherif", Font.PLAIN, 15));
-        add(txtfBLSt);
-        
-        //city combobox
-        lblCity = new JLabel("City");
-        lblCity.setBounds(30, 175, 175, 30);
-        lblCity.setFont(new Font("Sherif", Font.BOLD, 10));
-        add(lblCity);
-        
-        cmbCity = new JComboBox(city);
-        cmbCity.setBounds(30, 200, 190,25);
-        cmbCity.setFont(new Font("Sherif", Font.PLAIN, 15));
-        cmbCity.setCursor(new Cursor(Cursor.HAND_CURSOR){
-        });
-        add(cmbCity);
-        
-        //brgy combobox
-        lblBrgy = new JLabel("Barangay");
-        lblBrgy.setBounds(240, 175, 175, 30);
-        lblBrgy.setFont(new Font("Sherif", Font.BOLD, 10));
-        add(lblBrgy);
-        
-        cmbBrgy = new JComboBox(brgy);
-        cmbBrgy.setBounds(240, 200, 190,25);
-        cmbBrgy.setFont(new Font("Sherif", Font.PLAIN, 15));
-        cmbBrgy.setCursor(new Cursor(Cursor.HAND_CURSOR){
-        });
-        add(cmbBrgy);
+        //address from database depending on customerId
+        lblAddressQ = new JTextArea(addressQ);
+        lblAddressQ.setBounds(20, 140, 420, 60);
+        lblAddressQ.setEditable(false);
+        lblAddressQ.setFocusable(false);
+        lblAddressQ.setBackground(null);
+        lblAddressQ.setFont(new Font("Sherif", Font.PLAIN, 15));
+        add(lblAddressQ);
         
         //panel for food in menu and cart (buttons)
         pnlItem = new JPanel();
-        pnlItem.setBounds(0, 245, 464, 455);
+        pnlItem.setBounds(0, 210, 464, 490);
         pnlItem.setBackground(new Color(113, 45, 59));
         pnlItem.setLayout(null);
         add(pnlItem);
@@ -172,7 +142,7 @@ public class OrderSelection extends JFrame implements ActionListener {
         listItemSelect = new JList<>(dlmItemSelect);
         listItemSelect.setFont(new Font("Sherif", Font.BOLD, 15));
         spItemSelect = new JScrollPane(listItemSelect);
-        spItemSelect.setBounds(10, 40, 429, 130);
+        spItemSelect.setBounds(10, 40, 429, 145);
         pnlItem.add(spItemSelect);
         
         lblItemSelect = new JLabel("Food Menu");
@@ -186,13 +156,13 @@ public class OrderSelection extends JFrame implements ActionListener {
         listItemCart = new JList<>(dlmItemCart);
         listItemCart.setFont(new Font("Sherif", Font.BOLD, 15));
         spItemCart = new JScrollPane(listItemCart);
-        spItemCart.setBounds(10, 200, 429, 130);
+        spItemCart.setBounds(10, 215, 429, 145);
         pnlItem.add(spItemCart);
         
         lblItemCart = new JLabel("Cart");
         lblItemCart.setFont(new Font("Sherif", Font.BOLD, 15));
         lblItemCart.setForeground(Color.WHITE);
-        lblItemCart.setBounds(10, 170, 330, 30);
+        lblItemCart.setBounds(10, 185, 330, 30);
         pnlItem.add(lblItemCart);
         
         //display food quantity
@@ -200,47 +170,47 @@ public class OrderSelection extends JFrame implements ActionListener {
         txtfItemQt.setFocusable(false);
         txtfItemQt.setFont(new Font("Sherif", Font.BOLD, 15));
         txtfItemQt.setForeground(Color.WHITE);
-        txtfItemQt.setBounds(220, 340, 50, 50);
+        txtfItemQt.setBounds(220, 375, 50, 50);
         pnlItem.add(txtfItemQt);
         
         //displaying price
         lblTotal = new JLabel("Total Cost:                       ₱0");
         lblTotal.setFont(new Font("Sherif", Font.BOLD, 15));
         lblTotal.setForeground(Color.WHITE);
-        lblTotal.setBounds(30, 395, 240, 50);
+        lblTotal.setBounds(30, 430, 240, 50);
         pnlItem.add(lblTotal);
 
         //panel buttons
         btnAdd = new JButton("Add Item"); //adding food to cart
-        btnAdd.setBounds(10, 340, 110, 50);
+        btnAdd.setBounds(10, 375, 110, 50);
         btnAdd.setFocusable(false);
         btnAdd.setCursor(new Cursor(Cursor.HAND_CURSOR){
         });
         pnlItem.add(btnAdd);
         
         btnAddQt = new JButton("+"); //increment quantity
-        btnAddQt.setBounds(130, 340, 60, 50);
+        btnAddQt.setBounds(130, 375, 60, 50);
         btnAddQt.setFocusable(false);
         btnAddQt.setCursor(new Cursor(Cursor.HAND_CURSOR){
         });
         pnlItem.add(btnAddQt);
         
         btnMinQt = new JButton("-"); //decrement quantity
-        btnMinQt.setBounds(260, 340, 60, 50);
+        btnMinQt.setBounds(260, 375, 60, 50);
         btnMinQt.setFocusable(false);
         btnMinQt.setCursor(new Cursor(Cursor.HAND_CURSOR){
         });
         pnlItem.add(btnMinQt);
         
         btnRem = new JButton("Remove Item"); //remove food from cart
-        btnRem.setBounds(330, 340, 110, 50);
+        btnRem.setBounds(330, 375, 110, 50);
         btnRem.setFocusable(false);
         btnRem.setCursor(new Cursor(Cursor.HAND_CURSOR){
         });
         pnlItem.add(btnRem);
         
         btnOrder = new JButton("Order"); //set order - going to confirm frame
-        btnOrder.setBounds(330, 395, 110, 50);
+        btnOrder.setBounds(330, 430, 110, 50);
         btnOrder.setBorder(null);
         btnOrder.setBackground(new Color(254, 236, 55));
         btnOrder.setFocusable(false);
@@ -251,6 +221,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
+        cityChoice = 3;
+//        cityChoice = parent.cityChoice;
         restoChoice = 2;
 //        restoChoice = parent.chosenResto;
         
@@ -284,7 +256,6 @@ public class OrderSelection extends JFrame implements ActionListener {
         btnMinQt.addActionListener(this);
         btnOrder.addActionListener(this);
         btnRem.addActionListener(this);
-        cmbCity.addActionListener(this);
         btnBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -408,54 +379,15 @@ public class OrderSelection extends JFrame implements ActionListener {
         //order button
         if (e.getSource()==btnOrder) {
             
-            if (dlmItemCart.size()!=0) {
-                //conditions must be fulfilled before going the order confirm frame
-                if (!txtfBLSt.getText().isEmpty()&&cmbCity.getSelectedIndex()!=0&&cmbBrgy.getSelectedIndex()!=0) {
-                    brgyInput = (String) cmbBrgy.getSelectedItem(); //get the brgy for the next frame
-                    cityInput = (String) cmbCity.getSelectedItem(); //get the city for the next frame
-                    customerName = lblName.getText(); //get the customer name for the data base
-                    restoId(); //method to get generated restoId
-                    new ConfirmOrder(OrderSelection.this); //go to next frame - OrderSelection frame is set to parent
-                }else{
-                    JOptionPane.showMessageDialog(this, "Fill out all fields", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            if (dlmItemCart.size()!=0) {               
+                restoId(); //method to get generated restoId
+                new ConfirmOrder(OrderSelection.this); //go to next frame - OrderSelection frame is set to parent
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Cart is empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         
-        //check city - change brgy
-        if (e.getSource()==cmbCity) {
-            int citySelected = cmbCity.getSelectedIndex(); //get index of selected city
-            remove(cmbBrgy); //remove the combo box of brgy
-            //select the combo box of brgy base on selected city
-            switch (citySelected) {
-                case 0:
-                    cmbBrgy = new JComboBox(brgy);
-                    break;
-                case 1:
-                    cmbBrgy = new JComboBox(brgyBinan);
-                    break;
-                case 2:
-                    cmbBrgy = new JComboBox(brgyCabuyao);
-                    break;
-                case 3:
-                    cmbBrgy = new JComboBox(brgyMuntinlupa);
-                    break;
-                case 4:
-                    cmbBrgy = new JComboBox(brgySanPedro);
-                    break;
-                case 5:
-                    cmbBrgy = new JComboBox(brgyStaRosa);
-                    break;
-                default:
-                    throw new AssertionError();
-            }
-        
-            cmbBrgy.setBounds(240, 200, 190,25);
-            cmbBrgy.setFont(new Font("Sherif", Font.PLAIN, 15));
-            add(cmbBrgy); //adding updated combo box for brgy
-        }
     }
     
     //for the restaurants and its food menu
@@ -586,19 +518,18 @@ public class OrderSelection extends JFrame implements ActionListener {
     
     //for restoID depending on the resto and city
     public void restoId() {
-        short chosenCity = (short) cmbCity.getSelectedIndex();
 
         switch (restoChoice) {
             case 0:
-                switch (chosenCity) {
+                switch (cityChoice) {
                     case 1:
                         restoID = "MDBC";
                         break;
                     case 2:
-                        restoID = "MDCC";
+                        restoID = "MDCBC";
                         break;
                     case 3:
-                        restoID = "MDMC";
+                        restoID = "MDCLC";
                         break;
                     case 4:
                         restoID = "MDSPC";
@@ -611,15 +542,15 @@ public class OrderSelection extends JFrame implements ActionListener {
                 }
                 break;
             case 1:
-                switch (chosenCity) {
+                switch (cityChoice) {
                     case 1:
                         restoID = "JBBC";
                         break;
                     case 2:
-                        restoID = "JBCC";
+                        restoID = "JBCBC";
                         break;
                     case 3:
-                        restoID = "JBMC";
+                        restoID = "JBCLC";
                         break;
                     case 4:
                         restoID = "JBSPC";
@@ -632,15 +563,15 @@ public class OrderSelection extends JFrame implements ActionListener {
                 }
                 break;
             case 2:
-                switch (chosenCity) {
+                switch (cityChoice) {
                     case 1:
                         restoID = "BKBC";
                         break;
                     case 2:
-                        restoID = "BKCC";
+                        restoID = "BKCBC";
                         break;
                     case 3:
-                        restoID = "BKMC";
+                        restoID = "BKCLC";
                         break;
                     case 4:
                         restoID = "BKSPC";
@@ -653,15 +584,15 @@ public class OrderSelection extends JFrame implements ActionListener {
                 }
                 break;
             case 3:
-                switch (chosenCity) {
+                switch (cityChoice) {
                     case 1:
                         restoID = "GWBC";
                         break;
                     case 2:
-                        restoID = "GWCC";
+                        restoID = "GWCBC";
                         break;
                     case 3:
-                        restoID = "GWMC";
+                        restoID = "GWCLC";
                         break;
                     case 4:
                         restoID = "GWSPC";
@@ -677,5 +608,30 @@ public class OrderSelection extends JFrame implements ActionListener {
                 throw new AssertionError();
         }
     }
+    
+    public void dataBaseElements(){
+        try {
+            
+//            customerIdQ = "1JVR"; // inherit from resma's frame
+            customerIdQ = "1JVR";
+            
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/customer_data", "root", "group2");
+            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE customer_id=?");
+            st.setString(1, customerIdQ);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                fnameQ = rs.getString("first_name");
+                lnameQ = rs.getString("last_name");
+                addressQ = rs.getString("address");
+                phNumberQ = rs.getString("phone_number");
+            }
+
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 
 }

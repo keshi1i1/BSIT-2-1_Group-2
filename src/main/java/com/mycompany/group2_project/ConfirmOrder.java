@@ -33,7 +33,7 @@ public class ConfirmOrder extends JFrame {
         //disable parent frame
         parent.setEnabled(false);
         //updating the address
-        String address = parent.txtfBLSt.getText().concat("\nBrgy "+parent.brgyInput).concat(", "+parent.cityInput+" City");
+        String address = "Address"; //store new address
         //modify main frame
         setLocation(536, 210);
         setLayout(null);
@@ -127,9 +127,9 @@ public class ConfirmOrder extends JFrame {
                 if (confirmChoice == JOptionPane.YES_OPTION) {
                     //variables for orderId
                     String ordersList="";
-                    String orderId = null;
+                    String orderId = "";
                     boolean uniqueId = false;
-                    int numberId = 0;
+                    int numberId = 1;
                     StringBuilder orders = new StringBuilder();
                     
                     try {
@@ -137,8 +137,6 @@ public class ConfirmOrder extends JFrame {
                     Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectdatabase", "root", "group2");
                     
                     // elements to be stored in the database
-                    String name =  parent.customerName; //name of customer to database
-                    String customerId = "1234"; //will come from Resma's database/frame
                     String restoId = parent.restoID; //restoid to database
                     
                     //loop to check if orderId is unique
@@ -163,14 +161,12 @@ public class ConfirmOrder extends JFrame {
                             ordersList = orders.toString();
 
                             // insert the elements into the database
-                            PreparedStatement st = c.prepareStatement("INSERT INTO projectdata (name, address, customerId, restoId, orderId, orderItems, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                            st.setString(1, name);
-                            st.setString(2, address);
-                            st.setString(3, customerId);
-                            st.setString(4, restoId);
-                            st.setString(5, orderId);
-                            st.setString(6, ordersList);
-                            st.setString(7, "Processing");
+                            PreparedStatement st = c.prepareStatement("INSERT INTO projectdata (customerId, restoId, orderId, orderItems, status) VALUES (?, ?, ?, ?, ?)");
+                            st.setString(1, "1JVR"); //temporary
+                            st.setString(2, restoId);
+                            st.setString(3, orderId);
+                            st.setString(4, ordersList);
+                            st.setString(5, "Processing");
                             //break the loop for checking unique id
                             uniqueId = true;
 
@@ -200,8 +196,6 @@ public class ConfirmOrder extends JFrame {
                     parent.priceTotal = 0;
                     parent.lblTotal.setText("Total Cost:                       ₱0");
                     parent.setEnabled(true);
-                    parent.txtfBLSt.setText("");
-                    parent.cmbCity.setSelectedIndex(0);
                     parent.dlmItemCart.removeAllElements();
                     dispose();
                 }
