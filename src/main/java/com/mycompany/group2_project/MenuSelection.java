@@ -149,7 +149,7 @@ public class MenuSelection extends JFrame implements ActionListener {
         panel.setBackground(backgroundColor);
 
         branchComboBox = new JComboBox<>(new String[]{
-                "Muntinlupa", "San Pedro", "Binan", "Sta. Rosa", "Cabuyao"
+            "-select-", "Binan", "Cabuyao", "Calamba", "San Pedro", "Sta. Rosa"
         });
         branchComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(branchComboBox);
