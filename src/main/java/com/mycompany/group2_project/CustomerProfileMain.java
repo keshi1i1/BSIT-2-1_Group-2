@@ -8,7 +8,7 @@ public class CustomerProfileMain {
     public static void main(String[] args) {
         
         // Create and display the CustomerProfile frame, centered on the screen
-        new CustomerProfile().setLocationRelativeTo(null);
+        new CustomerProfile();
     }
 }
 
