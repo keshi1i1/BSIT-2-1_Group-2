@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -59,9 +60,9 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     
     //Java swing components
     private JPanel loginP, loginSecondP, registerP, registerSecondP, loginShadowP, registerShadowP;
-    private JLabel userLoginLbl, passLoginLbl, invalidUserPass, backgroundLbl, checkPassIconLbl1, firstNameLbl, lastNameLbl, emailLbl, phoneNumberLbl, userRegisterLbl, passRegisterLbl, confirmPassLbl, checkPassIconLbl2, checkPassIconLbl3;
+    private JLabel userLoginLbl, passLoginLbl, invalidUserPass, backgroundLbl, checkPassIconLbl1, firstNameLbl, lastNameLbl, addressLbl, emailLbl, phoneNumberLbl, userRegisterLbl, passRegisterLbl, confirmPassLbl, checkPassIconLbl2, checkPassIconLbl3;
     private JButton accountBtn, exitBtn, loginBtn, createBtn, closeLoginBtn, closeRegisterBtn, registerAccountBtn;
-    private JTextField userLoginTF, firstNameTF, lastNameTF, emailTF, phoneNumberTF, userRegisterTF;
+    private JTextField userLoginTF, firstNameTF, lastNameTF, addressTF, emailTF, phoneNumberTF, userRegisterTF;
     private JPasswordField passLoginTF, passRegisterTF, confirmPassTF;
     private JCheckBox checkPassLoginCB, checkPassRegisterCB, checkConfirmPassCB;
     private Font arial = new Font("Arial", Font.PLAIN, 14);
@@ -71,6 +72,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     private Image imgScale1, imgScale2;
     private CompoundBorder tfBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
     private CompoundBorder tfErrorBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.red, 2, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
+    private boolean enterPressed, enabled = true;
     
     //Added components in specified panels
     public void Components() {
@@ -97,6 +99,8 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         registerP.add(firstNameTF);
         registerP.add(lastNameLbl);
         registerP.add(lastNameTF);
+        registerP.add(addressLbl);
+        registerP.add(addressTF);
         registerP.add(emailLbl);
         registerP.add(emailTF);
         registerP.add(phoneNumberLbl);
@@ -127,7 +131,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         registerShadowP.setVisible(false);
         registerShadowP.setLayout(null);
         registerShadowP.setBackground(new Color(0,0,0, 30));
-        registerShadowP.setBounds(46,96,358,508);
+        registerShadowP.setBounds(46,61,358,578);
     }
     
     //Method for adding an image to the program
@@ -160,6 +164,26 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         accountBtn.setBounds(125,440, 200, 50);
         accountBtn.setFont(tahoma);
         accountBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        accountBtn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                if(!enabled) {
+                    return;
+                }
+                accountBtn.setFocusable(true);
+                accountBtn.setContentAreaFilled(true);
+                accountBtn.setBackground(maroon);
+                accountBtn.setForeground(Color.white);
+            }
+            public void mouseExited(MouseEvent e) {
+                if(!enabled) {
+                    return;
+                }
+                accountBtn.setFocusable(false);
+                accountBtn.setContentAreaFilled(false);
+                accountBtn.setBackground(Color.white);
+                accountBtn.setForeground(maroon);
+            }
+        });
         accountBtn.addActionListener(this);
         
         exitBtn = new JButton("Exit");
@@ -171,6 +195,26 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         exitBtn.setBounds(125,500, 200, 50);
         exitBtn.setFont(tahoma);
         exitBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exitBtn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                if(!enabled) {
+                    return;
+                }
+                exitBtn.setFocusable(true);
+                exitBtn.setContentAreaFilled(true);
+                exitBtn.setBackground(maroon);
+                exitBtn.setForeground(Color.white);
+            }
+            public void mouseExited(MouseEvent e) {
+                if(!enabled) {
+                    return;
+                }
+                exitBtn.setFocusable(false);
+                exitBtn.setContentAreaFilled(false);
+                exitBtn.setBackground(Color.white);
+                exitBtn.setForeground(maroon);
+            }
+        });
         exitBtn.addActionListener(this);
     }
     
@@ -292,7 +336,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         registerP.setVisible(false);
         registerP.setLayout(null);
         registerP.setBackground(Color.WHITE);
-        registerP.setBounds(50,100,350,500);
+        registerP.setBounds(50,65,350,570);
         registerP.setBorder(BorderFactory.createLineBorder(maroon, 2));
         
         registerSecondP = new JPanel();
@@ -312,13 +356,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         firstNameLbl = new JLabel("First Name");
         firstNameLbl.setFont(arial);
-        firstNameLbl.setBounds(55, 50, 110, 40);
+        firstNameLbl.setBounds(45, 50, 108, 40);
         firstNameLbl.setForeground(Color.LIGHT_GRAY);
         firstNameLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         firstNameTF = new JTextField();
         firstNameTF.setFont(arial);
-        firstNameTF.setBounds(40, 50, 125, 40);
+        firstNameTF.setBounds(30, 50, 138, 40);
         firstNameTF.setForeground(Color.black);
         firstNameTF.setBorder(tfBorder);
         firstNameTF.setOpaque(false);
@@ -326,27 +370,41 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         lastNameLbl = new JLabel("Last Name");
         lastNameLbl.setFont(arial);
-        lastNameLbl.setBounds(200, 50, 110, 40);
+        lastNameLbl.setBounds(197, 50, 108, 40);
         lastNameLbl.setForeground(Color.LIGHT_GRAY);
         lastNameLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         lastNameTF = new JTextField();
         lastNameTF.setFont(arial);
-        lastNameTF.setBounds(185, 50, 125, 40);
+        lastNameTF.setBounds(182, 50, 138, 40);
         lastNameTF.setForeground(Color.black);
         lastNameTF.setBorder(tfBorder);
         lastNameTF.setOpaque(false);
         lastNameTF.addKeyListener(this);
         
+        addressLbl = new JLabel("Address");
+        addressLbl.setFont(arial);
+        addressLbl.setBounds(45, 115, 255, 40);
+        addressLbl.setForeground(Color.LIGHT_GRAY);
+        addressLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        
+        addressTF = new JTextField();
+        addressTF.setFont(arial);
+        addressTF.setBounds(30, 115, 290, 40);
+        addressTF.setForeground(Color.black);
+        addressTF.setBorder(tfBorder);
+        addressTF.setOpaque(false);
+        addressTF.addKeyListener(this);
+        
         emailLbl = new JLabel("Email");
         emailLbl.setFont(arial);
-        emailLbl.setBounds(55, 115, 255, 40);
+        emailLbl.setBounds(45, 180, 255, 40);
         emailLbl.setForeground(Color.LIGHT_GRAY);
         emailLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         emailTF = new JTextField();
         emailTF.setFont(arial);
-        emailTF.setBounds(40, 115, 270, 40);
+        emailTF.setBounds(30, 180, 290, 40);
         emailTF.setForeground(Color.black);
         emailTF.setBorder(tfBorder);
         emailTF.setOpaque(false);
@@ -354,13 +412,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         phoneNumberLbl = new JLabel("Phone Number");
         phoneNumberLbl.setFont(arial);
-        phoneNumberLbl.setBounds(55, 180, 255, 40);
+        phoneNumberLbl.setBounds(45, 245, 255, 40);
         phoneNumberLbl.setForeground(Color.LIGHT_GRAY);
         phoneNumberLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         phoneNumberTF = new JTextField();
         phoneNumberTF.setFont(arial);
-        phoneNumberTF.setBounds(40, 180, 270, 40);
+        phoneNumberTF.setBounds(30, 245, 290, 40);
         phoneNumberTF.setForeground(Color.black);
         phoneNumberTF.setBorder(tfBorder);
         phoneNumberTF.setOpaque(false);
@@ -368,13 +426,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         userRegisterLbl = new JLabel("Username");
         userRegisterLbl.setFont(arial);
-        userRegisterLbl.setBounds(55, 245, 255, 40);
+        userRegisterLbl.setBounds(45, 310, 255, 40);
         userRegisterLbl.setForeground(Color.LIGHT_GRAY);
         userRegisterLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         userRegisterTF = new JTextField();
         userRegisterTF.setFont(arial);
-        userRegisterTF.setBounds(40, 245, 270, 40);
+        userRegisterTF.setBounds(30, 310, 290, 40);
         userRegisterTF.setForeground(Color.black);
         userRegisterTF.setBorder(tfBorder);
         userRegisterTF.setOpaque(false);
@@ -382,13 +440,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         passRegisterLbl = new JLabel("Password");
         passRegisterLbl.setFont(arial);
-        passRegisterLbl.setBounds(55, 310, 255, 40);
+        passRegisterLbl.setBounds(45, 375, 255, 40);
         passRegisterLbl.setForeground(Color.LIGHT_GRAY);
         passRegisterLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         passRegisterTF = new JPasswordField();
         passRegisterTF.setFont(arial);
-        passRegisterTF.setBounds(40, 310, 270, 40);
+        passRegisterTF.setBounds(30, 375, 290, 40);
         passRegisterTF.setForeground(Color.black);
         passRegisterTF.setBorder(tfBorder);
         passRegisterTF.setOpaque(false);
@@ -396,13 +454,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         checkPassIconLbl2 = new JLabel();
         checkPassIconLbl2.setFont(arial);
-        checkPassIconLbl2.setBounds(280, 320, 20, 20);
+        checkPassIconLbl2.setBounds(290, 385, 20, 20);
         checkPassIconLbl2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         checkPassIconLbl2.setIcon(scaledCloseEye);
         
         checkPassRegisterCB = new JCheckBox("");
         checkPassRegisterCB.setFont(new Font("Arial", Font.PLAIN, 10));
-        checkPassRegisterCB.setBounds(280, 320, 20, 20);
+        checkPassRegisterCB.setBounds(290, 385, 20, 20);
         checkPassRegisterCB.setForeground(Color.black);
         checkPassRegisterCB.setOpaque(false);
         checkPassRegisterCB.setFocusable(false);
@@ -411,13 +469,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         confirmPassLbl = new JLabel("Confirm Password");
         confirmPassLbl.setFont(arial);
-        confirmPassLbl.setBounds(55, 375, 255, 40);
+        confirmPassLbl.setBounds(45, 440, 255, 40);
         confirmPassLbl.setForeground(Color.LIGHT_GRAY);
         confirmPassLbl.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         confirmPassTF = new JPasswordField();
         confirmPassTF.setFont(arial);
-        confirmPassTF.setBounds(40, 375, 270, 40);
+        confirmPassTF.setBounds(30, 440, 290, 40);
         confirmPassTF.setForeground(Color.black);
         confirmPassTF.setBorder(tfBorder);
         confirmPassTF.setOpaque(false);
@@ -425,13 +483,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         checkPassIconLbl3 = new JLabel();
         checkPassIconLbl3.setFont(arial);
-        checkPassIconLbl3.setBounds(280, 385, 20, 20);
+        checkPassIconLbl3.setBounds(290, 450, 20, 20);
         checkPassIconLbl3.setCursor(new Cursor(Cursor.HAND_CURSOR));
         checkPassIconLbl3.setIcon(scaledCloseEye);
         
         checkConfirmPassCB = new JCheckBox("");
         checkConfirmPassCB.setFont(new Font("Arial", Font.PLAIN, 10));
-        checkConfirmPassCB.setBounds(280, 385, 20, 20);
+        checkConfirmPassCB.setBounds(290, 450, 20, 20);
         checkConfirmPassCB.setForeground(Color.black);
         checkConfirmPassCB.setOpaque(false);
         checkConfirmPassCB.setFocusable(false);
@@ -440,7 +498,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         
         registerAccountBtn = new JButton("SIGN UP");
         registerAccountBtn.setFont(arial);
-        registerAccountBtn.setBounds(115, 440, 120, 30);
+        registerAccountBtn.setBounds(115, 505, 120, 30);
         registerAccountBtn.setForeground(Color.black);
         registerAccountBtn.setBackground(Color.white);
         registerAccountBtn.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -467,6 +525,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
             accountBtn.setEnabled(false);
             exitBtn.setEnabled(false);
             setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            
+            //for the background of accountBtn to not overlap as it ends up in mouseEntered state
+            accountBtn.setFocusable(false);
+            accountBtn.setContentAreaFilled(false);
+            accountBtn.setForeground(maroon);
+            //for disabling the mouseListener of accountBtn and exitBtn
+            enabled = false;
         }
         
         //For exitting the program
@@ -487,6 +552,9 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
             passLoginLbl.setText("Password");
             passLoginTF.setBorder(tfBorder);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            //for enabling the mouseListener of accountBtn and exitBtn
+            enabled = true;
         }
         
         //For checkPassLoginCB checkbox
@@ -511,7 +579,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                 //For connecting to the database
                 
                 //"jdbc:mysql://[host address]/[database_name], [user], [password]
-                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/customer_data", "root", "group2");
+                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
                 
                 //The query for the database
                 PreparedStatement st = (PreparedStatement) c.prepareStatement("SELECT username, password FROM account_profile WHERE username=? and password=?");
@@ -576,6 +644,9 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
             lastNameLbl.setText("Last Name");
             lastNameTF.setText("");
             lastNameTF.setBorder(tfBorder);
+            addressLbl.setText("Address");
+            addressTF.setText("");
+            addressTF.setBorder(tfBorder);
             emailLbl.setText("Email");
             emailTF.setText("");
             emailTF.setBorder(tfBorder);
@@ -615,21 +686,39 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
             //All the data that will be used for conditions, and put into the database
             String firstName = firstNameTF.getText().trim();
             String lastName = lastNameTF.getText().trim();
+            String address = addressTF.getText().trim();
             String email = emailTF.getText().trim();
             String phoneNumber = phoneNumberTF.getText().trim();
             String username = userRegisterTF.getText().trim();
             String password = passRegisterTF.getText().trim();
             String confirmPass = confirmPassTF.getText().trim();
             
+            //For condition in the case that the address is not complete
+            int commaCount = 0;
+            for(int i=0; i<address.length(); i++) {
+                if(address.charAt(i)==',') {
+                    commaCount++;
+                }
+            }
+            
+            //For getting the initials of first and last name, and for adding uniqueness to customer_id in database
+            String initials = "", firstNameUpper = firstName.toUpperCase();
+            initials += firstNameUpper.charAt(0);
+            if(firstName.contains(" ")) {
+                int index = firstNameUpper.indexOf(" ");
+                initials += firstNameUpper.charAt(index+1);
+            }
+            initials += lastName.toUpperCase().charAt(0);
+            
             //For connecting and adding values to the database
             try {
-                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/customer_data", "root", "group2");
+                Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
                 
                 //The prepared query for inserting values into the database
-                PreparedStatement st = (PreparedStatement) c.prepareStatement("INSERT INTO account_profile VALUES((SELECT COUNT(*)+1 FROM (SELECT * FROM account_profile) AS tmp),'" + firstName + "','" + lastName + "','" + email + "','" + phoneNumber + "','" + username + "','" + password + "')");
+                PreparedStatement st = (PreparedStatement) c.prepareStatement("INSERT INTO account_profile VALUES(CONCAT((SELECT COUNT(*)+1 FROM (SELECT * FROM account_profile) AS tmp),'" + initials + "'),'" + firstName + "','" + lastName + "','" + address + ", Laguna','" + email + "','" + phoneNumber + "','" + username + "','" + password + "')");
                 
                 //If TRUE, highlights that empty textfields that needs to be filled with text
-                if(firstName.equals("") || lastName.equals("") || email.equals("") || phoneNumber.equals("") || username.equals("") || password.equals("")) {
+                if(firstName.equals("") || lastName.equals("") || address.equals("") || email.equals("") || phoneNumber.equals("") || username.equals("") || password.equals("")) {
                     
                     JOptionPane.showMessageDialog(registerP, "Invalid! Please fill out the empty fields.", "Error!", JOptionPane.ERROR_MESSAGE);
                     
@@ -637,6 +726,8 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                         firstNameTF.setBorder(tfErrorBorder);
                     if(lastName.equals(""))
                         lastNameTF.setBorder(tfErrorBorder);
+                    if(email.equals(""))
+                        addressTF.setBorder(tfErrorBorder);
                     if(email.equals(""))
                         emailTF.setBorder(tfErrorBorder);
                     if(phoneNumber.equals(""))
@@ -647,6 +738,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                         passRegisterTF.setBorder(tfErrorBorder);
                     if(confirmPass.equals(""))
                         confirmPassTF.setBorder(tfErrorBorder);
+                //if TRUE, asks the user to follow the format "House #, Street, Brgy, Town/City"
+                } else if(commaCount!=3) {
+                    JOptionPane.showMessageDialog(registerP, "Invalid! Please follow the address format.", "Error!", JOptionPane.ERROR_MESSAGE);
+                    addressTF.setBorder(tfErrorBorder);
+                    addressTF.setText("");
+                    addressLbl.setText("House #, Street, Brgy, Town/City");
+                    
                 //If TRUE, asks the user to correct the email; For needing '@' and '.com' as in for correct email
                 } else if(!email.contains("@") || !email.contains(".com")) {
                     JOptionPane.showMessageDialog(registerP, "Invalid! Please correct your email.", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -678,6 +776,8 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                         firstNameTF.setText("");
                         lastNameLbl.setText("Last Name");
                         lastNameTF.setText("");
+                        addressLbl.setText("Address");
+                        addressTF.setText("");
                         emailLbl.setText("Email");
                         emailTF.setText("");
                         phoneNumberLbl.setText("Phone Number");
@@ -700,6 +800,103 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //This is a copy-paste from actionEvent of loginBtn, only copied for the reason so when user press Enter, it would do the same actionEvent
+        if(e.getSource()==passLoginTF) {
+            if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+                //For getting the input of user from username and password textfields
+                String username = userLoginTF.getText();
+                String password = passLoginTF.getText();
+
+                //For connecting and adding values to the database
+                try {
+                    //For connecting to the database
+
+                    //"jdbc:mysql://[host address]/[database_name], [user], [password]
+                    Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+
+                    //The query for the database
+                    PreparedStatement st = (PreparedStatement) c.prepareStatement("SELECT username, password FROM account_profile WHERE username=? and password=?");
+
+                    //The data needed to compare in database
+                    st.setString(1, username); 
+                    st.setString(2, password);
+
+                    //For executing the query above
+                    ResultSet rs = st.executeQuery();
+
+                    //adminUser and adminPass are only temporary
+                    //If TRUE, logs in to the program, and dispose this current program
+                    if ((username.equals("adminUser") & password.equals("adminPass")) || rs.next()) {
+                        loginBtn.setBackground(new Color(184,207,229));
+                        
+                        JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                        loginBtn.setBackground(Color.white);
+    //                    dispose();
+    //                    new Trial_foodDelMain();
+                    //If FALSE, highlights the border of username and password textfields
+                    } else {
+                        loginBtn.setBackground(new Color(184,207,229));
+                        
+                        JOptionPane.showMessageDialog(loginP, "Invalid Username or Password.", "Error!", JOptionPane.ERROR_MESSAGE);
+                        loginBtn.setBackground(Color.white);
+
+                        if(username.equals(""))
+                            userLoginTF.setBorder(tfErrorBorder);
+                        if(password.equals(""))
+                            passLoginTF.setBorder(tfErrorBorder);
+
+                        if(!username.equals("") && !password.equals(""))
+                            passLoginLbl.setText("Password");
+                            passLoginTF.setText("");
+                            passLoginTF.setBorder(tfErrorBorder);
+                    }
+                //In case of error, this catches the error and tell the programmer the specific error
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            }
+        }
+        //for addressTF, only for design purposes
+        /*if(e.getSource()==addressTF) {
+            String address = addressTF.getText();
+            String space = "", concat;
+            char character = e.getKeyChar();
+            int commaCount = 0, charCount = 0;
+            
+            for(int i=0; i<address.length(); i++) {
+                if(address.charAt(i)==',') {
+                    commaCount++;
+                }
+                charCount++;
+            }
+            
+            if(commaCount==0) {
+                for(int i=0; i<charCount; i++) {
+                    space += " ";
+                }
+                concat = ", Street, Brgy, Town/City";
+                addressLbl.setText(space + concat);
+            } else if(commaCount==1) {
+                for(int i=0; i<charCount; i++) {
+                    space += " ";
+                }
+                concat = ", Brgy, Town/City";
+                addressLbl.setText(space + concat);
+            } else if(commaCount==2) {
+                for(int i=0; i<charCount; i++) {
+                    space += " ";
+                }
+                concat = ", Town/City";
+                addressLbl.setText(space + concat);
+            } else if(commaCount==3) {
+                for(int i=0; i<charCount; i++) {
+                    space += " ";
+                }
+                concat = ", Laguna";
+                addressLbl.setText(space + concat);
+            }
+            addressTF.setBorder(tfBorder);
+        }*/
     }
     
     //KeyEvents for preventing specified characters in a textfield
@@ -758,6 +955,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     //KeyEvents for labels over textfields; AND for design only
     @Override
     public void keyReleased(KeyEvent e) {
+        
         //All of these are for when textfields are empty, it sets a label a text; Otherwise, when textfields are not empty, it erases the labels
         
         //For login panel: username
@@ -789,6 +987,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
             lastNameTF.setBorder(tfBorder);
             if(lastNameTF.getText().equals("")) {
                 lastNameLbl.setText("Last Name");
+            }
+        //For register panel: address
+        } else if(e.getSource()==addressTF) {
+            addressLbl.setText("");
+            addressTF.setBorder(tfBorder);
+            if(addressTF.getText().equals("")) {
+                addressLbl.setText("House #, Street, Brgy, Town/City");
             }
         //For register panel: email
         } else if(e.getSource()==emailTF) {
