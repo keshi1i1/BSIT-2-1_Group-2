@@ -1,9 +1,17 @@
+
 package com.mycompany.group2_project;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,24 +25,35 @@ import javax.swing.SwingUtilities;
 public class EmailVerification extends JFrame implements ActionListener {
 
     // UI Components
-    private JLabel lblEmail, lblEmail1;
+    private JLabel lblEmail;
     private JTextField txtUserEmail;
     private JButton btnBack, btnNext;
     private JPanel mainPanel;
-
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
+    String enteredEmail,correctEmail;
 
     // Constructor
     EmailVerification() {
+        
+         try{
+         //For connecting to the database
+
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id='3AG'");
+        
         // Set JFrame properties
         setTitle("Email Verification");
-        setSize(464, 368); 
+        setSize(464, 368);
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ryzam\\Documents\\NetBeansProjects\\Group2_Project\\src\\main\\java\\com\\mycompany\\group2_project\\Icon.png");
+        ImageIcon logoIcon = new ImageIcon("Icon.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
          // Main panel with border
         mainPanel = new JPanel();
         mainPanel.setBounds(5, 10, 440, 315);
@@ -43,17 +62,11 @@ public class EmailVerification extends JFrame implements ActionListener {
         mainPanel.setBackground(Color.WHITE);
         add(mainPanel);
 
-        // Masked email display for reference
-        lblEmail = new JLabel("ry**********ay@gmail.com");
-        lblEmail.setBounds(115, 70, 250, 30); 
+        // Instruction to prompt the user
+        lblEmail = new JLabel("Enter your Email:");
+        lblEmail.setBounds(160, 100, 200, 30);
         lblEmail.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblEmail);
-
-        // Instruction to prompt the user
-        lblEmail1 = new JLabel("Enter your Email:");
-        lblEmail1.setBounds(162, 100, 140, 30); 
-        lblEmail1.setFont(new Font("Arial", Font.PLAIN, 16));
-        mainPanel.add(lblEmail1);
 
         // Text field for user input
         txtUserEmail = new JTextField();
@@ -65,7 +78,7 @@ public class EmailVerification extends JFrame implements ActionListener {
         btnBack = new JButton("Cancel");
         btnBack.setBounds(100, 200, 100, 30);
         btnBack.setFont(new Font("Arial", Font.BOLD, 15));
-        btnBack.setBackground(new Color(113, 45, 59)); 
+        btnBack.setBackground(new Color(113, 45, 59));
         btnBack.setForeground(Color.WHITE);
         mainPanel.add(btnBack);
 
@@ -73,7 +86,7 @@ public class EmailVerification extends JFrame implements ActionListener {
         btnNext = new JButton("Next");
         btnNext.setBounds(252, 200, 100, 30);
         btnNext.setFont(new Font("Arial", Font.BOLD, 15));
-        btnNext.setBackground(new Color(113, 45, 59)); 
+        btnNext.setBackground(new Color(113, 45, 59));
         btnNext.setForeground(Color.WHITE);
         mainPanel.add(btnNext);
 
@@ -82,40 +95,70 @@ public class EmailVerification extends JFrame implements ActionListener {
         btnNext.addActionListener(this);
 
         // Display the JFrame
-        setVisible(true); 
-    }
+        setVisible(true);
+    }   catch (ClassNotFoundException ex) {
+            Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+    }
     // Handles button actions (Back, Next)
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnBack) {
             // Close the frame when "Cancel" was clicked
             this.dispose();
-        } 
+        }
         else if (e.getSource() == btnNext) {
-            // Validate email input
-            String correctEmail = "ryzamaealicaway@gmail.com"; // The correct email for validation
-            String enteredEmail = txtUserEmail.getText().trim(); // User input
+            try {
+                // Validate email input
+                enteredEmail = txtUserEmail.getText(); // User input
+                pst = con.prepareStatement("select * from account_profile where customer_id='3AG'");
+            }
+            
+            catch (SQLException ex) {
+                Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                rs = pst.executeQuery();
+                    
+                if(rs.next()) {
+                    correctEmail = rs.getString("email");
+                }
 
             if (enteredEmail.isEmpty()) {
                 // Warn if no email is entered
                 JOptionPane.showMessageDialog(this, "Please enter a valid Email Address", "Warning", JOptionPane.WARNING_MESSAGE);
-            } 
+            }
             else if (!enteredEmail.equals(correctEmail)) {
+                
                 // Show error if the email doesn't match
                 JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Error", JOptionPane.ERROR_MESSAGE);
-            } 
+            }
             else {
                 // Proceed if the email matches
-                this.dispose(); 
-                new ChangePassword().setLocationRelativeTo(null); 
+                this.dispose();
+                
+                try {
+                    new ChangePassword().setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+             } catch (SQLException ex) {
+                Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     // Main method to run the program
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new EmailVerification().setLocationRelativeTo(null));
+        SwingUtilities.invokeLater(() ->
+                new EmailVerification().setLocationRelativeTo(null));
     }
-}
 
+}
+   
+        
+    
