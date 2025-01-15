@@ -221,8 +221,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
-        cityChoice = 3;
-//        cityChoice = parent.cityChoice;
+        cityChoice = 5;
+//        cityChoice = parent.chosenCity;
         restoChoice = 2;
 //        restoChoice = parent.chosenResto;
         
@@ -613,9 +613,9 @@ public class OrderSelection extends JFrame implements ActionListener {
         try {
             
 //            customerIdQ = "1JVR"; // inherit from resma's frame
-            customerIdQ = "1JVR";
+            customerIdQ = "2DKR";
             
-            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/customer_data", "root", "group2");
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
             PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE customer_id=?");
             st.setString(1, customerIdQ);
             ResultSet rs = st.executeQuery();

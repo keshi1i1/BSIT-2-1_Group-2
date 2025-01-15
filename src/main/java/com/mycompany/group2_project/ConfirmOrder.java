@@ -134,10 +134,11 @@ public class ConfirmOrder extends JFrame {
                     
                     try {
                     // connecting to database
-                    Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectdatabase", "root", "group2");
+                    Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
                     
                     // elements to be stored in the database
                     String restoId = parent.restoID; //restoid to database
+                    String customerId = parent.customerIdQ;
                     
                     //loop to check if orderId is unique
                     while (!uniqueId) {
@@ -145,7 +146,7 @@ public class ConfirmOrder extends JFrame {
                         //format code of orderId
                         orderId = parent.orderPrefix + String.format("%05d", numberId );
                         
-                        PreparedStatement stCheck = c.prepareStatement("SELECT COUNT(*) FROM projectdata WHERE orderId=?");
+                        PreparedStatement stCheck = c.prepareStatement("SELECT COUNT(*) FROM order_data WHERE orderId=?");
                         stCheck.setString(1, orderId);
                         ResultSet rs = stCheck.executeQuery();
 
@@ -161,8 +162,8 @@ public class ConfirmOrder extends JFrame {
                             ordersList = orders.toString();
 
                             // insert the elements into the database
-                            PreparedStatement st = c.prepareStatement("INSERT INTO projectdata (customerId, restoId, orderId, orderItems, status) VALUES (?, ?, ?, ?, ?)");
-                            st.setString(1, "1JVR"); //temporary
+                            PreparedStatement st = c.prepareStatement("INSERT INTO order_data (customerId, restoId, orderId, orderItems, status) VALUES (?, ?, ?, ?, ?)");
+                            st.setString(1, customerId);
                             st.setString(2, restoId);
                             st.setString(3, orderId);
                             st.setString(4, ordersList);
