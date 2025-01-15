@@ -31,7 +31,8 @@ import java.util.PriorityQueue;
 
 
 public class DeliveryStatus extends JFrame implements MouseListener, ActionListener, ListSelectionListener {
-
+    
+    //This is my GUI COMPONENTS
     private JButton pastBtn, currBtn, cancelBtn, recBtn, infoBtn, refBtn;
     private JLabel HdrTitle, backLabel, StatusLabel;
     private JPanel MidPanel, BtnPanel, BgPanel, HdrPanel, BtmPanel;
@@ -39,6 +40,8 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
     private JTable orderTable;
     private JScrollPane orderScrollPane;
     private ImageIcon LogoIcon;
+    
+    //My database connection and data model 
     private Connection con;
     private ArrayList<String> rows;
     private DefaultTableModel df;
@@ -127,26 +130,26 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         pastBtn = new JButton("Past Orders");
         pastBtn.setBounds(230, 17, 150, 30);
         BtmPanel.add(pastBtn);
-
+        // set as a enabled false
         currBtn = new JButton("Current Orders");
         currBtn.setBounds(70, 17, 150, 30);
         currBtn.setEnabled(false);
         BtmPanel.add(currBtn);
-
+        // Canceling Processing Order
         cancelBtn = new JButton("Cancel Order");
         cancelBtn.setBounds(10, 590, 110, 30);
         cancelBtn.setEnabled(false);
         BgPanel.add(cancelBtn);
-
+        // Button to mark your order as received
         recBtn = new JButton("Received");
         recBtn.setBounds(340, 590, 100, 30);
         recBtn.setEnabled(false);
         BgPanel.add(recBtn);
-
+        // More information about your order
         infoBtn = new JButton("More Info");
         infoBtn.setBounds(235, 590, 90, 30);
         BgPanel.add(infoBtn);
-        
+        // Refreshing the table
         refBtn = new JButton("Refresh");
         refBtn.setBounds(135, 590, 90, 30);
         BgPanel.add(refBtn);
@@ -178,6 +181,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         setVisible(true);
     }
 
+    // Connection to the MySQL database
     public void Connect() {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
@@ -185,7 +189,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
             Logger.getLogger(DeliveryStatus.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+      //This is the data that will go to the table from the database 
     public void dataElements() {
         df = (DefaultTableModel) orderTable.getModel();
         df.setColumnIdentifiers(new String[]{"Order ID", "Customer ID", "Restaurant ID", "Order", "Status"});
@@ -206,7 +210,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                 df.addRow(new Object[]{orderId, customerId, restaurantId, orderItems, status});
 
                 int rowIndex = df.getRowCount() - 1;
-
+                //This is a timer that will automatically change the status to PROCESSING to IN TRANSIT
             if ("PROCESSING".equals(status)) {
                     Timer processingTimer = new Timer(5000, new ActionListener() {
                         @Override
@@ -256,13 +260,14 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                 String status = orderTable.getValueAt(selectedRow, 4).toString().toUpperCase();
              
                 updateProgressBarFromStatus(status);
-                
+                //If the status is PROCESSING the button will apear clickable and it can be cancelled 
                 if ("PROCESSING".equals(status)) {
                     cancelBtn.setEnabled(true);
                 } else {
                     cancelBtn.setEnabled(false);
                 }
-                
+                /*If the status turn into IN TRANSIT the button RECEIVED will apear clickable and the status will
+                 be changed into RECEIVED*/
                 if ("IN TRANSIT".equals(status)){
                     recBtn.setEnabled(true);
                 } else {
@@ -271,7 +276,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
             }
         }
     }
-    
+    //This is the place where my JPROGRESSBAR progressed
     private void updateProgressBarFromStatus(String status) {
         switch (status){
             case "PROCESSING":
@@ -297,6 +302,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                 
         }   
     }
+    //This is the PriorityQueue, this sets what status should be first in the table
     private int getPriority(String status) {
     switch (status) {
         case "IN TRANSIT":
@@ -329,7 +335,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         return Integer.compare(getPriority(status1), getPriority(status2));
     });
     
-    // Clear and re-add sorted rows
+    // This clear and re add sorted rows
     dm.setRowCount(0);
     for (String[] row : rows) {
         dm.addRow(row);
@@ -344,7 +350,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
             if (selectedRow != -1) {
                 String orderId = orderTable.getValueAt(selectedRow, 0).toString();
                 String status = orderTable.getValueAt(selectedRow, 4).toString().toUpperCase();
-
+                // This is where my IN TRANSIT condition is, if its IN TRANSIT the next status will appear which is the RECEIVED status
                 if ("IN TRANSIT".equals(status)) {
                     try {
                         String updateSql = "UPDATE order_data SET status = 'RECEIVED' WHERE orderId = ?";
@@ -363,6 +369,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                     JOptionPane.showMessageDialog(this, "Order must be In Transit to mark as Received.");
                 }
             }
+            //This is where my cancel button works, so it only works if the status is processing
         }else if (e.getSource() == cancelBtn){
             int selectedRow = orderTable.getSelectedRow();
             if (selectedRow != -1){
@@ -395,6 +402,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                this.dispose();
                //New OrderHistoryMain()
         }
+        //This is the information button, if select a row and click the "more info" button it will show the neccesary order information
          if(e.getSource() == infoBtn) {
              try{
                  String username = "jestervon08", fname = "", lname = "", addr = "", pn = "";
@@ -431,9 +439,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
     } 
       if (e.getSource() == refBtn) {
           df.setRowCount(0);
-//           for(int i = 0; i < df.getRowCount(); i++){
-//               df.removeRow(i);
-//           }
+
           dataElements();
       }  
     }
