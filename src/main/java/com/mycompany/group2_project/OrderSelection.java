@@ -46,10 +46,12 @@ public class OrderSelection extends JFrame implements ActionListener {
     public int priceAdd, priceRem, priceTotal;
     
     //variables for query
-    public String fnameQ, lnameQ, addressQ, phNumberQ, username;
+    public String customerIdQ, fnameQ, lnameQ, addressQ, phNumberQ, username;
 
     
-    OrderSelection(/*MenuSelection parent*/) {
+    OrderSelection(String user, short resto, short city) {
+        username = user;
+        
         //modify main frame
         setSize(464, 737);
         setTitle("Food Delivery");
@@ -59,8 +61,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         //setLogo
-//        imgLogo = new ImageIcon("fordaFood.png");
-        imgLogo = new ImageIcon("Image.png");
+        imgLogo = new ImageIcon("fordaFood.png");
+//        imgLogo = new ImageIcon("Image.png");
         setIconImage(imgLogo.getImage());
         
         //header panel
@@ -221,10 +223,8 @@ public class OrderSelection extends JFrame implements ActionListener {
         //food-items in select
         //restoChoice = get value/index from previous frame
         
-        cityChoice = 5;
-//        cityChoice = parent.chosenCity;
-        restoChoice = 2;
-//        restoChoice = parent.chosenResto;
+        cityChoice = city;
+        restoChoice = resto;
         
 //        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
         // orderPrefix depending on chosen resto that will be used for restoId
@@ -260,7 +260,7 @@ public class OrderSelection extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-//                parent.setVisible(true);
+                new MenuSelection(username);
             }
         });
         
@@ -611,16 +611,15 @@ public class OrderSelection extends JFrame implements ActionListener {
     
     public void dataBaseElements(){
         try {
-            
 //            username = "1JVR"; // inherit from resma's frame
-            username = "2DKR";
             
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE username=?");
+            PreparedStatement st = c.prepareStatement("SELECT customer_id, first_name, last_name, address, phone_number FROM account_profile WHERE username=?");
             st.setString(1, username);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
+                customerIdQ = rs.getString("customer_id");
                 fnameQ = rs.getString("first_name");
                 lnameQ = rs.getString("last_name");
                 addressQ = rs.getString("address");

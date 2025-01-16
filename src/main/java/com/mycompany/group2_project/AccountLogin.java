@@ -73,6 +73,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     public CompoundBorder tfBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
     public CompoundBorder tfErrorBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.red, 2, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
     public boolean enterPressed, enabled = true;
+    public String username, password;
     
     //Added components in specified panels
     public void Components() {
@@ -571,8 +572,8 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         //For loggin in to the delivery program
         if(e.getSource()==loginBtn) {
             //For getting the input of user from username and password textfields
-            String username = userLoginTF.getText();
-            String password = passLoginTF.getText();
+            username = userLoginTF.getText();
+            password = passLoginTF.getText();
             
             //For connecting and adding values to the database
             try {
@@ -595,8 +596,9 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                 //If TRUE, logs in to the program, and dispose this current program
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                    
                     dispose();
-                    new MenuSelection(AccountLogin.this);
+                    new MenuSelection(username);
                 //If FALSE, highlights the border of username and password textfields
                 } else {
                     JOptionPane.showMessageDialog(loginP, "Invalid Username or Password.", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -804,8 +806,8 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
         if(e.getSource()==passLoginTF) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER) {
                 //For getting the input of user from username and password textfields
-                String username = userLoginTF.getText();
-                String password = passLoginTF.getText();
+                username = userLoginTF.getText();
+                password = passLoginTF.getText();
 
                 //For connecting and adding values to the database
                 try {
@@ -832,7 +834,7 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                         JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
                         loginBtn.setBackground(Color.white);
                         dispose();
-                        new MenuSelection(AccountLogin.this);
+                        new MenuSelection(username);
                     //If FALSE, highlights the border of username and password textfields
                     } else {
                         loginBtn.setBackground(new Color(184,207,229));

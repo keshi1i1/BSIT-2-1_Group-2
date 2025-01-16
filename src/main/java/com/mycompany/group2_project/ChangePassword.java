@@ -32,10 +32,12 @@ public class ChangePassword extends JFrame implements ActionListener {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
+    public String customerId;
 
 
     //Constructor
-    ChangePassword() throws SQLException { 
+    ChangePassword(String id) throws SQLException { 
+        customerId = id;
           
         try{
          //For connecting to the database
@@ -147,7 +149,8 @@ public class ChangePassword extends JFrame implements ActionListener {
         // Validate current password
         
             try {
-                pst = con.prepareStatement("select * from account_profile where customer_id='3AG'");
+                pst = con.prepareStatement("select * from account_profile where customer_id=?");
+                pst.setString(1, customerId);
                 rs = pst.executeQuery();
              if(rs.next()){
             
@@ -168,8 +171,9 @@ public class ChangePassword extends JFrame implements ActionListener {
         }
         
         try {
-            pst = con.prepareStatement("update account_profile set password=? where customer_id='3AG'");
+            pst = con.prepareStatement("update account_profile set password=? where customer_id=?");
             pst.setString(1, newPassword);
+            pst.setString(2, customerId);
               int rs1 = pst.executeUpdate();
               if(rs1==1){
                   
@@ -183,19 +187,5 @@ public class ChangePassword extends JFrame implements ActionListener {
         }
        
     }
-}
-    
-    // Main method to run the program
-         public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new ChangePassword().setLocationRelativeTo(null);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
     }
 }

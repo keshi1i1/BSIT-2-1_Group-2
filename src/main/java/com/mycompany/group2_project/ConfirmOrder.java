@@ -28,12 +28,14 @@ public class ConfirmOrder extends JFrame {
     private JLabel lblAddress, lblCost, lblCostShow, lblContact, lblContactNum, lblCart;
     private JTextArea txtaAddressSet;
     private ImageIcon imgLogo;
+    public String customerId;
     
     ConfirmOrder(OrderSelection parent) {
+        
         //disable parent frame
         parent.setEnabled(false);
         //updating the address
-        String address = "Address"; //store new address
+        String address = parent.addressQ; //store new address
         //modify main frame
         setLocation(536, 210);
         setLayout(null);
@@ -124,7 +126,7 @@ public class ConfirmOrder extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int confirmChoice = JOptionPane.showConfirmDialog(parent, "Do you want to check your order?", "Order Checker", JOptionPane.YES_NO_OPTION);
-                if (confirmChoice == JOptionPane.YES_OPTION) {
+                if (confirmChoice == JOptionPane.YES_OPTION || confirmChoice == JOptionPane.NO_OPTION) {
                     //variables for orderId
                     String ordersList="";
                     String orderId = "";
@@ -138,7 +140,7 @@ public class ConfirmOrder extends JFrame {
                     
                     // elements to be stored in the database
                     String restoId = parent.restoID; //restoid to database
-                    String customerId = parent.username;
+                    customerId = parent.customerIdQ;
                     
                     //loop to check if orderId is unique
                     while (!uniqueId) {
@@ -167,7 +169,7 @@ public class ConfirmOrder extends JFrame {
                             st.setString(2, restoId);
                             st.setString(3, orderId);
                             st.setString(4, ordersList);
-                            st.setString(5, "Processing");
+                            st.setString(5, "PROCESSING");
                             //break the loop for checking unique id
                             uniqueId = true;
 
@@ -188,17 +190,19 @@ public class ConfirmOrder extends JFrame {
                 } catch (SQLException exception) {
                     exception.printStackTrace();
                 }
-                    
-                    dispose();
-                    parent.dispose();
-//                    new DeliveryStatus();
-                } else if (confirmChoice == JOptionPane.NO_OPTION) {
-                    //reset inputs in the orderselection frame
-                    parent.priceTotal = 0;
-                    parent.lblTotal.setText("Total Cost:                       ₱0");
-                    parent.setEnabled(true);
-                    parent.dlmItemCart.removeAllElements();
-                    dispose();
+                    if(confirmChoice == JOptionPane.YES_OPTION) {
+                        dispose();
+                        parent.dispose();
+                        new DeliveryStatus(customerId);
+                        
+                    } else if (confirmChoice == JOptionPane.NO_OPTION) {
+                        //reset inputs in the orderselection frame
+                        parent.priceTotal = 0;
+                        parent.lblTotal.setText("Total Cost:                       ₱0");
+                        parent.setEnabled(true);
+                        parent.dlmItemCart.removeAllElements();
+                        dispose();
+                    }
                 }
                 
             }

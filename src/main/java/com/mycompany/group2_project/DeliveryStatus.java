@@ -46,7 +46,11 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
     private ArrayList<String> rows;
     private DefaultTableModel df;
     
-    DeliveryStatus() {
+    public String customerId;
+    
+    DeliveryStatus(String id) {
+        customerId = id;
+        
         // Icon logo for our project 
         LogoIcon = new ImageIcon("fordafood.png");
         Connect();
@@ -101,6 +105,8 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         DefaultTableModel tableModel = new DefaultTableModel();
         orderTable = new JTable(tableModel);
         orderTable.setDefaultEditor(Object.class, null);
+        orderTable.setFont(new Font("Arial", Font.PLAIN, 11));
+        orderTable.setRowHeight(30);
         orderScrollPane = new JScrollPane(orderTable);
         orderScrollPane.setBounds(10, 10, 405, 370);
         MidPanel.add(orderScrollPane);
@@ -195,7 +201,8 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         df.setColumnIdentifiers(new String[]{"Order ID", "Customer ID", "Restaurant ID", "Order", "Status"});
 
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT * FROM order_data WHERE status = 'PROCESSING' OR status = 'IN TRANSIT'");
+            PreparedStatement pst = con.prepareStatement("SELECT * FROM order_data WHERE status = 'PROCESSING' OR status = 'IN TRANSIT' AND customerId=?");
+            pst.setString(1, customerId);
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -211,8 +218,8 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
 
                 int rowIndex = df.getRowCount() - 1;
                 //This is a timer that will automatically change the status to PROCESSING to IN TRANSIT
-            if ("PROCESSING".equals(status)) {
-                    Timer processingTimer = new Timer(5000, new ActionListener() {
+            if ("PROCESSING".equals(status)) { //30 secs is given to user to cancel before it changes the status to IN TRANSIT
+                    Timer processingTimer = new Timer(30000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
@@ -373,14 +380,14 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         }else if (e.getSource() == cancelBtn){
             int selectedRow = orderTable.getSelectedRow();
             if (selectedRow != -1){
-                String OrderId = orderTable.getValueAt(selectedRow, 0).toString();
+                String orderId = orderTable.getValueAt(selectedRow, 0).toString();
                 String status = orderTable.getValueAt(selectedRow, 4).toString().toUpperCase();
                 
                  if ("PROCESSING".equals(status)){
                      try {
                          String updatedSql = "UPDATE order_data SET status = 'CANCELLED' WHERE orderId = ?";
                          PreparedStatement pst = con.prepareStatement(updatedSql);
-                         pst.setString(1, OrderId);
+                         pst.setString(1, orderId);
                          int rowsUpdated = pst.executeUpdate();
                          
                          if (rowsUpdated > 0){
@@ -400,14 +407,14 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         } 
         if (e.getSource() == pastBtn){
                this.dispose();
-               //New OrderHistoryMain()
+               new OrderHistory(customerId);
         }
         //This is the information button, if select a row and click the "more info" button it will show the neccesary order information
          if(e.getSource() == infoBtn) {
              try{
-                 String username = "jestervon08", fname = "", lname = "", addr = "", pn = "";
-                 PreparedStatement pst = con.prepareStatement("SELECT * FROM account_profile WHERE username=?");
-                 pst.setString(1, username);
+                 String fname = "", lname = "", addr = "", pn = "";
+                 PreparedStatement pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id=?");
+                 pst.setString(1, customerId);
                  ResultSet rs = pst.executeQuery();
                  
                  
@@ -449,8 +456,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == backLabel) {
             dispose();
-            
-            //New CustomerProfile()
+            new CustomerProfile(customerId);
         }
     }
     

@@ -35,7 +35,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
 
     public JPanel restoPanel, menuPanel, homePanel, quickRestoPanel, searchPanel;
     public JComboBox<String> branchComboBox;
-    public JButton orderBtn, profileBtn, logoutBtn, quickRestaurantBtn, viewRestaurantsBtn, backBtn, backBtn2, searchBtn, quickLookupBtn, orderBtn2;
+    public JButton orderBtn, profileBtn, logoutBtn, quickRestaurantBtn, viewRestaurantsBtn, backBtn, backBtn2, backBtn3, searchBtn, quickLookupBtn, orderBtn2;
     public JLabel space1, space2, addressLbl, underlineLbl, searchLbl;
     public JTextField searchTf;
     public Color maroon = new Color(113, 45, 59);
@@ -50,15 +50,16 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     public String[] columns = {"Resto ID", "Restaurant", "Location", "Distance"},
                 restaurants = {"McDonald's", "Jollibee", "Greenwich", "Burger King"},
                 locations = {"San Pedro", "Binan", "Sta. Rosa", "Cabuyao", "Calamba"};
-    public String username, customerId;
+    public String username, customerId, addressCity;
 
     public short chosenCity;
     
     // Logo
     public ImageIcon logoIcon = new ImageIcon("fordaFood.png");
 
-    public MenuSelection(AccountLogin parent) {
-        username = parent.userLoginTF.getText();
+    public MenuSelection(String user) {
+        username = user;
+        
         QuickRestoPanel();
         setTitle("Restaurant Profile Manager");
         setSize(464, 737);
@@ -280,6 +281,8 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         table.setShowGrid(true);
         table.setGridColor(Color.black);
         table.setShowVerticalLines(true);
+        table.setFont(new Font("Arial", Font.PLAIN, 11));
+        table.setRowHeight(30);
         sp = new JScrollPane(table);
         sp.setBounds(30, 160, 390, 430);
         
@@ -288,9 +291,19 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         }
         AddRows();
         
+        backBtn3 = new JButton("\u2b9c");
+        backBtn3.setFont(new Font("Sherif", Font.BOLD, 14));
+        backBtn3.setBounds(30, 608, 40, 40);
+        backBtn3.setForeground(maroon);
+        backBtn3.setBackground(Color.white);
+        backBtn3.setBorder(BorderFactory.createLineBorder(maroon, 2));
+        backBtn3.setFocusable(false);
+        backBtn3.addActionListener(this);
+        backBtn3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         quickLookupBtn = new JButton("Quick Restaurant Lookup");
-        quickLookupBtn.setFont(new Font("Arial", Font.BOLD, 15));
-        quickLookupBtn.setBounds(30, 608, 290, 40);
+        quickLookupBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        quickLookupBtn.setBounds(70, 608, 250, 40);
         quickLookupBtn.setForeground(maroon);
         quickLookupBtn.setBackground(Color.white);
         quickLookupBtn.setBorder(BorderFactory.createLineBorder(maroon, 2));
@@ -299,7 +312,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         quickLookupBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         orderBtn2 = new JButton("Order Now");
-        orderBtn2.setFont(new Font("Arial", Font.BOLD, 15));
+        orderBtn2.setFont(new Font("Arial", Font.BOLD, 14));
         orderBtn2.setBounds(320, 608, 100, 40);
         orderBtn2.setForeground(maroon);
         orderBtn2.setBackground(Color.white);
@@ -316,6 +329,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         searchPanel.add(searchTf);
         quickRestoPanel.add(searchBtn);
         quickRestoPanel.add(sp);
+        quickRestoPanel.add(backBtn3);
         quickRestoPanel.add(quickLookupBtn);
         quickRestoPanel.add(orderBtn2);
     }
@@ -422,7 +436,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
                 locations = {"San Pedro", "Binan", "Sta. Rosa", "Cabuyao", "Calamba"};
         
         String address = addressLbl.getText();
-        String addressCity = "";
+        addressCity = "";
         int commaCount = 0;
         for(int i=0; i<address.length(); i++) {
             if(address.charAt(i)==',') {
@@ -705,9 +719,8 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     } else if (e.getSource() == backBtn2) {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else if (e.getSource() == profileBtn) {
-        
-        setVisible(false);
-        new CustomerProfile(MenuSelection.this);
+        dispose();
+        new CustomerProfile(customerId);
     } else if (e.getSource() == logoutBtn) {
         dispose();
         new AccountLogin();
@@ -721,11 +734,17 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         sorter.setRowFilter(RowFilter.regexFilter(input));
         table.setRowSorter(sorter);
         
+    } else if(e.getSource()==backBtn3) {
+        searchTf.setText("");
+        table.setRowSorter(null);
+        
+        quickRestoPanel.setVisible(false);
+        homePanel.setVisible(true);
     } else if(e.getSource()==quickLookupBtn) {
         String input = searchTf.getText().trim();
         
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        sorter.setRowFilter(RowFilter.regexFilter("0km"));
+        sorter.setRowFilter(RowFilter.regexFilter(addressCity));
         table.setRowSorter(sorter);
         
     } else if (e.getSource() == orderBtn) {
@@ -734,8 +753,8 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
             JOptionPane.showMessageDialog(this, "Invalid! Please choose a city above.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        setVisible(false);
-        new OrderSelection(MenuSelection.this);
+        dispose();
+        new OrderSelection(username, chosenResto, chosenCity);
     } else if(e.getSource()==orderBtn2) {
         String chosenRestaurant;
         String chosenLocation;
@@ -777,8 +796,8 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
                     break;
             }
             
-            setVisible(false);
-            new OrderSelection(MenuSelection.this);
+            dispose();
+            new OrderSelection(username, chosenResto, chosenCity);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid! Please select a row first.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;

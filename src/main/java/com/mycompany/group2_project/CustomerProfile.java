@@ -21,20 +21,21 @@ public class CustomerProfile extends JFrame implements ActionListener {
     private JPanel mainPanel;
     private JTextField Address, Username, PhoneNumber, Email;
     private JPasswordField  Password;
-    String add,email,fn,ln, phnumber, username, pass;
+    public String customerId, add, email, fn, ln, phnumber, username, pass;
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
     
     // Constructor
-    CustomerProfile() {
+    CustomerProfile(String id) {
+        customerId = id;
           
         try{
          //For connecting to the database
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id='3AG'");
-       
+                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id=?");
+                pst.setString(1, customerId);
                 rs = pst.executeQuery();
                 if(rs.next()){
                     fn = rs.getString("first_name");
@@ -72,8 +73,8 @@ public class CustomerProfile extends JFrame implements ActionListener {
         mainPanel.add(btnHome);
 
         // User's Name Label
-        lblName = new JLabel(fn + " " + ln);
-        lblName.setBounds(130, 40, 200, 30);
+        lblName = new JLabel(fn + " " + ln, SwingConstants.CENTER);
+        lblName.setBounds(0, 40, 450, 30);
         lblName.setFont(new Font("Arial", Font.BOLD, 25));
         lblName.setForeground(new Color(113, 45, 59)); 
         mainPanel.add(lblName);
@@ -166,28 +167,21 @@ public class CustomerProfile extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Open the EmailVerification frame when "Change Password" is clicked
         if (e.getSource() == btnResetPass) {
-            new EmailVerification().setLocationRelativeTo(null); 
+            new EmailVerification(customerId).setLocationRelativeTo(null); 
         }
         
         // Check if the "Order History" button was clicked
         else if (e.getSource() == btnOrder) {
         this.dispose();
         // Open the DeliveryStatusMain frame (Show order history)
-//        new DeliveryStatus();
+        new DeliveryStatus(customerId);
     }
          // Check if the "Home" button was clicked
         else if (e.getSource() == btnHome) {
             this.dispose();
             // Open the MenuSelectionMain frame (Back to the main menu)
-//            new MenuSelection();
+            new MenuSelection(username);
         } 
-    }
-
-    // Main method to run the program
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new CustomerProfile().setLocationRelativeTo(null);
-        });
     }
 }
 
