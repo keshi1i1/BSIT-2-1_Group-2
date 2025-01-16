@@ -1,6 +1,5 @@
 package com.mycompany.group2_project;
 
-
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -34,24 +33,20 @@ import java.util.PriorityQueue;
 public class DeliveryStatus extends JFrame implements MouseListener, ActionListener, ListSelectionListener {
     
     //This is my GUI COMPONENTS
-    public JButton pastBtn, currBtn, cancelBtn, recBtn, infoBtn, refBtn;
-    public JLabel HdrTitle, backLabel, StatusLabel;
-    public JPanel MidPanel, BtnPanel, BgPanel, HdrPanel, BtmPanel;
-    public JProgressBar ProgressBar;
-    public JTable orderTable;
-    public JScrollPane orderScrollPane;
-    public ImageIcon LogoIcon;
+    private JButton pastBtn, currBtn, cancelBtn, recBtn, infoBtn, refBtn;
+    private JLabel HdrTitle, backLabel, StatusLabel;
+    private JPanel MidPanel, BtnPanel, BgPanel, HdrPanel, BtmPanel;
+    private JProgressBar ProgressBar;
+    private JTable orderTable;
+    private JScrollPane orderScrollPane;
+    private ImageIcon LogoIcon;
     
     //My database connection and data model 
-    public Connection con;
-    public ArrayList<String> rows;
-    public DefaultTableModel df;
+    private Connection con;
+    private ArrayList<String> rows;
+    private DefaultTableModel df;
     
-    public String customerId, username;
-    public CustomerProfile parent;
-    DeliveryStatus(CustomerProfile parent) {
-        username = parent.username;
-        customerId = parent.customerId;
+    DeliveryStatus() {
         // Icon logo for our project 
         LogoIcon = new ImageIcon("fordafood.png");
         Connect();
@@ -92,27 +87,8 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         backLabel.setBounds(25, 21, 50, 30);
         backLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
         backLabel.setForeground(Color.WHITE);
-        backLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(e.getSource()==backLabel) {
-                    dispose();
-                    parent.setVisible(true);
-                }
-            }
-            @Override
-            public void mousePressed(MouseEvent e) {}
-
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        });
         HdrPanel.add(backLabel);
+        backLabel.addMouseListener(this);
 
         // Middle Panel, where the main part is
         MidPanel = new JPanel();
@@ -199,7 +175,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         refBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         orderTable.getSelectionModel().addListSelectionListener(this);
-        
+
         dataElements(); 
           
         setVisible(true);
@@ -219,8 +195,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         df.setColumnIdentifiers(new String[]{"Order ID", "Customer ID", "Restaurant ID", "Order", "Status"});
 
         try {
-            PreparedStatement pst = con.prepareStatement("SELECT * FROM order_data WHERE status = 'PROCESSING' OR status = 'IN TRANSIT' and customerId=?");
-            pst.setString(1, customerId);
+            PreparedStatement pst = con.prepareStatement("SELECT * FROM order_data WHERE status = 'PROCESSING' OR status = 'IN TRANSIT'");
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -302,7 +277,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         }
     }
     //This is the place where my JPROGRESSBAR progressed
-    public void updateProgressBarFromStatus(String status) {
+    private void updateProgressBarFromStatus(String status) {
         switch (status){
             case "PROCESSING":
                 ProgressBar.setValue(25);
@@ -328,7 +303,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         }   
     }
     //This is the PriorityQueue, this sets what status should be first in the table
-    public int getPriority(String status) {
+    private int getPriority(String status) {
     switch (status) {
         case "IN TRANSIT":
             return 1;
@@ -341,7 +316,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
         return 0;
 }
     
-    public void sortPriorityQueue(){
+    private void sortPriorityQueue(){
         DefaultTableModel dm = (DefaultTableModel) orderTable.getModel();
         
          java.util.List<String[]> rows = new java.util.ArrayList<>();
@@ -424,14 +399,13 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
             }
         } 
         if (e.getSource() == pastBtn){
-               setVisible(false);
-               ConfirmOrder parent = null;
-               new OrderHistory(parent);
+               this.dispose();
+               //New OrderHistoryMain()
         }
         //This is the information button, if select a row and click the "more info" button it will show the neccesary order information
          if(e.getSource() == infoBtn) {
              try{
-                 String fname = "", lname = "", addr = "", pn = "";
+                 String username = "jestervon08", fname = "", lname = "", addr = "", pn = "";
                  PreparedStatement pst = con.prepareStatement("SELECT * FROM account_profile WHERE username=?");
                  pst.setString(1, username);
                  ResultSet rs = pst.executeQuery();
@@ -446,7 +420,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                 
                 
             }
-            //For more info
+            // More info about your orders
             int selectedRow = orderTable.getSelectedRow();
             if(selectedRow != -1) {
                 String value = orderTable.getValueAt(selectedRow, 3).toString();
@@ -469,11 +443,18 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
           dataElements();
       }  
     }
+    
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+        if (e.getSource() == backLabel) {
+            dispose();
+            
+            //New CustomerProfile()
+        }
     }
+    
+    
     
 
     @Override
