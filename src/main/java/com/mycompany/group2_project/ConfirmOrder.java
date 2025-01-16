@@ -29,14 +29,11 @@ public class ConfirmOrder extends JFrame {
     private JTextArea txtaAddressSet;
     private ImageIcon imgLogo;
     
-    public String restoId, customerId, username;
-    
     ConfirmOrder(OrderSelection parent) {
-        username = parent.username;
         //disable parent frame
         parent.setEnabled(false);
         //updating the address
-        String address = parent.addressQ; //store new address
+        String address = "Address"; //store new address
         //modify main frame
         setLocation(536, 210);
         setLayout(null);
@@ -85,7 +82,7 @@ public class ConfirmOrder extends JFrame {
         lblContact.setBounds(10, 260, 100, 30);
         add(lblContact);
         
-        lblContactNum = new JLabel(parent.phNumberQ);
+        lblContactNum = new JLabel(parent.lblNum.getText());
         lblContactNum.setFont(new Font("Sherif", Font.PLAIN, 14));
         lblContactNum.setBounds(15, 280, 100, 30);
         add(lblContactNum);
@@ -140,8 +137,8 @@ public class ConfirmOrder extends JFrame {
                     Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
                     
                     // elements to be stored in the database
-                    restoId = parent.restoID; //restoid to database
-                    customerId = parent.customerIdQ;
+                    String restoId = parent.restoID; //restoid to database
+                    String customerId = parent.username;
                     
                     //loop to check if orderId is unique
                     while (!uniqueId) {
@@ -194,7 +191,7 @@ public class ConfirmOrder extends JFrame {
                     
                     dispose();
                     parent.dispose();
-                    new OrderHistory(ConfirmOrder.this);
+//                    new DeliveryStatus();
                 } else if (confirmChoice == JOptionPane.NO_OPTION) {
                     //reset inputs in the orderselection frame
                     parent.priceTotal = 0;

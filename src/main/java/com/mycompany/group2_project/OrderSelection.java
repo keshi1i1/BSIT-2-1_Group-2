@@ -20,25 +20,25 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class OrderSelection extends JFrame implements ActionListener {
     
-    public JLabel lblNameDesc, lblNumDesc, lblAddress;
+    private JLabel lblNameDesc, lblNumDesc, lblAddress;
     public JLabel lblNum, lblTotal, lblName;
-    public ImageIcon imgLogo, imgResto;
+    private ImageIcon imgLogo, imgResto;
     
     //Panel - header
-    public JPanel pnlHeader;
-    public JLabel lblResto, lblRestoImg;
-    public JButton btnBack;
+    private JPanel pnlHeader;
+    private JLabel lblResto, lblRestoImg;
+    private JButton btnBack;
     
     //Panel - order
-    public JPanel pnlItem;
-    public JList<String> listItemSelect, listItemCart;
+    private JPanel pnlItem;
+    private JList<String> listItemSelect, listItemCart;
     public DefaultListModel<String> dlmItemSelect, dlmItemCart;
-    public JScrollPane spItemSelect, spItemCart;
-    public JLabel lblItemSelect, lblItemCart, txtfItemQt;
-    public JTextArea lblAddressQ;
-    public JButton btnAdd, btnRem, btnAddQt, btnMinQt, btnOrder;
+    private JScrollPane spItemSelect, spItemCart;
+    private JLabel lblItemSelect, lblItemCart, txtfItemQt;
+    private JTextArea lblAddressQ;
+    private JButton btnAdd, btnRem, btnAddQt, btnMinQt, btnOrder;
     
-    public int itemQt=1; //food quantity
+    private int itemQt=1; //food quantity
     public short restoChoice, cityChoice; //inherit from previous frame - necessary for resto id and what menu to show
     public String restoID, orderPrefix; //necessary for IDs
     
@@ -46,11 +46,10 @@ public class OrderSelection extends JFrame implements ActionListener {
     public int priceAdd, priceRem, priceTotal;
     
     //variables for query
-    public String customerIdQ, fnameQ, lnameQ, addressQ, phNumberQ, username;
+    public String fnameQ, lnameQ, addressQ, phNumberQ, username;
 
-    OrderSelection(MenuSelection parent) {
-        username =  parent.username;
-        System.out.println(customerIdQ);
+    
+    OrderSelection(/*MenuSelection parent*/) {
         //modify main frame
         setSize(464, 737);
         setTitle("Food Delivery");
@@ -58,7 +57,6 @@ public class OrderSelection extends JFrame implements ActionListener {
         setLayout(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
         
         //setLogo
 //        imgLogo = new ImageIcon("fordaFood.png");
@@ -220,11 +218,13 @@ public class OrderSelection extends JFrame implements ActionListener {
         });
         pnlItem.add(btnOrder);
         
-//        food-items in select
-//        restoChoice = get value/index from previous frame
+        //food-items in select
+        //restoChoice = get value/index from previous frame
         
-        cityChoice = parent.chosenCity;
-        restoChoice = parent.chosenResto;
+        cityChoice = 5;
+//        cityChoice = parent.chosenCity;
+        restoChoice = 2;
+//        restoChoice = parent.chosenResto;
         
 //        restoChoice = 0; //what resto/fastfood is chosen from the prev frame
         // orderPrefix depending on chosen resto that will be used for restoId
@@ -260,7 +260,7 @@ public class OrderSelection extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                parent.setVisible(true);
+//                parent.setVisible(true);
             }
         });
         
@@ -612,13 +612,15 @@ public class OrderSelection extends JFrame implements ActionListener {
     public void dataBaseElements(){
         try {
             
+//            username = "1JVR"; // inherit from resma's frame
+            username = "2DKR";
+            
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-            PreparedStatement st = c.prepareStatement("SELECT customer_id, first_name, last_name, address, phone_number FROM account_profile WHERE username=?");
+            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE username=?");
             st.setString(1, username);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                customerIdQ = rs.getString("customer_id");
                 fnameQ = rs.getString("first_name");
                 lnameQ = rs.getString("last_name");
                 addressQ = rs.getString("address");
