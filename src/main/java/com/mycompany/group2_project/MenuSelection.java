@@ -33,34 +33,32 @@ import javax.swing.table.TableRowSorter;
 
 public class MenuSelection extends JFrame implements ActionListener, KeyListener {
 
-    private JPanel restoPanel, menuPanel, homePanel, quickRestoPanel, searchPanel;
-    private JComboBox<String> branchComboBox;
-    private JButton orderBtn, profileBtn, logoutBtn, quickRestaurantBtn, viewRestaurantsBtn, backBtn, backBtn2, searchBtn, quickLookupBtn, orderBtn2;
-    private JLabel space1, space2, addressLbl, underlineLbl, searchLbl;
-    private JTextField searchTf;
-    private Color maroon = new Color(113, 45, 59);
-    private ImageIcon homePage, mcdo, jobee, green, burger;;
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private JScrollPane sp;
-    private Hashtable<String, String> hashT;
-    private boolean enabled = true;
-    private JList<RowSorter.SortKey> sortKeys;
+    public JPanel restoPanel, menuPanel, homePanel, quickRestoPanel, searchPanel;
+    public JComboBox<String> branchComboBox;
+    public JButton orderBtn, profileBtn, logoutBtn, quickRestaurantBtn, viewRestaurantsBtn, backBtn, backBtn2, searchBtn, quickLookupBtn, orderBtn2;
+    public JLabel space1, space2, addressLbl, underlineLbl, searchLbl;
+    public JTextField searchTf;
+    public Color maroon = new Color(113, 45, 59);
+    public ImageIcon homePage, mcdo, jobee, green, burger;;
+    public JTable table;
+    public DefaultTableModel tableModel;
+    public JScrollPane sp;
+    public Hashtable<String, String> hashT;
+    public boolean enabled = true;
+    public JList<RowSorter.SortKey> sortKeys;
     
-    private String[] columns = {"Resto ID", "Restaurant", "Location", "Distance"},
+    public String[] columns = {"Resto ID", "Restaurant", "Location", "Distance"},
                 restaurants = {"McDonald's", "Jollibee", "Greenwich", "Burger King"},
                 locations = {"San Pedro", "Binan", "Sta. Rosa", "Cabuyao", "Calamba"};
-    
+    public String username, customerId;
+
     public short chosenCity;
     
     // Logo
-    private ImageIcon logoIcon = new ImageIcon("fordaFood.png");
-    
-    public static void main(String[] args) {
-        new MenuSelection();
-    }
+    public ImageIcon logoIcon = new ImageIcon("fordaFood.png");
 
-    public MenuSelection() {
+    public MenuSelection(AccountLogin parent) {
+        username = parent.userLoginTF.getText();
         QuickRestoPanel();
         setTitle("Restaurant Profile Manager");
         setSize(464, 737);
@@ -77,7 +75,8 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         add(homePanel, "home");
         add(new JScrollPane(restoPanel), "restoP");
         add(new JScrollPane(menuPanel), "Menu");
-
+        
+        
         setVisible(true);
     }
     
@@ -179,7 +178,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
 
     // Panel for restaurant panel
-    private JPanel RestoPanel(Color maroon) {
+    public JPanel RestoPanel(Color maroon) {
         JPanel panel = new JPanel(new BorderLayout());
 
         backBtn = new JButton("\u2b9c ");
@@ -220,7 +219,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
     
     //Panel for quick restaurant panel
-    private void QuickRestoPanel() {
+    public void QuickRestoPanel() {
         
         Font arial = new Font("Arial", Font.PLAIN, 15);
         
@@ -322,14 +321,14 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
     
     //For getting the address of the user that logged in
-    private String getAddress() {
-        String username = "jestervon08", address = "";
+    public String getAddress() {
+        String address = "";
         try {
             //"jdbc:mysql://[host address]/[database_name], [user], [password]
             Connection c = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
                 
             //The query for the database
-            PreparedStatement st = (PreparedStatement) c.prepareStatement("SELECT address FROM account_profile WHERE username=?");
+            PreparedStatement st = (PreparedStatement) c.prepareStatement("SELECT address, customer_id FROM account_profile WHERE username=?");
                 
             //The data needed to compare in database
             st.setString(1, username); 
@@ -339,6 +338,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
             
             if(rs.next()) {
                 address = rs.getString("address");
+                customerId = rs.getString("customer_id");
             }
             
         } catch (SQLException ex) {
@@ -348,7 +348,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
     
     //For getting the resto Id from two given data using hashtable
-    private String getRestoId(String restaurant, String location) {
+    public String getRestoId(String restaurant, String location) {
         
         hashT = new Hashtable<>();
         
@@ -381,7 +381,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
     
     //Used Dijkstra algorithim as reference; did not use Dijkstra specifically
-    private String getDistance(String addressCity, String location) {
+    public String getDistance(String addressCity, String location) {
         /* San Pedro --1--> Binan --2--> Sta. Rosa --3--> Cabuyao --4--> Calamba
            San Pedro --1--> Binan ] 
            San Pedro --3--> Sta. Rosa ] 1, 2, 3, and 4 is the distance between one city to another city
@@ -417,7 +417,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         return total;
     }
     
-    private void AddRows() {
+    public void AddRows() {
         String[] restaurants = {"McDonald's", "Jollibee", "Greenwich", "Burger King"},
                 locations = {"San Pedro", "Binan", "Sta. Rosa", "Cabuyao", "Calamba"};
         
@@ -454,7 +454,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
   
     //restaurant choices
-    private void RestoButton(String name, JPanel parentPanel, Image restoPic) {
+    public void RestoButton(String name, JPanel parentPanel, Image restoPic) {
         JButton restaurantButton = new JButton(name);
         restaurantButton.setFont(new Font("Arial", Font.BOLD, 20));
         restaurantButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -467,7 +467,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
   
     //menu panel for displaying a selected restaurant menu
-    private JPanel MenuPanel(Color backgroundColor) {
+    public JPanel MenuPanel(Color backgroundColor) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -494,7 +494,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
   
     public short chosenResto;
-    private void MenuPanel(String restaurantName) {
+    public void MenuPanel(String restaurantName) {
         // Clears the current menu and set a new one based on restaurant selection
         menuPanel.removeAll();
 
@@ -535,133 +535,133 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
         if (restaurantName.equals("Burger King")) {
             chosenResto = 2;
             menuCategory("Whopper", new String[][]{
-                    {"(â‚±75) Whopper Jr."},
-                    {"(â‚±177) Whopper"}
+                    {"(\u20b175) Whopper Jr."},
+                    {"(\u20b1177) Whopper"}
             });
             menuCategory("4-Cheese Whopper", new String[][]{
-                    {"(â‚±99) 4-Cheese Whopper Jr."},
-                    {"(â‚±198) 4-Cheese Whopper"},
-                    {"(â‚±173) Bacon 4-Cheese Whopper Jr."},
-                    {"(â‚±282) Bacon 4-Cheese Whopper"}
+                    {"(\u20b199) 4-Cheese Whopper Jr."},
+                    {"(\u20b1198) 4-Cheese Whopper"},
+                    {"(\u20b1173) Bacon 4-Cheese Whopper Jr."},
+                    {"(\u20b1282) Bacon 4-Cheese Whopper"}
             });
             menuCategory("X-tra Long Chicken", new String[][]{
-                    {"(â‚±59) X-tra Long Chicken Jr. Sandwich"},
-                    {"(â‚±99) X-tra Long Chicken Sandwich"}
+                    {"(\u20b159) X-tra Long Chicken Jr. Sandwich"},
+                    {"(\u20b199) X-tra Long Chicken Sandwich"}
             });
             menuCategory("Plant-Based Whopper", new String[][]{
-                    {"(â‚±136) Plant-Based Whopper Jr."},
-                    {"(â‚±295) Plant-Based Whopper"}
+                    {"(\u20b1136) Plant-Based Whopper Jr."},
+                    {"(\u20b1295) Plant-Based Whopper"}
             });
             menuCategory("Chicken King", new String[][]{
-                    {"(â‚±269) BLT Spicy Chicken King"},
-                    {"(â‚±215) Chicken King"},
-                    {"(â‚±229) Spicy Chicken King"}
+                    {"(\u20b1269) BLT Spicy Chicken King"},
+                    {"(\u20b1215) Chicken King"},
+                    {"(\u20b1229) Spicy Chicken King"}
             });
             menuCategory("Flame-Grilled Cheeseburger", new String[][]{
-                    {"(â‚±225) Flame-Grilled BBQ Hamburger"},
-                    {"(â‚±75) Flame-Grilled Hamburger"},
-                    {"(â‚±85) Flame-Grilled Cheeseburger"},
-                    {"(â‚±159) Flame-Grilled Double Cheeseburger"}
+                    {"(\u20b1225) Flame-Grilled BBQ Hamburger"},
+                    {"(\u20b175) Flame-Grilled Hamburger"},
+                    {"(\u20b185) Flame-Grilled Cheeseburger"},
+                    {"(\u20b1159) Flame-Grilled Double Cheeseburger"}
             });
             menuCategory("Drinks", new String[][]{
-                    {"(â‚±75) Coke"},
-                    {"(â‚±63) Coke Float"},
-                    {"(â‚±73) Rootbeer Float"}
+                    {"(\u20b175) Coke"},
+                    {"(\u20b163) Coke Float"},
+                    {"(\u20b173) Rootbeer Float"}
             });
         } else if (restaurantName.equals("Greenwich")) {
             chosenResto = 3;
             menuCategory("Feel G Deals", new String[][]{
-                    {"(â‚±319) 9\" Pizza - Buy One Take One"},
-                    {"(â‚±499) 12\" Pizza - Buy One Take One"},
-                    {"(â‚±679) Buy One Take Two"}
+                    {"(\u20b1319) 9\" Pizza - Buy One Take One"},
+                    {"(\u20b1499) 12\" Pizza - Buy One Take One"},
+                    {"(\u20b1679) Buy One Take Two"}
             });
             menuCategory("Pizzawrap", new String[][]{
-                    {"(â‚±77) Hawaiian Overload Pizzawrap"},
-                    {"(â‚±122) Hawaiian Overload Pizzawrap Value Meal"},
-                    {"(â‚±223) Hawaiian Overload Pizzawrap Pack of Three"},
-                    {"(â‚±223) Assorted Pizzawrap Pack of Three"},
-                    {"(â‚±111) Roast Beef & Cream Cheese Pizzawrap"}
+                    {"(\u20b177) Hawaiian Overload Pizzawrap"},
+                    {"(\u20b1122) Hawaiian Overload Pizzawrap Value Meal"},
+                    {"(\u20b1223) Hawaiian Overload Pizzawrap Pack of Three"},
+                    {"(\u20b1223) Assorted Pizzawrap Pack of Three"},
+                    {"(\u20b1111) Roast Beef & Cream Cheese Pizzawrap"}
             });
             menuCategory("Pizza", new String[][]{
-                    {"(â‚±174) All Meat Overload"},
-                    {"(â‚±140) Ham & Cheese Classic"},
-                    {"(â‚±140) Cheeseburger Classic"},
-                    {"(â‚±140) Cheesy Bacon & Ham Classic"},
-                    {"(â‚±162) Beef & Pineapples Overload"}
+                    {"(\u20b1174) All Meat Overload"},
+                    {"(\u20b1140) Ham & Cheese Classic"},
+                    {"(\u20b1140) Cheeseburger Classic"},
+                    {"(\u20b1140) Cheesy Bacon & Ham Classic"},
+                    {"(\u20b1162) Beef & Pineapples Overload"}
             });
             menuCategory("Pasta", new String[][]{
-                    {"(â‚±99) Lasagna Supreme"},
-                    {"(â‚±99) Meaty Spaghetti"},
-                    {"(â‚±144) Creamy Bacon Carbonara"}
+                    {"(\u20b199) Lasagna Supreme"},
+                    {"(\u20b199) Meaty Spaghetti"},
+                    {"(\u20b1144) Creamy Bacon Carbonara"}
             });
             menuCategory("Chicken and Sides", new String[][]{
-                    {"(â‚±62) Classic Choco Frozen Cake"},
-                    {"(â‚±308) Chicken and Waves"}
+                    {"(\u20b162) Classic Choco Frozen Cake"},
+                    {"(\u20b1308) Chicken and Waves"}
             });
             menuCategory("Drinks", new String[][]{
-                    {"(â‚±99) 1.5L Coke"},
-                    {"(â‚±85) 1L Pepsi"}
+                    {"(\u20b199) 1.5L Coke"},
+                    {"(\u20b185) 1L Pepsi"}
             });
         } else if (restaurantName.equals("McDonald's")) {
             chosenResto = 0;
             menuCategory("Breakfast", new String[][]{
-                    {"(â‚±158) Cheesy Eggdesal"},
-                    {"(â‚±37) Hash Browns"},
-                    {"(â‚±63) Sausage Platter with Rice"},
-                    {"(â‚±66) 3pc. Hotcakes"}
+                    {"(\u20b1158) Cheesy Eggdesal"},
+                    {"(\u20b137) Hash Browns"},
+                    {"(\u20b163) Sausage Platter with Rice"},
+                    {"(\u20b166) 3pc. Hotcakes"}
             });
             menuCategory("Fries", new String[][]{
-                    {"(â‚±79) Fries"}
+                    {"(\u20b179) Fries"}
             });
             menuCategory("Drinks & Desserts", new String[][]{
-                    {"(â‚±66) Coke"},
-                    {"(â‚±72) Orange Juice"},
-                    {"(â‚±52) Coke McFloat"},
-                    {"(â‚±57) McFlurry with Oreo Cookies"},
-                    {"(â‚±50) Hot Fudge Sundae"}
+                    {"(\u20b166) Coke"},
+                    {"(\u20b172) Orange Juice"},
+                    {"(\u20b152) Coke McFloat"},
+                    {"(\u20b157) McFlurry with Oreo Cookies"},
+                    {"(\u20b150) Hot Fudge Sundae"}
             });
             menuCategory("Burgers", new String[][]{
-                    {"(â‚±154) Big Mac"},
-                    {"(â‚±54) Burger McDo"},
-                    {"(â‚±135) Double Cheeseburger"},
-                    {"(â‚±146) McChicken Sandwich"},
-                    {"(â‚±52) McCrispy Chicken Sandwich"}
+                    {"(\u20b1154) Big Mac"},
+                    {"(\u20b154) Burger McDo"},
+                    {"(\u20b1135) Double Cheeseburger"},
+                    {"(\u20b1146) McChicken Sandwich"},
+                    {"(\u20b152) McCrispy Chicken Sandwich"}
             });
             menuCategory("Chicken", new String[][]{
-                    {"(â‚±118) 1pc. Chicken McDo with McSpaghetti"},
-                    {"(â‚±80) 1pc. Chicken McDo with Rice"},
-                    {"(â‚±60) McCrispy Chicken Fillet with Rice"},
-                    {"(â‚±158) 2pc. Chicken McDo with Rice"},
-                    {"(â‚±178) 6pc. Chicken McNuggets with Fries"}
+                    {"(\u20b1118) 1pc. Chicken McDo with McSpaghetti"},
+                    {"(\u20b180) 1pc. Chicken McDo with Rice"},
+                    {"(\u20b160) McCrispy Chicken Fillet with Rice"},
+                    {"(\u20b1158) 2pc. Chicken McDo with Rice"},
+                    {"(\u20b1178) 6pc. Chicken McNuggets with Fries"}
             });
         } else if (restaurantName.equals("Jollibee")) {
             chosenResto = 1;
             menuCategory("Burgers", new String[][]{
-                    {"(â‚±40) Yumburger"},
-                    {"(â‚±66) Cheesy Yumburger"},
-                    {"(â‚±169) Champ"},
-                    {"(â‚±239) Aloha Champ"},
-                    {"(â‚±91) Bacon Cheesy Yumburger"}
+                    {"(\u20b140) Yumburger"},
+                    {"(\u20b166) Cheesy Yumburger"},
+                    {"(\u20b1169) Champ"},
+                    {"(\u20b1239) Aloha Champ"},
+                    {"(\u20b191) Bacon Cheesy Yumburger"}
             });
             menuCategory("Chickenjoy", new String[][]{
-                    {"(â‚±82) 1pc. Chickenjoy"},
-                    {"(â‚±163) 2pc. Chickenjoy"},
-                    {"(â‚±140) 1pc. Chickenjoy with Burger Steak"},
-                    {"(â‚±139) 1pc. Chickenjoy with Jolly Spaghetti"},
-                    {"(â‚±535) 8pc. Chickenjoy"}
+                    {"(\u20b182) 1pc. Chickenjoy"},
+                    {"(\u20b1163) 2pc. Chickenjoy"},
+                    {"(\u20b1140) 1pc. Chickenjoy with Burger Steak"},
+                    {"(\u20b1139) 1pc. Chickenjoy with Jolly Spaghetti"},
+                    {"(\u20b1535) 8pc. Chickenjoy"}
             });
             menuCategory("Spaghetti", new String[][]{
-                    {"(â‚±66) Jolly Spaghetti"}
+                    {"(\u20b166) Jolly Spaghetti"}
             });
             menuCategory("Burger Steak", new String[][]{
-                    {"(â‚±77) 1pc. Burger Steak"},
-                    {"(â‚±117) 2pc. Burger Steak"}
+                    {"(\u20b177) 1pc. Burger Steak"},
+                    {"(\u20b1117) 2pc. Burger Steak"}
             });
             menuCategory("Sides & Drinks", new String[][]{
-                    {"(â‚±40) Jolly Crispy Fries"},
-                    {"(â‚±66) Coke"},
-                    {"(â‚±42) Pineapple Juice"},
-                    {"(â‚±66) Chocolate Sundae"}
+                    {"(\u20b140) Jolly Crispy Fries"},
+                    {"(\u20b166) Coke"},
+                    {"(\u20b142) Pineapple Juice"},
+                    {"(\u20b166) Chocolate Sundae"}
             });
         }
 
@@ -673,7 +673,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
   
     //to create and add a menu category to the menu panel
-    private void menuCategory(String categoryName, String[][] items) {
+    public void menuCategory(String categoryName, String[][] items) {
         JPanel categoryPanel = new JPanel();
         categoryPanel.setLayout(new BoxLayout(categoryPanel, BoxLayout.Y_AXIS));
         categoryPanel.setBorder(BorderFactory.createTitledBorder(
@@ -688,7 +688,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     }
 
     //to add a menu item to the category
-    private void addMenuItem(String itemName, JPanel parentPanel) {
+    public void addMenuItem(String itemName, JPanel parentPanel) {
         JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         itemPanel.setBackground(Color.WHITE);
 
@@ -705,11 +705,12 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     } else if (e.getSource() == backBtn2) {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "restoP");
     } else if (e.getSource() == profileBtn) {
-        dispose();
-        //new CustomerProfile();
+        
+        setVisible(false);
+        new CustomerProfile(MenuSelection.this);
     } else if (e.getSource() == logoutBtn) {
         dispose();
-        //new AccountLogin();
+        new AccountLogin();
     } else if(e.getSource() == quickRestaurantBtn) {
         homePanel.setVisible(false);
         quickRestoPanel.setVisible(true);
@@ -734,7 +735,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
             return;
         }
         setVisible(false);
-       // new OrderSelection(MenuSelection.this);
+        new OrderSelection(MenuSelection.this);
     } else if(e.getSource()==orderBtn2) {
         String chosenRestaurant;
         String chosenLocation;
@@ -777,7 +778,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
             }
             
             setVisible(false);
-            //new OrderSelection(MenuSelection.this);
+            new OrderSelection(MenuSelection.this);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid! Please select a row first.", "Error!", JOptionPane.ERROR_MESSAGE);
             return;

@@ -18,4 +18,5 @@
         <maven.compiler.target>22</maven.compiler.target>
         <exec.mainClass>com.mycompany.group2_project.Group2_Project</exec.mainClass>
     </properties>
+    <name>Group2_OnlineFoodDeliverySystem</name>
 </project>

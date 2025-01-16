@@ -30,9 +30,9 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
     private ImageIcon imgLogo;
     private Color brColor = new Color(113, 45, 59);
     private Border paneBorder = BorderFactory.createLineBorder(brColor, 28);
-    private String fName, lName, add, num;
+    public String fName, lName, add, num, customerId;
     
-    OrderHistory() {
+    OrderHistory(ConfirmOrder parent) {
         
         setSize(464, 737);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,7 +115,13 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         hdrExit.addMouseListener(this);
         tbCom.addMouseListener(this);
         tbCan.addMouseListener(this);
-        btnCurrent.addActionListener(this);
+        btnCurrent.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                CustomerProfile parent = null;
+                new DeliveryStatus(parent);
+            }
+        });
         btnCompleted.addActionListener(this);
         btnCancelled.addActionListener(this);
         
@@ -190,10 +196,8 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
     @Override
     public void actionPerformed(ActionEvent e) {
         //Function for the Current Orders tab
-        if(e.getSource() == btnCurrent) {
-            this.dispose();
-            //new DeliveryStatus();
-        } else if(e.getSource() == btnCancelled) {
+        
+        if(e.getSource() == btnCancelled) {
             //Function for the Cancelled Tab Button 
             spCom.setVisible(false);
             btnCancelled.setEnabled(false);
@@ -231,7 +235,8 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         try {
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
             modelOne.setRowCount(0);
-            PreparedStatement st = c.prepareStatement("SELECT * FROM order_data WHERE status = 'Received'");
+            PreparedStatement st = c.prepareStatement("SELECT * FROM order_data WHERE status = 'RECEIVED' and customerId=?");
+            st.setString(1, customerId);
             ResultSet receivedRes = st.executeQuery();
             
             while (receivedRes.next()) {
@@ -243,7 +248,8 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
                 modelOne.addRow(variable);
             } 
             
-            PreparedStatement stCancel = c.prepareStatement("SELECT * FROM order_data WHERE status = 'cancelled'");
+            PreparedStatement stCancel = c.prepareStatement("SELECT * FROM order_data WHERE status = 'CANCELLED' and customerId=?");
+            st.setString(1, customerId);
             ResultSet cancelledRes = stCancel.executeQuery();
             
             while (cancelledRes.next()) {
@@ -264,8 +270,6 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
     
     public void dataBase() {
         try {
-            
-            String customerId = "1JVR";
             
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
             PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE customer_id=?");

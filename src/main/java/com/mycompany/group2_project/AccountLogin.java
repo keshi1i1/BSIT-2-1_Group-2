@@ -59,20 +59,20 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
     }
     
     //Java swing components
-    private JPanel loginP, loginSecondP, registerP, registerSecondP, loginShadowP, registerShadowP;
-    private JLabel userLoginLbl, passLoginLbl, invalidUserPass, backgroundLbl, checkPassIconLbl1, firstNameLbl, lastNameLbl, addressLbl, emailLbl, phoneNumberLbl, userRegisterLbl, passRegisterLbl, confirmPassLbl, checkPassIconLbl2, checkPassIconLbl3;
-    private JButton accountBtn, exitBtn, loginBtn, createBtn, closeLoginBtn, closeRegisterBtn, registerAccountBtn;
-    private JTextField userLoginTF, firstNameTF, lastNameTF, addressTF, emailTF, phoneNumberTF, userRegisterTF;
-    private JPasswordField passLoginTF, passRegisterTF, confirmPassTF;
-    private JCheckBox checkPassLoginCB, checkPassRegisterCB, checkConfirmPassCB;
-    private Font arial = new Font("Arial", Font.PLAIN, 14);
-    private Font tahoma = new Font("Tahoma", Font.BOLD, 15);
-    private Color maroon = new Color(113, 45, 59);
-    private ImageIcon logoIcon, homePageIcon, openEyeIcon, closeEyeIcon, scaledOpenEye, scaledCloseEye;
-    private Image imgScale1, imgScale2;
-    private CompoundBorder tfBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
-    private CompoundBorder tfErrorBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.red, 2, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
-    private boolean enterPressed, enabled = true;
+    public JPanel loginP, loginSecondP, registerP, registerSecondP, loginShadowP, registerShadowP;
+    public JLabel userLoginLbl, passLoginLbl, invalidUserPass, backgroundLbl, checkPassIconLbl1, firstNameLbl, lastNameLbl, addressLbl, emailLbl, phoneNumberLbl, userRegisterLbl, passRegisterLbl, confirmPassLbl, checkPassIconLbl2, checkPassIconLbl3;
+    public JButton accountBtn, exitBtn, loginBtn, createBtn, closeLoginBtn, closeRegisterBtn, registerAccountBtn;
+    public JTextField userLoginTF, firstNameTF, lastNameTF, addressTF, emailTF, phoneNumberTF, userRegisterTF;
+    public JPasswordField passLoginTF, passRegisterTF, confirmPassTF;
+    public JCheckBox checkPassLoginCB, checkPassRegisterCB, checkConfirmPassCB;
+    public Font arial = new Font("Arial", Font.PLAIN, 14);
+    public Font tahoma = new Font("Tahoma", Font.BOLD, 15);
+    public Color maroon = new Color(113, 45, 59);
+    public ImageIcon logoIcon, homePageIcon, openEyeIcon, closeEyeIcon, scaledOpenEye, scaledCloseEye;
+    public Image imgScale1, imgScale2;
+    public CompoundBorder tfBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.black, 1, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
+    public CompoundBorder tfErrorBorder = createCompoundBorder(BorderFactory.createLineBorder(Color.red, 2, true), BorderFactory.createEmptyBorder(0, 14, 0, 14));
+    public boolean enterPressed, enabled = true;
     
     //Added components in specified panels
     public void Components() {
@@ -593,10 +593,10 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
                
                 //adminUser and adminPass are only temporary
                 //If TRUE, logs in to the program, and dispose this current program
-                if ((username.equalsIgnoreCase("adminUser") & password.equals("adminPass")) || rs.next()) {
+                if (rs.next()) {
                     JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    new MenuSelection();
+                    new MenuSelection(AccountLogin.this);
                 //If FALSE, highlights the border of username and password textfields
                 } else {
                     JOptionPane.showMessageDialog(loginP, "Invalid Username or Password.", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -826,13 +826,13 @@ public class AccountLogin extends JFrame implements ActionListener, KeyListener 
 
                     //adminUser and adminPass are only temporary
                     //If TRUE, logs in to the program, and dispose this current program
-                    if ((username.equals("adminUser") & password.equals("adminPass")) || rs.next()) {
+                    if (rs.next()) {
                         loginBtn.setBackground(new Color(184,207,229));
                         
                         JOptionPane.showMessageDialog(loginP, "You have successfully logged in.", "Success!", JOptionPane.INFORMATION_MESSAGE);
                         loginBtn.setBackground(Color.white);
-    //                    dispose();
-    //                    new Trial_foodDelMain();
+                        dispose();
+                        new MenuSelection(AccountLogin.this);
                     //If FALSE, highlights the border of username and password textfields
                     } else {
                         loginBtn.setBackground(new Color(184,207,229));
