@@ -131,6 +131,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         add(btnCancelled);
         add(spCom);
         setVisible(true);
+        
         dataBase();
         databaseConnection();
         
@@ -227,11 +228,12 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
             spCom.setVisible(true);
         }
     }
+    //Database for Order Data
     public void databaseConnection() {
         try {
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
             modelOne.setRowCount(0);
-            PreparedStatement st = c.prepareStatement("SELECT * FROM order_data WHERE status = 'Received'");
+            PreparedStatement st = c.prepareStatement("SELECT * FROM order_data WHERE status = 'RECEIVED'");
             ResultSet receivedRes = st.executeQuery();
             
             while (receivedRes.next()) {
@@ -243,7 +245,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
                 modelOne.addRow(variable);
             } 
             
-            PreparedStatement stCancel = c.prepareStatement("SELECT * FROM order_data WHERE status = 'cancelled'");
+            PreparedStatement stCancel = c.prepareStatement("SELECT * FROM order_data WHERE status = 'CANCELLED'");
             ResultSet cancelledRes = stCancel.executeQuery();
             
             while (cancelledRes.next()) {
@@ -261,7 +263,7 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         }
         
     } 
-    
+    //Database for Account info
     public void dataBase() {
         try {
             
