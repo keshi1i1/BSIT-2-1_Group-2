@@ -1,7 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.mycompany.group2_project;
 
 /**
@@ -20,12 +19,11 @@ package com.mycompany.group2_project;
 - orderId (random generated numbers, [ex. 109091029])
 - customerId (random generated numbers, must not be the same as orderId, [ex. 263])
 - restaurantId (NOT SURE here, probably given Id for different branch of the restaurant from different locations)
-*/
-
+ */
 public class OrderSelectionMain {
- 
+
     public static void main(String[] args) {
         new OrderSelection();
-        
+
     }
 }

@@ -138,7 +138,7 @@ public class ConfirmOrder extends JFrame {
                     
                     // elements to be stored in the database
                     String restoId = parent.restoID; //restoid to database
-                    String customerId = parent.customerIdQ;
+                    String customerId = parent.username;
                     
                     //loop to check if orderId is unique
                     while (!uniqueId) {

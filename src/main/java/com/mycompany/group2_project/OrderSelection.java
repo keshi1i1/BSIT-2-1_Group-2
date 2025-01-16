@@ -46,7 +46,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     public int priceAdd, priceRem, priceTotal;
     
     //variables for query
-    public String fnameQ, lnameQ, addressQ, phNumberQ, customerIdQ;
+    public String fnameQ, lnameQ, addressQ, phNumberQ, username;
 
     
     OrderSelection(/*MenuSelection parent*/) {
@@ -612,12 +612,12 @@ public class OrderSelection extends JFrame implements ActionListener {
     public void dataBaseElements(){
         try {
             
-//            customerIdQ = "1JVR"; // inherit from resma's frame
-            customerIdQ = "2DKR";
+//            username = "1JVR"; // inherit from resma's frame
+            username = "2DKR";
             
             Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE customer_id=?");
-            st.setString(1, customerIdQ);
+            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE username=?");
+            st.setString(1, username);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
