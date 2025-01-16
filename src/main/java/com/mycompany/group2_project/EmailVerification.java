@@ -32,19 +32,17 @@ public class EmailVerification extends JFrame implements ActionListener {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
-    public String enteredEmail,correctEmail, customerId;
+    String enteredEmail,correctEmail;
 
     // Constructor
-    EmailVerification(CustomerProfile parent) {
-        customerId = parent.customerId;
+    EmailVerification() {
         
          try{
          //For connecting to the database
 
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id=?");
-                pst.setString(1, customerId);
+                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id='3AG'");
         
         // Set JFrame properties
         setTitle("Email Verification");
@@ -116,8 +114,13 @@ public class EmailVerification extends JFrame implements ActionListener {
             try {
                 // Validate email input
                 enteredEmail = txtUserEmail.getText(); // User input
-                pst = con.prepareStatement("select * from account_profile where customer_id=?");
-                pst.setString(1, customerId);
+                pst = con.prepareStatement("select * from account_profile where customer_id='3AG'");
+            }
+            
+            catch (SQLException ex) {
+                Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
                 rs = pst.executeQuery();
                     
                 if(rs.next()) {
@@ -136,19 +139,24 @@ public class EmailVerification extends JFrame implements ActionListener {
             else {
                 // Proceed if the email matches
                 this.dispose();
-                new ChangePassword(EmailVerification.this).setLocationRelativeTo(null);
+                
+                try {
+                    new ChangePassword().setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+             } catch (SQLException ex) {
+                Logger.getLogger(EmailVerification.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
     // Main method to run the program
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() ->
-//                new EmailVerification().setLocationRelativeTo(null));
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() ->
+                new EmailVerification().setLocationRelativeTo(null));
+    }
 
 }
    

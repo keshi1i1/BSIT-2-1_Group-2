@@ -32,13 +32,10 @@ public class ChangePassword extends JFrame implements ActionListener {
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
-    
-    public String customerId;
 
 
     //Constructor
-    ChangePassword(EmailVerification parent) throws SQLException { 
-        customerId = parent.customerId;
+    ChangePassword() throws SQLException { 
           
         try{
          //For connecting to the database
@@ -150,8 +147,7 @@ public class ChangePassword extends JFrame implements ActionListener {
         // Validate current password
         
             try {
-                pst = con.prepareStatement("select * from account_profile where customer_id=?");
-                pst.setString(1, customerId);
+                pst = con.prepareStatement("select * from account_profile where customer_id='3AG'");
                 rs = pst.executeQuery();
              if(rs.next()){
             
@@ -189,4 +185,17 @@ public class ChangePassword extends JFrame implements ActionListener {
     }
 }
     
+    // Main method to run the program
+         public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    new ChangePassword().setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
 }

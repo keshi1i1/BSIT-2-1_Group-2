@@ -1,11 +1,9 @@
 
 package com.mycompany.group2_project;
 
-import com.sun.source.tree.ParenthesizedTree;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,27 +16,24 @@ import javax.swing.*;
 public class CustomerProfile extends JFrame implements ActionListener {
 
     // UI Components
-    public JLabel lblName, lblUsername, lblEmail, lblPhoneNumber, lblPassword, lblAddress;
-    public JButton btnHome, btnOrder, btnResetPass;
-    public JPanel mainPanel;
-    public JTextField Address, Username, PhoneNumber, Email;
-    public JPasswordField  Password;
-    public String add,email,fn,ln, phnumber, username, pass, customerId;
+    private JLabel lblName, lblUsername, lblEmail, lblPhoneNumber, lblPassword, lblAddress;
+    private JButton btnHome, btnOrder, btnResetPass;
+    private JPanel mainPanel;
+    private JTextField Address, Username, PhoneNumber, Email;
+    private JPasswordField  Password;
+    String add,email,fn,ln, phnumber, username, pass;
     Connection con;
     PreparedStatement pst;
     ResultSet rs;
     
-    public MenuSelection parent;
     // Constructor
-    CustomerProfile(MenuSelection parent) {
-        customerId = parent.customerId;
+    CustomerProfile() {
           
         try{
          //For connecting to the database
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
-                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id=?");
-                pst.setString(1, customerId);
+                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id='3AG'");
        
                 rs = pst.executeQuery();
                 if(rs.next()){
@@ -153,14 +148,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         // Add action listeners
         btnResetPass.addActionListener(this);
         btnOrder.addActionListener(this);
-        btnHome.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            dispose();
-                            // Open the MenuSelectionMain frame (Back to the main menu)
-                            parent.setVisible(true);
-                        }
-        });
+        btnHome.addActionListener(this);
 
         // Display the JFrame
         setVisible(true);
@@ -178,21 +166,30 @@ public class CustomerProfile extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Open the EmailVerification frame when "Change Password" is clicked
         if (e.getSource() == btnResetPass) {
-            new EmailVerification(CustomerProfile.this).setLocationRelativeTo(null); 
+            new EmailVerification().setLocationRelativeTo(null); 
         }
         
         // Check if the "Order History" button was clicked
         else if (e.getSource() == btnOrder) {
-            setVisible(false);
-//         Open the DeliveryStatusMain frame (Show order history)
-            new DeliveryStatus(CustomerProfile.this);
-        }
+        this.dispose();
+        // Open the DeliveryStatusMain frame (Show order history)
+//        new DeliveryStatus();
+    }
          // Check if the "Home" button was clicked
-        
-    } 
+        else if (e.getSource() == btnHome) {
+            this.dispose();
+            // Open the MenuSelectionMain frame (Back to the main menu)
+//            new MenuSelection();
+        } 
+    }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new CustomerProfile().setLocationRelativeTo(null);
+        });
+    }
 }
-
-
 
 
 
