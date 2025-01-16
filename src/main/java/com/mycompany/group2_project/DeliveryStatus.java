@@ -420,7 +420,7 @@ public class DeliveryStatus extends JFrame implements MouseListener, ActionListe
                 
                 
             }
-            //For more info
+            // More info about your orders
             int selectedRow = orderTable.getSelectedRow();
             if(selectedRow != -1) {
                 String value = orderTable.getValueAt(selectedRow, 3).toString();
