@@ -1,9 +1,17 @@
+
 package com.mycompany.group2_project;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,20 +29,27 @@ public class ChangePassword extends JFrame implements ActionListener {
     private JPasswordField txtCurrent, txtNew, txtRetype;
     private JButton btnCancel, btnConfirm;
     private JPanel mainPanel;
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
 
-
-    // Stored password 
-    private final String currentPasswordStored = "adminPass";
 
     //Constructor
-    ChangePassword() { 
+    ChangePassword() throws SQLException { 
+          
+        try{
+         //For connecting to the database
+
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+     
        // Set JFrame properties
         setTitle("Change Password");
         setSize(464, 368);
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("fordaFood.png");
+        ImageIcon logoIcon = new ImageIcon("Icon.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -101,53 +116,86 @@ public class ChangePassword extends JFrame implements ActionListener {
         
         // Display the JFrame
         setVisible(true);
-    }
+    
+    }   catch (SQLException ex) {
+            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+    }
     // Handles button actions (Cancel, Confirm)
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Check if the "Cancel" button was clicked
-        if (e.getSource() == btnCancel) {
-            this.dispose(); 
-        } 
-        // Check if the "Confirm" button was clicked
-        else if (e.getSource() == btnConfirm) {
-            // Get text from password fields
-            String currentPasswordInput = new String(txtCurrent.getPassword());
-            String newPassword = new String(txtNew.getPassword());
-            String retypePassword = new String(txtRetype.getPassword());
+    // Check if the "Cancel" button was clicked
+    if (e.getSource() == btnCancel) {
+        this.dispose(); 
+    } 
+    // Check if the "Confirm" button was clicked
+    else if (e.getSource() == btnConfirm) {
+        // Get text from password fields
+        String currentPasswordInput = new String(txtCurrent.getPassword());
+        String newPassword = new String(txtNew.getPassword());
+        String retypePassword = new String(txtRetype.getPassword());
 
-            // Validate current password
-            if (!currentPasswordInput.equals(currentPasswordStored)) {
-                JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
-                return; 
-            }
-
-            // Validate that new passwords match
-            if(newPassword.isEmpty() || retypePassword.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill out the password field!", "Error", JOptionPane.ERROR_MESSAGE);
-                
-            } else if (!newPassword.equals(retypePassword)) {
-                JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
-                return; 
-            } else {
-                // Show success message and close the frame
-                JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); 
-            }
-
+        // Check for empty fields
+        if (currentPasswordInput.isEmpty() || newPassword.isEmpty() || retypePassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
         }
-    }
 
+        // Validate current password
+        
+            try {
+                pst = con.prepareStatement("select * from account_profile where customer_id='3AG'");
+                rs = pst.executeQuery();
+             if(rs.next()){
+            
+        String pass = rs.getString("password");
+        if (!currentPasswordInput.equals(pass)) {
+            JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        }
+            } catch (SQLException ex) {
+                Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        // Validate that new passwords match
+        if (!newPassword.equals(retypePassword)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        
+        try {
+            pst = con.prepareStatement("update account_profile set password=? where customer_id='3AG'");
+            pst.setString(1, newPassword);
+              int rs1 = pst.executeUpdate();
+              if(rs1==1){
+                  
+               // Show success message and close the frame
+        JOptionPane.showMessageDialog(this, "Password Saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+       
+        this.dispose(); 
+              }
+        } catch (SQLException ex) {
+            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }
+}
+    
     // Main method to run the program
-    public static void main(String[] args) {
+         public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-               new ChangePassword().setLocationRelativeTo(null);
+                try {
+                    new ChangePassword().setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 }
-
-

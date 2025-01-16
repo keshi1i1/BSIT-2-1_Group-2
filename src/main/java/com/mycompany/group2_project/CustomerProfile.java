@@ -1,8 +1,16 @@
+
 package com.mycompany.group2_project;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class CustomerProfile extends JFrame implements ActionListener {
@@ -10,17 +18,40 @@ public class CustomerProfile extends JFrame implements ActionListener {
     // UI Components
     private JLabel lblName, lblUsername, lblEmail, lblPhoneNumber, lblPassword, lblAddress;
     private JButton btnHome, btnOrder, btnResetPass;
-    private JPanel EmailBox, UsernameBox, PhoneNumberBox, PasswordBox, AddressBox, mainPanel;
-
+    private JPanel mainPanel;
+    private JTextField Address, Username, PhoneNumber, Email;
+    private JPasswordField  Password;
+    String add,email,fn,ln, phnumber, username, pass;
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
+    
     // Constructor
     CustomerProfile() {
+          
+        try{
+         //For connecting to the database
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+                pst = con.prepareStatement("SELECT * FROM account_profile WHERE customer_id='3AG'");
+       
+                rs = pst.executeQuery();
+                if(rs.next()){
+                    fn = rs.getString("first_name");
+                    ln = rs.getString("last_name");
+                    add = rs.getString("address");
+                    email = rs.getString("email");
+                    phnumber = rs.getString("phone_number");
+                    username = rs.getString("username");
+                    pass = rs.getString("password");
+                      
         // Set JFrame properties
         setTitle("Customer Profile");
         setSize(464, 737);
         setResizable(false);
         setLayout(null);
         setLocationRelativeTo(null);
-        ImageIcon logoIcon = new ImageIcon("fordaFood.png");
+        ImageIcon logoIcon = new ImageIcon("Icon.png");
         setIconImage(logoIcon.getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -41,7 +72,7 @@ public class CustomerProfile extends JFrame implements ActionListener {
         mainPanel.add(btnHome);
 
         // User's Name Label
-        lblName = new JLabel("Alfred Gualberto");
+        lblName = new JLabel(fn + " " + ln);
         lblName.setBounds(130, 40, 200, 30);
         lblName.setFont(new Font("Arial", Font.BOLD, 25));
         lblName.setForeground(new Color(113, 45, 59)); 
@@ -56,45 +87,55 @@ public class CustomerProfile extends JFrame implements ActionListener {
         mainPanel.add(btnOrder);
 
         // Add Profile Details (Email, Username, Phone Number, Password, Address)
+        lblAddress = new JLabel("Address");
+        lblAddress.setBounds(50, 120, 80, 30);
+        lblAddress.setFont(new Font("Arial", Font.BOLD, 18));
+        mainPanel.add(lblAddress);
+
+        Address = new JTextField(add);
+        Address.setBounds(50, 150, 350, 30);
+        Address.setFont(new Font("Arial", Font.BOLD, 13));
+        mainPanel.add(Address);
+
         lblEmail = new JLabel("Email");
-        lblEmail.setBounds(50, 120, 80, 30);
+        lblEmail.setBounds(50, 210, 100, 30);
         lblEmail.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblEmail);
 
-        EmailBox = createBoxWithLabel("alf*********rto@gmail.com", 50, 150, 340, 40);
-        mainPanel.add(EmailBox);
-
-        lblUsername = new JLabel("Username");
-        lblUsername.setBounds(50, 210, 100, 30);
-        lblUsername.setFont(new Font("Arial", Font.BOLD, 18));
-        mainPanel.add(lblUsername);
-
-        UsernameBox = createBoxWithLabel("adminUser", 50, 240, 340, 40);
-        mainPanel.add(UsernameBox);
+        Email = new JTextField(email);
+        Email.setBounds(50, 240, 350, 30);
+        Email.setFont(new Font("Arial", Font.BOLD, 13));
+        mainPanel.add(Email);
 
         lblPhoneNumber = new JLabel("Phone Number");
         lblPhoneNumber.setBounds(50, 300, 150, 30);
         lblPhoneNumber.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblPhoneNumber);
 
-        PhoneNumberBox = createBoxWithLabel("09876543210", 50, 330, 340, 40);
-        mainPanel.add(PhoneNumberBox);
+        PhoneNumber= new JTextField(phnumber);
+        PhoneNumber.setBounds(50, 330, 350, 30);
+        PhoneNumber.setFont(new Font("Arial", Font.BOLD, 13));
+        mainPanel.add(PhoneNumber);
+
+        lblUsername = new JLabel("Username");
+        lblUsername.setBounds(50, 390, 100, 30);
+        lblUsername.setFont(new Font("Arial", Font.BOLD, 18));
+        mainPanel.add(lblUsername);
+
+        Username= new JTextField(username);
+        Username.setBounds(50, 420, 350, 30);
+        Username.setFont(new Font("Arial", Font.BOLD, 13));
+        mainPanel.add(Username);
 
         lblPassword = new JLabel("Password");
-        lblPassword.setBounds(50, 390, 100, 30);
+        lblPassword.setBounds(50, 480, 100, 30);
         lblPassword.setFont(new Font("Arial", Font.BOLD, 18));
         mainPanel.add(lblPassword);
 
-        PasswordBox = createBoxWithLabel("*********", 50, 420, 340, 40);
-        mainPanel.add(PasswordBox);
-
-        lblAddress = new JLabel("Address");
-        lblAddress.setBounds(50, 480, 100, 30);
-        lblAddress.setFont(new Font("Arial", Font.BOLD, 18));
-        mainPanel.add(lblAddress);
-
-        AddressBox = createBoxWithLabel("Brgy. Santo Niño, Biñan City, Laguna", 50, 510, 340, 40);
-        mainPanel.add(AddressBox);
+        Password= new JPasswordField(pass);
+        Password.setBounds(50, 510, 350, 30);
+        Password.setFont(new Font("Arial", Font.BOLD, 13));
+        mainPanel.add(Password);
 
         // Add Change Password Button
         btnResetPass = new JButton("Change Password");
@@ -111,22 +152,13 @@ public class CustomerProfile extends JFrame implements ActionListener {
 
         // Display the JFrame
         setVisible(true);
-    }
-
-    // Creates a JPanel with a label inside (used for profile details)
-    private JPanel createBoxWithLabel(String text, int x, int y, int width, int height) {
-        JPanel box = new JPanel();
-        box.setBounds(x, y, width, height);
-        box.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        box.setLayout(null);
-        box.setBackground(Color.WHITE);
-
-        JLabel label = new JLabel(text);
-        label.setBounds(10, 10, width - 20, height - 20);
-        label.setFont(new Font("Arial", Font.PLAIN, 15));
-        box.add(label);
-
-        return box;
+                }
+         } catch (SQLException ex) {
+            Logger.getLogger(CustomerProfile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CustomerProfile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     // Handles button actions (Change Password, Order History, Home)
@@ -141,13 +173,13 @@ public class CustomerProfile extends JFrame implements ActionListener {
         else if (e.getSource() == btnOrder) {
         this.dispose();
         // Open the DeliveryStatusMain frame (Show order history)
-        new DeliveryStatus();
+//        new DeliveryStatus();
     }
          // Check if the "Home" button was clicked
         else if (e.getSource() == btnHome) {
             this.dispose();
             // Open the MenuSelectionMain frame (Back to the main menu)
-            new MenuSelection();
+//            new MenuSelection();
         } 
     }
 
@@ -158,4 +190,10 @@ public class CustomerProfile extends JFrame implements ActionListener {
         });
     }
 }
+
+
+
+
+
+
 
