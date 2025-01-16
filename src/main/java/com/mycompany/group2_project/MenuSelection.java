@@ -181,7 +181,7 @@ public class MenuSelection extends JFrame implements ActionListener, KeyListener
     public JPanel RestoPanel(Color maroon) {
         JPanel panel = new JPanel(new BorderLayout());
 
-        backBtn = new JButton("\u2b9c ");
+        backBtn = new JButton("\u2b9c                                                       ");
         backBtn.setPreferredSize(new Dimension(5, 50)); 
         backBtn.setFont(new Font("Sherif", Font.BOLD, 25));
         backBtn.setForeground(Color.WHITE);
