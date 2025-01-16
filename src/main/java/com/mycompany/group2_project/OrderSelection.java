@@ -392,7 +392,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     
     //for the restaurants and its food menu
     public void restoOneMD(){
-        imgResto = new ImageIcon("mcdo.png");
+        imgResto = new ImageIcon("mcdo_2.png");
         lblRestoImg = new JLabel(imgResto);
         lblRestoImg.setBounds(270,0,300,50);
         pnlHeader.add(lblRestoImg); //change image on the upper right corner
@@ -423,7 +423,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoTwoJB(){
-        imgResto = new ImageIcon("jollibee.png");        
+        imgResto = new ImageIcon("jollibee_2.png");        
         lblRestoImg = new JLabel(imgResto);
         lblRestoImg.setBounds(262,0,300,50);
         pnlHeader.add(lblRestoImg); //change image on the upper right corner
@@ -455,7 +455,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoThreeBK(){
-        imgResto = new ImageIcon("burgerk.png");        
+        imgResto = new ImageIcon("burgerk_2.png");        
         lblRestoImg = new JLabel(imgResto);
         lblRestoImg.setBounds(270,0,300,50);
         pnlHeader.add(lblRestoImg); //change image on the upper right corner
@@ -486,7 +486,7 @@ public class OrderSelection extends JFrame implements ActionListener {
     }
     
     public void restoFourGW(){
-        imgResto = new ImageIcon("greenw.png");        
+        imgResto = new ImageIcon("greenw_2.png");        
         lblRestoImg = new JLabel(imgResto);
         lblRestoImg.setBounds(270,0,300,50);
         pnlHeader.add(lblRestoImg); //change image on the upper right corner
