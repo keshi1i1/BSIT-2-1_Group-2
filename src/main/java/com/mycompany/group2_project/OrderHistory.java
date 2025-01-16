@@ -1,6 +1,7 @@
 
 package com.mycompany.group2_project;
 
+import com.mysql.cj.xdevapi.PreparableStatement;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -8,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -15,13 +20,17 @@ import javax.swing.table.DefaultTableModel;
 public class OrderHistory extends JFrame implements MouseListener, ActionListener {
     
     private JPanel panelHdr, panelBottom;
-    private JLabel hdrText, hdrExit, lblPastOrders, lblDeliveryTimes;
-    private JTable tbHistory;
-    private JButton btnCurrent, btnPast, btnReview;
-    private JScrollPane scrollPane;
-    private String[] name = {"Restaurant", "Items"};
-    private DefaultTableModel model;
+    private JLabel hdrText, hdrExit, hdrStatus;
+    private JTable tbCom, tbCan;
+    private JButton btnCurrent, btnPast, btnCompleted, btnCancelled;
+    private JScrollPane spCom, spCan ;
+    private String[] var = {"CustomerId", "Resto Id",  "OrderItems", "Status"};
+    private String[] varTwo = {"CustomerId", "Resto Id",  "OrderItems", "Status"};
+    private DefaultTableModel modelOne, modelTwo;
     private ImageIcon imgLogo;
+    private Color brColor = new Color(113, 45, 59);
+    private Border paneBorder = BorderFactory.createLineBorder(brColor, 28);
+    private String fName, lName, add, num;
     
     OrderHistory() {
         
@@ -48,27 +57,27 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         hdrExit.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         //Order label at the header
-        hdrText = new JLabel("ORDER HISTORY");
+        hdrText = new JLabel("ORDER HISTORY: ");
         hdrText.setFont(new Font("arial", Font.BOLD, 20));
-        hdrText.setBounds(60, 23, 300, 30);
+        hdrText.setBounds(60, 23, 180, 30);
         hdrText.setForeground(Color.WHITE);
         
-        //Button for Reviewing Orders
-        btnReview = new JButton("Review Order");
-        btnReview.setBounds(300, 85, 135, 24);
-        btnReview.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 11));
+        //Status at the header
+        hdrStatus = new JLabel("COMPLETED");
+        hdrStatus.setFont(new Font("arial", Font.BOLD, 20));
+        hdrStatus.setBounds(240, 23, 150, 30);
+        hdrStatus.setForeground(Color.WHITE);
         
-        //Delivery times label
-        lblPastOrders = new JLabel("Delivery Times:");
-        lblPastOrders.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-        lblPastOrders.setBounds(25, 82, 150, 30);
-        lblPastOrders.setForeground(Color.BLACK);
+        //Button for Completed Orders Tab
+        btnCompleted = new JButton("Completed Orders");
+        btnCompleted.setBounds(60, 82, 160, 30);
+        btnCompleted.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 11));
+        btnCompleted.setEnabled(false);
         
-        //Delivery count
-        lblDeliveryTimes = new JLabel("0");
-        lblDeliveryTimes.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-        lblDeliveryTimes.setBounds(180, 82, 50, 30);
-        lblDeliveryTimes.setForeground(Color.BLACK);
+        //Button for Cancelled Orders Tab
+        btnCancelled = new JButton("Cancelled Orders");
+        btnCancelled.setBounds(240, 82, 160, 30);
+        btnCancelled.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 11));
         
         //Bottom panel of the frame
         panelBottom = new JPanel();
@@ -87,35 +96,43 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         btnPast.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
         btnPast.setEnabled(false);
         
-        //Creating custom color for scrollpane border
-        Color brColor = new Color(113, 45, 59);
-        Border paneBorder = BorderFactory.createLineBorder(brColor, 28);
+        //Creating table for the Completed Orders
+        modelOne = new DefaultTableModel(var, 0);
+        tbCom = new JTable(modelOne);
+        spCom = new JScrollPane(tbCom);
+        spCom.setBounds(15, 125, 420, 490);
+        tbCom.setFont(new Font("Arial", Font.PLAIN, 10));
+        spCom.setBorder(paneBorder);
+        tbCom.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tbCom.getColumnModel().getColumn(1).setPreferredWidth(15);
+        tbCom.getColumnModel().getColumn(3).setPreferredWidth(10);
+        tbCom.setRowHeight(40);
         
-        //creating table with scrollpane
-        model = new DefaultTableModel(name, 1);
-        tbHistory = new JTable(model);
-        scrollPane = new JScrollPane(tbHistory);
-        scrollPane.setBounds(15, 125, 420, 490);
-        scrollPane.setBorder(paneBorder);
-        tbHistory.getColumnModel().getColumn(0).setPreferredWidth(35);
-        tbHistory.setRowHeight(50);
+        modelTwo = new DefaultTableModel();
+        tbCan = new JTable(modelTwo);
         
         //mouse and action listeners
         hdrExit.addMouseListener(this);
+        tbCom.addMouseListener(this);
+        tbCan.addMouseListener(this);
         btnCurrent.addActionListener(this);
+        btnCompleted.addActionListener(this);
+        btnCancelled.addActionListener(this);
         
         //Adding Components
         add(panelHdr);
         panelHdr.add(hdrExit);
         panelHdr.add(hdrText);
+        panelHdr.add(hdrStatus);
         add(panelBottom);
         panelBottom.add(btnPast);
         panelBottom.add(btnCurrent);
-        add(btnReview);
-        add(lblPastOrders);
-        add(lblDeliveryTimes);
-        add(scrollPane);
+        add(btnCompleted);
+        add(btnCancelled);
+        add(spCom);
         setVisible(true);
+        dataBase();
+        databaseConnection();
         
     }
 
@@ -124,7 +141,27 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function of the back button
         if(e.getSource() == hdrExit) {
             this.dispose();
-            new CustomerProfile();
+            //new CustomerProfile();
+        } else if(e.getSource() == tbCom) {
+            //For more info
+            int selectedRow = tbCom.getSelectedRow();
+            if(selectedRow != -1) {
+                String value = modelOne.getValueAt(selectedRow, 2).toString();
+                String items = value.replaceAll("," , "\n");
+                JOptionPane.showMessageDialog(this, "Name: " + fName + " " + lName + "\nPhone Number: " + num + "\nAddress: "+ add + "\n" + 
+                        "-----------------------------------------------------------------------------------\n" + items + 
+                        "-----------------------------------------------------------------------------------\nFROM: FordaFOOD", "Order Info", JOptionPane.PLAIN_MESSAGE);
+            }
+        } else if(e.getSource() == tbCan) {
+            //For more info
+            int selectedRow = tbCan.getSelectedRow();
+            if(selectedRow != -1) {
+                String value = modelTwo.getValueAt(selectedRow, 2).toString();
+                String items = value.replaceAll("," , "\n");
+                JOptionPane.showMessageDialog(this, "Name: " + fName + " " + lName + "\nPhone Number: " + num + "\nAddress: "+ add + "\n" + 
+                        "-----------------------------------------------------------------------------------\n" + items + 
+                        "-----------------------------------------------------------------------------------\nFROM: FordaFOOD", "Order Info", JOptionPane.PLAIN_MESSAGE);
+            }
         }
     }
     
@@ -155,10 +192,98 @@ public class OrderHistory extends JFrame implements MouseListener, ActionListene
         //Function for the Current Orders tab
         if(e.getSource() == btnCurrent) {
             this.dispose();
-            new DeliveryStatus();
+            //new DeliveryStatus();
+        } else if(e.getSource() == btnCancelled) {
+            //Function for the Cancelled Tab Button 
+            spCom.setVisible(false);
+            btnCancelled.setEnabled(false);
+            btnCompleted.setEnabled(true);
+            hdrStatus.setText("CANCELLED");
+            
+            //Creating another Table for the Cancelled Orders
+            modelTwo = new DefaultTableModel(varTwo, 0);
+            tbCan = new JTable(modelTwo);
+            spCan = new JScrollPane(tbCan);
+            spCan.setBounds(15, 125, 420, 490);
+            tbCan.setFont(new Font("Arial", Font.PLAIN, 10));
+            spCan.setBorder(paneBorder);
+            tbCan.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tbCan.getColumnModel().getColumn(1).setPreferredWidth(15);
+            tbCan.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tbCan.setRowHeight(40);
+            add(spCan);
+            
+            tbCan.addMouseListener(this);
+            databaseConnection();
+            
+                 
+        } else if (e.getSource() == btnCompleted) {
+            //Function for the Cancelled Tab Button
+            btnCompleted.setEnabled(false);
+            btnCancelled.setEnabled(true);
+            hdrStatus.setText("COMPLETED");
+            
+            spCan.setVisible(false);
+            spCom.setVisible(true);
         }
     }
+    public void databaseConnection() {
+        try {
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+            modelOne.setRowCount(0);
+            PreparedStatement st = c.prepareStatement("SELECT * FROM order_data WHERE status = 'Received'");
+            ResultSet receivedRes = st.executeQuery();
+            
+            while (receivedRes.next()) {
+                String customerId = receivedRes.getString("customerId");
+                String resto = receivedRes.getString("restoId");
+                String orderId = receivedRes.getString("orderItems");
+                String status = receivedRes.getString("status");
+                Object[] variable = {customerId, resto, orderId, status};
+                modelOne.addRow(variable);
+            } 
+            
+            PreparedStatement stCancel = c.prepareStatement("SELECT * FROM order_data WHERE status = 'cancelled'");
+            ResultSet cancelledRes = stCancel.executeQuery();
+            
+            while (cancelledRes.next()) {
+                String customerId = cancelledRes.getString("customerId");
+                String resto = cancelledRes.getString("restoId");
+                String orderId = cancelledRes.getString("orderItems");
+                String status = cancelledRes.getString("status");
+                Object[] variable = {customerId, resto, orderId, status};
+                modelTwo.addRow(variable);
+            }
+            
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    } 
+    
+    public void dataBase() {
+        try {
+            
+            String customerId = "1JVR";
+            
+            Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/group2_database", "root", "group2");
+            PreparedStatement st = c.prepareStatement("SELECT first_name, last_name, address, phone_number FROM account_profile WHERE customer_id=?");
+            st.setString(1, customerId);
+            ResultSet customerRes = st.executeQuery();
+            
+            while (customerRes.next()) {
+                fName = customerRes.getString("first_name");
+                lName = customerRes.getString("last_name");
+                add = customerRes.getString("address");
+                num = customerRes.getString("phone_number");
+                
+            }
+            
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
-
-
-
